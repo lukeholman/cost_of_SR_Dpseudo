@@ -275,7 +275,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">SR in D. pseudobscura</a>
+      <a class="navbar-brand" href="index.html">SR meiotic drive</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -411,10 +411,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong01d7dbb"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 01d7dbb </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongfc7812e"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> fc7812e </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong01d7dbb" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongfc7812e" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -424,10 +424,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   figures/figure_3.pdf
-    Modified:   figures/figure_4.pdf
 
 </code></pre>
 <p>
@@ -466,6 +462,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+fc7812e
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+First complete commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+93aec6e
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -563,22 +593,6 @@ SE &lt;- function(x) sd(x) / sqrt(length(x))</code></pre>
   rename(body_size = `Body size`,
          female_age = `F age`) %&gt;%
   mutate(genotype = factor(genotype, levels = c(&quot;STST&quot;, &quot;SRST&quot;, &quot;SRSR&quot;)))</code></pre>
-<pre><code>Warning: Missing column names filled in: &#39;X12&#39; [12]</code></pre>
-<pre><code>Parsed with column specification:
-cols(
-  ID = col_integer(),
-  Isoline = col_character(),
-  genotype = col_character(),
-  `genotype pooled 2` = col_integer(),
-  `genotype pooled 1` = col_integer(),
-  `genotype pooled` = col_integer(),
-  Gen = col_integer(),
-  Block = col_integer(),
-  `F age` = col_integer(),
-  `Body size` = col_double(),
-  offspring = col_integer(),
-  X12 = col_character()
-)</code></pre>
 </div>
 <div id="make-a-table-of-summary-statistics-and-sample-sizes" class="section level2">
 <h2>Make a table of summary statistics and sample sizes</h2>
@@ -988,18 +1002,15 @@ Across all isolines
 <p>The model assumes that the response variable, offspring number, is the result of a ‘hurdle’ process. Essentially this means that the model consists of two sub-models: one controlling the probability that offspring number is non-zero, and one controlling the number of offspring produced provided that more than zero are produced (we assume that offspring number follows a negative binomial distribution, because this improved model fit relative to the simpler hurdle-Poisson model).</p>
 <p>We assume that the parameters controlling both the hurdle and the distribution of non-zero values are affected by four fixed effects (the female’s genotype: STST, SRST, or SRSR), her isoline, the female’s age, and the interaction between genotype and isoline. We also fit two random effects: isoline, and experimental block. All fixed effects were assumed to have a prior distribution following a normal distribution with mean 0 and SD = 5.</p>
 <pre class="r"><code>if(!file.exists(&quot;output/brms_model.rds&quot;)){
-
+ 
+  # The hurdle and the mean have the same set of predictors
   model_formula &lt;- bf(
-    offspring ~ genotype * Isoline + female_age + (1 | Block), # formula for the mean
-    hu        ~ genotype * Isoline + female_age + (1 | Block)  # formula for the hurdle
+    offspring ~ genotype * Isoline + female_age + (1 | Block), 
+    hu        ~ genotype * Isoline + female_age + (1 | Block)  
   )
   
   model_prior &lt;- c(set_prior(&quot;normal(0, 5)&quot;, class = &quot;b&quot;),
                    set_prior(&quot;normal(0, 5)&quot;, class = &quot;b&quot;, dpar = &quot;hu&quot;))
-  
-  # imputed_data &lt;- fitness_data %&gt;%
-  #   select(offspring, genotype, body_size, female_age, Isoline, Block) %&gt;%
-  #   mice(m = 5, print = FALSE) 
   
   model &lt;- brm(model_formula,
                         family = &quot;hurdle_negbinomial&quot;,
@@ -1060,76 +1071,864 @@ lukeholman
       mutate(pd = (100 - pd) / 100,
              Parameter = gsub(&quot;[.]&quot;, &quot;:&quot;, gsub(&quot;b_&quot;, &quot;&quot;, Parameter)))
 
-random &lt;- summary(model)$random # Finish
+random &lt;- as.data.frame(summary(model)$random[[1]]) %&gt;%
+  rownames_to_column(&quot;Parameter&quot;) %&gt;%
+  mutate(p = NA,
+         Parameter = c(&quot;sd(Block - Intercept)&quot;, &quot;sd(Block - Hurdle intercept)&quot;))
 
 summary(model)$fixed %&gt;% as.data.frame() %&gt;% 
   rownames_to_column(&quot;Parameter&quot;) %&gt;%
   left_join(bayesian_p_values, by = &quot;Parameter&quot;) %&gt;%
   rename(p = pd) %&gt;% arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
+  rbind(random) %&gt;%
   mutate(Parameter = gsub(&quot;hu_&quot;, &quot;Hurdle - &quot;, Parameter),
          Estimate =  format(round(Estimate, 3), nsmall = 3),
          Est.Error =  format(round(Est.Error, 3), nsmall = 3),
          ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot;&quot;),
+         ` ` = replace(` `, is.na(` `), &quot;&quot;),
          p = format(round(p, 4), nsmall = 4),
          Rhat = format(round(Rhat, 3), nsmall = 3),
          `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
          `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
          Eff.Sample = round(Eff.Sample, 0)
-         ) </code></pre>
-<pre><code>                            Parameter Estimate Est.Error l-95% CI u-95% CI
-1                           Intercept    4.049     0.269    3.520    4.585
-2                        genotypeSRST    0.366     0.169    0.029    0.698
-3                        genotypeSRSR   -0.423     0.186   -0.790   -0.065
-4                        IsolineLew17   -0.061     0.164   -0.378    0.261
-5                        IsolineSloB3    0.287     0.167   -0.048    0.612
-6                        IsolineSloB7    0.163     0.171   -0.170    0.496
-7                          female_age    0.023     0.058   -0.091    0.138
-8           genotypeSRST:IsolineLew17   -0.225     0.242   -0.690    0.261
-9           genotypeSRSR:IsolineLew17   -0.017     0.255   -0.513    0.488
-10          genotypeSRST:IsolineSloB3   -0.687     0.253   -1.187   -0.191
-11          genotypeSRSR:IsolineSloB3   -0.849     0.268   -1.361   -0.314
-12          genotypeSRST:IsolineSloB7   -0.547     0.240   -1.015   -0.069
-13          genotypeSRSR:IsolineSloB7   -0.340     0.263   -0.854    0.176
-14                 Hurdle - Intercept   -1.498     1.190   -3.834    0.816
-15              Hurdle - genotypeSRST    1.473     0.799    0.003    3.142
-16              Hurdle - genotypeSRSR    2.186     0.789    0.750    3.854
-17              Hurdle - IsolineLew17   -1.045     1.206   -3.607    1.140
-18              Hurdle - IsolineSloB3   -0.925     1.195   -3.408    1.287
-19              Hurdle - IsolineSloB7   -0.666     1.197   -3.150    1.504
-20                Hurdle - female_age   -0.327     0.237   -0.796    0.131
-21 Hurdle - genotypeSRST:IsolineLew17    0.564     1.344   -1.982    3.384
-22 Hurdle - genotypeSRSR:IsolineLew17   -0.833     1.399   -3.483    2.078
-23 Hurdle - genotypeSRST:IsolineSloB3    0.851     1.343   -1.656    3.658
-24 Hurdle - genotypeSRSR:IsolineSloB3    1.078     1.307   -1.358    3.753
-25 Hurdle - genotypeSRST:IsolineSloB7   -0.590     1.402   -3.270    2.293
-26 Hurdle - genotypeSRSR:IsolineSloB7    0.186     1.291   -2.219    2.827
-   Eff.Sample  Rhat      p  
-1        6153 1.000 0.0000 *
-2        3221 1.001 0.0166 *
-3        3580 1.001 0.0111 *
-4        4053 1.000 0.3622  
-5        3999 1.000 0.0424 *
-6        3623 1.000 0.1717  
-7        9705 1.000 0.3435  
-8        3965 1.000 0.1704  
-9        4135 1.001 0.4712  
-10       4235 1.000 0.0045 *
-11       4732 1.001 0.0009 *
-12       3817 1.000 0.0115 *
-13       4039 1.001 0.0988  
-14       5225 1.000 0.1005  
-15       3454 1.000 0.0250 *
-16       3472 1.000 0.0009 *
-17       3525 1.000 0.1933  
-18       2814 1.000 0.2150  
-19       3975 1.000 0.3049  
-20      10966 1.000 0.0831  
-21       3611 1.000 0.3439  
-22       3812 1.000 0.2704  
-23       3169 1.000 0.2689  
-24       2985 1.000 0.2051  
-25       4095 1.000 0.3333  
-26       3847 1.000 0.4508  </code></pre>
+         ) %&gt;% 
+  kable() %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:left;">
+Estimate
+</th>
+<th style="text-align:left;">
+Est.Error
+</th>
+<th style="text-align:left;">
+l-95% CI
+</th>
+<th style="text-align:left;">
+u-95% CI
+</th>
+<th style="text-align:right;">
+Eff.Sample
+</th>
+<th style="text-align:left;">
+Rhat
+</th>
+<th style="text-align:left;">
+p
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:left;">
+4.049
+</td>
+<td style="text-align:left;">
+0.269
+</td>
+<td style="text-align:left;">
+3.520
+</td>
+<td style="text-align:left;">
+4.585
+</td>
+<td style="text-align:right;">
+6153
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0000
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST
+</td>
+<td style="text-align:left;">
+0.366
+</td>
+<td style="text-align:left;">
+0.169
+</td>
+<td style="text-align:left;">
+0.029
+</td>
+<td style="text-align:left;">
+0.698
+</td>
+<td style="text-align:right;">
+3221
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+0.0166
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRSR
+</td>
+<td style="text-align:left;">
+-0.423
+</td>
+<td style="text-align:left;">
+0.186
+</td>
+<td style="text-align:left;">
+-0.790
+</td>
+<td style="text-align:left;">
+-0.065
+</td>
+<td style="text-align:right;">
+3580
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+0.0111
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IsolineLew17
+</td>
+<td style="text-align:left;">
+-0.061
+</td>
+<td style="text-align:left;">
+0.164
+</td>
+<td style="text-align:left;">
+-0.378
+</td>
+<td style="text-align:left;">
+0.261
+</td>
+<td style="text-align:right;">
+4053
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.3622
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IsolineSloB3
+</td>
+<td style="text-align:left;">
+0.287
+</td>
+<td style="text-align:left;">
+0.167
+</td>
+<td style="text-align:left;">
+-0.048
+</td>
+<td style="text-align:left;">
+0.612
+</td>
+<td style="text-align:right;">
+3999
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0424
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IsolineSloB7
+</td>
+<td style="text-align:left;">
+0.163
+</td>
+<td style="text-align:left;">
+0.171
+</td>
+<td style="text-align:left;">
+-0.170
+</td>
+<td style="text-align:left;">
+0.496
+</td>
+<td style="text-align:right;">
+3623
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.1717
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+female_age
+</td>
+<td style="text-align:left;">
+0.023
+</td>
+<td style="text-align:left;">
+0.058
+</td>
+<td style="text-align:left;">
+-0.091
+</td>
+<td style="text-align:left;">
+0.138
+</td>
+<td style="text-align:right;">
+9705
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.3435
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST:IsolineLew17
+</td>
+<td style="text-align:left;">
+-0.225
+</td>
+<td style="text-align:left;">
+0.242
+</td>
+<td style="text-align:left;">
+-0.690
+</td>
+<td style="text-align:left;">
+0.261
+</td>
+<td style="text-align:right;">
+3965
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.1704
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRSR:IsolineLew17
+</td>
+<td style="text-align:left;">
+-0.017
+</td>
+<td style="text-align:left;">
+0.255
+</td>
+<td style="text-align:left;">
+-0.513
+</td>
+<td style="text-align:left;">
+0.488
+</td>
+<td style="text-align:right;">
+4135
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+0.4712
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST:IsolineSloB3
+</td>
+<td style="text-align:left;">
+-0.687
+</td>
+<td style="text-align:left;">
+0.253
+</td>
+<td style="text-align:left;">
+-1.187
+</td>
+<td style="text-align:left;">
+-0.191
+</td>
+<td style="text-align:right;">
+4235
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0045
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRSR:IsolineSloB3
+</td>
+<td style="text-align:left;">
+-0.849
+</td>
+<td style="text-align:left;">
+0.268
+</td>
+<td style="text-align:left;">
+-1.361
+</td>
+<td style="text-align:left;">
+-0.314
+</td>
+<td style="text-align:right;">
+4732
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+0.0009
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST:IsolineSloB7
+</td>
+<td style="text-align:left;">
+-0.547
+</td>
+<td style="text-align:left;">
+0.240
+</td>
+<td style="text-align:left;">
+-1.015
+</td>
+<td style="text-align:left;">
+-0.069
+</td>
+<td style="text-align:right;">
+3817
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0115
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRSR:IsolineSloB7
+</td>
+<td style="text-align:left;">
+-0.340
+</td>
+<td style="text-align:left;">
+0.263
+</td>
+<td style="text-align:left;">
+-0.854
+</td>
+<td style="text-align:left;">
+0.176
+</td>
+<td style="text-align:right;">
+4039
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+0.0988
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - Intercept
+</td>
+<td style="text-align:left;">
+-1.498
+</td>
+<td style="text-align:left;">
+1.190
+</td>
+<td style="text-align:left;">
+-3.834
+</td>
+<td style="text-align:left;">
+0.816
+</td>
+<td style="text-align:right;">
+5225
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.1005
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRST
+</td>
+<td style="text-align:left;">
+1.473
+</td>
+<td style="text-align:left;">
+0.799
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+3.142
+</td>
+<td style="text-align:right;">
+3454
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0250
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRSR
+</td>
+<td style="text-align:left;">
+2.186
+</td>
+<td style="text-align:left;">
+0.789
+</td>
+<td style="text-align:left;">
+0.750
+</td>
+<td style="text-align:left;">
+3.854
+</td>
+<td style="text-align:right;">
+3472
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0009
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - IsolineLew17
+</td>
+<td style="text-align:left;">
+-1.045
+</td>
+<td style="text-align:left;">
+1.206
+</td>
+<td style="text-align:left;">
+-3.607
+</td>
+<td style="text-align:left;">
+1.140
+</td>
+<td style="text-align:right;">
+3525
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.1933
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - IsolineSloB3
+</td>
+<td style="text-align:left;">
+-0.925
+</td>
+<td style="text-align:left;">
+1.195
+</td>
+<td style="text-align:left;">
+-3.408
+</td>
+<td style="text-align:left;">
+1.287
+</td>
+<td style="text-align:right;">
+2814
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.2150
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - IsolineSloB7
+</td>
+<td style="text-align:left;">
+-0.666
+</td>
+<td style="text-align:left;">
+1.197
+</td>
+<td style="text-align:left;">
+-3.150
+</td>
+<td style="text-align:left;">
+1.504
+</td>
+<td style="text-align:right;">
+3975
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.3049
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - female_age
+</td>
+<td style="text-align:left;">
+-0.327
+</td>
+<td style="text-align:left;">
+0.237
+</td>
+<td style="text-align:left;">
+-0.796
+</td>
+<td style="text-align:left;">
+0.131
+</td>
+<td style="text-align:right;">
+10966
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.0831
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRST:IsolineLew17
+</td>
+<td style="text-align:left;">
+0.564
+</td>
+<td style="text-align:left;">
+1.344
+</td>
+<td style="text-align:left;">
+-1.982
+</td>
+<td style="text-align:left;">
+3.384
+</td>
+<td style="text-align:right;">
+3611
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.3439
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRSR:IsolineLew17
+</td>
+<td style="text-align:left;">
+-0.833
+</td>
+<td style="text-align:left;">
+1.399
+</td>
+<td style="text-align:left;">
+-3.483
+</td>
+<td style="text-align:left;">
+2.078
+</td>
+<td style="text-align:right;">
+3812
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.2704
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRST:IsolineSloB3
+</td>
+<td style="text-align:left;">
+0.851
+</td>
+<td style="text-align:left;">
+1.343
+</td>
+<td style="text-align:left;">
+-1.656
+</td>
+<td style="text-align:left;">
+3.658
+</td>
+<td style="text-align:right;">
+3169
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.2689
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRSR:IsolineSloB3
+</td>
+<td style="text-align:left;">
+1.078
+</td>
+<td style="text-align:left;">
+1.307
+</td>
+<td style="text-align:left;">
+-1.358
+</td>
+<td style="text-align:left;">
+3.753
+</td>
+<td style="text-align:right;">
+2985
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.2051
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRST:IsolineSloB7
+</td>
+<td style="text-align:left;">
+-0.590
+</td>
+<td style="text-align:left;">
+1.402
+</td>
+<td style="text-align:left;">
+-3.270
+</td>
+<td style="text-align:left;">
+2.293
+</td>
+<td style="text-align:right;">
+4095
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.3333
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRSR:IsolineSloB7
+</td>
+<td style="text-align:left;">
+0.186
+</td>
+<td style="text-align:left;">
+1.291
+</td>
+<td style="text-align:left;">
+-2.219
+</td>
+<td style="text-align:left;">
+2.827
+</td>
+<td style="text-align:right;">
+3847
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+0.4508
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sd(Block - Intercept)
+</td>
+<td style="text-align:left;">
+0.180
+</td>
+<td style="text-align:left;">
+0.159
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+0.568
+</td>
+<td style="text-align:right;">
+2097
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sd(Block - Hurdle intercept)
+</td>
+<td style="text-align:left;">
+0.572
+</td>
+<td style="text-align:left;">
+0.518
+</td>
+<td style="text-align:left;">
+0.023
+</td>
+<td style="text-align:left;">
+1.948
+</td>
+<td style="text-align:right;">
+2326
+</td>
+<td style="text-align:left;">
+1.001
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
 </div>
 <div id="plot-the-estimated-means-for-each-genotype" class="section level2">
 <h2>Plot the estimated means for each genotype</h2>
