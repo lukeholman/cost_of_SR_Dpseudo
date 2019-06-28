@@ -22,7 +22,7 @@ SE <- function(x) sd(x) / sqrt(length(x))
 ```
 
 ## Load the data
-```{r}
+```{r message=FALSE, warning=FALSE}
 fitness_data <- read_csv("data/SR_fitness_data.csv") %>% 
   filter(!is.na(genotype)) %>%
   rename(body_size = `Body size`,
@@ -70,18 +70,15 @@ We assume that the parameters controlling both the hurdle and the distribution o
 
 ```{r}
 if(!file.exists("output/brms_model.rds")){
-
+ 
+  # The hurdle and the mean have the same set of predictors
   model_formula <- bf(
-    offspring ~ genotype * Isoline + female_age + (1 | Block), # formula for the mean
-    hu        ~ genotype * Isoline + female_age + (1 | Block)  # formula for the hurdle
+    offspring ~ genotype * Isoline + female_age + (1 | Block), 
+    hu        ~ genotype * Isoline + female_age + (1 | Block)  
   )
   
   model_prior <- c(set_prior("normal(0, 5)", class = "b"),
                    set_prior("normal(0, 5)", class = "b", dpar = "hu"))
-  
-  # imputed_data <- fitness_data %>%
-  #   select(offspring, genotype, body_size, female_age, Isoline, Block) %>%
-  #   mice(m = 5, print = FALSE) 
   
   model <- brm(model_formula,
                         family = "hurdle_negbinomial",
@@ -108,22 +105,28 @@ bayesian_p_values <- as.data.frame(p_direction(model)) %>%
       mutate(pd = (100 - pd) / 100,
              Parameter = gsub("[.]", ":", gsub("b_", "", Parameter)))
 
-random <- summary(model)$random # Finish
+random <- as.data.frame(summary(model)$random[[1]]) %>%
+  rownames_to_column("Parameter") %>%
+  mutate(p = NA,
+         Parameter = c("sd(Block - Intercept)", "sd(Block - Hurdle intercept)"))
 
 summary(model)$fixed %>% as.data.frame() %>% 
   rownames_to_column("Parameter") %>%
   left_join(bayesian_p_values, by = "Parameter") %>%
   rename(p = pd) %>% arrange(grepl("hu_", Parameter)) %>%
+  rbind(random) %>%
   mutate(Parameter = gsub("hu_", "Hurdle - ", Parameter),
          Estimate =  format(round(Estimate, 3), nsmall = 3),
          Est.Error =  format(round(Est.Error, 3), nsmall = 3),
          ` ` = ifelse(p < 0.05, "*", ""),
+         ` ` = replace(` `, is.na(` `), ""),
          p = format(round(p, 4), nsmall = 4),
          Rhat = format(round(Rhat, 3), nsmall = 3),
          `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
          `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
          Eff.Sample = round(Eff.Sample, 0)
-         ) 
+         ) %>% 
+  kable() %>% kable_styling()
 ```
 
 ## Plot the estimated means for each genotype
