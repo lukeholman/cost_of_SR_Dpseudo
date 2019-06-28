@@ -318,7 +318,7 @@ div.section {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -327,7 +327,7 @@ div.section {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -339,7 +339,7 @@ div.section {
 <strong>Last updated:</strong> 2019-06-28
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>cost_of_SR_Dpseudo/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -355,12 +355,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -415,10 +415,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstronge56965b"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> e56965b </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongffdc5d4"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> ffdc5d4 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstronge56965b" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongffdc5d4" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -429,114 +429,9 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  analysis/population_genetic_model.Rmd
-    Untracked:  analysis/statistics.Rmd
-    Untracked:  data/SR_fitness_data.csv
-    Untracked:  data/simulation_output.rds
-    Untracked:  data/simulation_output_1.rds
-    Untracked:  data/simulation_output_10.rds
-    Untracked:  data/simulation_output_100.rds
-    Untracked:  data/simulation_output_11.rds
-    Untracked:  data/simulation_output_12.rds
-    Untracked:  data/simulation_output_13.rds
-    Untracked:  data/simulation_output_14.rds
-    Untracked:  data/simulation_output_15.rds
-    Untracked:  data/simulation_output_16.rds
-    Untracked:  data/simulation_output_17.rds
-    Untracked:  data/simulation_output_18.rds
-    Untracked:  data/simulation_output_19.rds
-    Untracked:  data/simulation_output_2.rds
-    Untracked:  data/simulation_output_20.rds
-    Untracked:  data/simulation_output_21.rds
-    Untracked:  data/simulation_output_22.rds
-    Untracked:  data/simulation_output_23.rds
-    Untracked:  data/simulation_output_24.rds
-    Untracked:  data/simulation_output_25.rds
-    Untracked:  data/simulation_output_26.rds
-    Untracked:  data/simulation_output_27.rds
-    Untracked:  data/simulation_output_28.rds
-    Untracked:  data/simulation_output_29.rds
-    Untracked:  data/simulation_output_3.rds
-    Untracked:  data/simulation_output_30.rds
-    Untracked:  data/simulation_output_31.rds
-    Untracked:  data/simulation_output_32.rds
-    Untracked:  data/simulation_output_33.rds
-    Untracked:  data/simulation_output_34.rds
-    Untracked:  data/simulation_output_35.rds
-    Untracked:  data/simulation_output_36.rds
-    Untracked:  data/simulation_output_37.rds
-    Untracked:  data/simulation_output_38.rds
-    Untracked:  data/simulation_output_39.rds
-    Untracked:  data/simulation_output_4.rds
-    Untracked:  data/simulation_output_40.rds
-    Untracked:  data/simulation_output_41.rds
-    Untracked:  data/simulation_output_42.rds
-    Untracked:  data/simulation_output_43.rds
-    Untracked:  data/simulation_output_44.rds
-    Untracked:  data/simulation_output_45.rds
-    Untracked:  data/simulation_output_46.rds
-    Untracked:  data/simulation_output_47.rds
-    Untracked:  data/simulation_output_48.rds
-    Untracked:  data/simulation_output_49.rds
-    Untracked:  data/simulation_output_5.rds
-    Untracked:  data/simulation_output_50.rds
-    Untracked:  data/simulation_output_51.rds
-    Untracked:  data/simulation_output_52.rds
-    Untracked:  data/simulation_output_53.rds
-    Untracked:  data/simulation_output_54.rds
-    Untracked:  data/simulation_output_55.rds
-    Untracked:  data/simulation_output_56.rds
-    Untracked:  data/simulation_output_57.rds
-    Untracked:  data/simulation_output_58.rds
-    Untracked:  data/simulation_output_59.rds
-    Untracked:  data/simulation_output_6.rds
-    Untracked:  data/simulation_output_60.rds
-    Untracked:  data/simulation_output_61.rds
-    Untracked:  data/simulation_output_62.rds
-    Untracked:  data/simulation_output_63.rds
-    Untracked:  data/simulation_output_64.rds
-    Untracked:  data/simulation_output_65.rds
-    Untracked:  data/simulation_output_66.rds
-    Untracked:  data/simulation_output_67.rds
-    Untracked:  data/simulation_output_68.rds
-    Untracked:  data/simulation_output_69.rds
-    Untracked:  data/simulation_output_7.rds
-    Untracked:  data/simulation_output_70.rds
-    Untracked:  data/simulation_output_71.rds
-    Untracked:  data/simulation_output_72.rds
-    Untracked:  data/simulation_output_73.rds
-    Untracked:  data/simulation_output_74.rds
-    Untracked:  data/simulation_output_75.rds
-    Untracked:  data/simulation_output_76.rds
-    Untracked:  data/simulation_output_77.rds
-    Untracked:  data/simulation_output_78.rds
-    Untracked:  data/simulation_output_79.rds
-    Untracked:  data/simulation_output_8.rds
-    Untracked:  data/simulation_output_80.rds
-    Untracked:  data/simulation_output_81.rds
-    Untracked:  data/simulation_output_82.rds
-    Untracked:  data/simulation_output_83.rds
-    Untracked:  data/simulation_output_84.rds
-    Untracked:  data/simulation_output_85.rds
-    Untracked:  data/simulation_output_86.rds
-    Untracked:  data/simulation_output_87.rds
-    Untracked:  data/simulation_output_88.rds
-    Untracked:  data/simulation_output_89.rds
-    Untracked:  data/simulation_output_9.rds
-    Untracked:  data/simulation_output_90.rds
-    Untracked:  data/simulation_output_91.rds
-    Untracked:  data/simulation_output_92.rds
-    Untracked:  data/simulation_output_93.rds
-    Untracked:  data/simulation_output_94.rds
-    Untracked:  data/simulation_output_95.rds
-    Untracked:  data/simulation_output_96.rds
-    Untracked:  data/simulation_output_97.rds
-    Untracked:  data/simulation_output_98.rds
-    Untracked:  data/simulation_output_99.rds
-    Untracked:  docs/figure/
-    Untracked:  figures/
-    Untracked:  output/brms_model.rds
+Unstaged changes:
+    Modified:   figures/figure_3.pdf
+    Modified:   figures/figure_4.pdf
 
 </code></pre>
 <p>
@@ -549,9 +444,69 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+ffdc5d4
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+First complete commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+ffdc5d4
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+First complete commit
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -1031,6 +986,43 @@ Across all isolines
 <pre class="r"><code>pp_check(model, type = &quot;dens_overlay&quot;)</code></pre>
 <pre><code>Using 10 posterior samples for ppc type &#39;dens_overlay&#39; by default.</code></pre>
 <p><img src="figure/statistics.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ffdc5d4
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="inspect-the-models-parameter-estimates" class="section level2">
 <h2>Inspect the model’s parameter estimates</h2>
@@ -1219,8 +1211,82 @@ figure_1 %&gt;% ggsave(filename = &quot;figures/figure_1.pdf&quot;, width = 9, h
 figure_2 %&gt;% ggsave(filename = &quot;figures/figure_2.pdf&quot;, width = 9, height = 4)</code></pre>
 <pre class="r"><code>figure_1</code></pre>
 <p><img src="figure/statistics.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ffdc5d4
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>figure_2</code></pre>
 <p><img src="figure/statistics.Rmd/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ffdc5d4
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="calculated-pairwise-differences-between-genotypes" class="section level2">
 <h2>Calculated pairwise differences between genotypes</h2>
@@ -1541,14 +1607,14 @@ loaded via a namespace (and not attached):
  [70] lattice_0.20-35      labeling_0.3         rstantools_1.5.0    
  [73] htmlwidgets_1.2      tidyselect_0.2.5     processx_3.2.1      
  [76] plyr_1.8.4           magrittr_1.5         R6_2.4.0            
- [79] pillar_1.3.1.9000    haven_1.1.2          withr_2.1.2         
- [82] xts_0.11-0           abind_1.4-5          modelr_0.1.2        
- [85] crayon_1.3.4         rmarkdown_1.10       grid_3.5.1          
- [88] readxl_1.1.0         callr_2.0.4          git2r_0.23.0        
- [91] threejs_0.3.1        digest_0.6.18        xtable_1.8-4        
- [94] httpuv_1.5.1         stats4_3.5.1         munsell_0.5.0       
- [97] beeswarm_0.2.3       viridisLite_0.3.0    vipor_0.4.5         
-[100] shinyjs_1.0         </code></pre>
+ [79] pillar_1.3.1.9000    haven_1.1.2          whisker_0.3-2       
+ [82] withr_2.1.2          xts_0.11-0           abind_1.4-5         
+ [85] modelr_0.1.2         crayon_1.3.4         rmarkdown_1.10      
+ [88] grid_3.5.1           readxl_1.1.0         callr_2.0.4         
+ [91] git2r_0.23.0         threejs_0.3.1        digest_0.6.18       
+ [94] xtable_1.8-4         httpuv_1.5.1         stats4_3.5.1        
+ [97] munsell_0.5.0        beeswarm_0.2.3       viridisLite_0.3.0   
+[100] vipor_0.4.5          shinyjs_1.0         </code></pre>
 </div>
 </div>
 
