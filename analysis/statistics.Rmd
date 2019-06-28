@@ -1,0 +1,291 @@
+---
+title: "statistics"
+author: "lukeholman"
+date: "2019-06-21"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Load R libraries
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(brms)
+library(bayestestR)
+library(kableExtra)
+library(ggbeeswarm)
+library(RColorBrewer)
+library(showtext)
+font_add_google(name = "Lato", family = "Lato", regular.wt = 400, bold.wt = 700)
+showtext_auto()
+options(stringsAsFactors = FALSE)
+
+SE <- function(x) sd(x) / sqrt(length(x))
+```
+
+## Load the data
+```{r}
+fitness_data <- read_csv("data/SR_fitness_data.csv") %>% 
+  filter(!is.na(genotype)) %>%
+  rename(body_size = `Body size`,
+         female_age = `F age`) %>%
+  mutate(genotype = factor(genotype, levels = c("STST", "SRST", "SRSR")))
+```
+
+
+## Make a table of summary statistics and sample sizes
+
+Here, we calculate the mean offspring produced by females from each of the three genotypes (STST, SRST, and SRSR), either within each isoline or across all the isolines. We also calculate the % females that failed to produce any offspring, and provide sample size information.
+```{r}
+means_by_isoline <- fitness_data %>%
+  group_by(genotype, Isoline) %>%
+  summarise(
+    Number_of_females_measured = n(),
+    Mean_offspring_per_female = mean(offspring),
+    SE = SE(offspring),
+    n_females_producing_offspring = sum(offspring != 0),
+    Percent_females_producing_offspring = 100 * n_females_producing_offspring / n()) 
+
+means <- fitness_data %>%
+  mutate(Isoline = "Across all isolines") %>%
+  group_by(genotype, Isoline) %>%
+  summarise(
+    Number_of_females_measured = n(),
+    Mean_offspring_per_female = mean(offspring),
+    SE = SE(offspring),
+    n_females_producing_offspring = sum(offspring != 0),
+    Percent_females_producing_offspring = 100 * n_females_producing_offspring / n()) 
+
+
+bind_rows(means_by_isoline, means) %>%
+  rename_all(function(x) gsub("_", " ", x)) %>%
+  rename_all(function(x) gsub("Percent", "%", x)) %>%
+  rename(Genotype = genotype) %>%
+  kable(digits = 2) %>% kable_styling()
+```
+
+## Run the Bayesian hurdle model 
+
+The model assumes that the response variable, offspring number, is the result of a 'hurdle' process. Essentially this means that the model consists of two sub-models: one controlling the probability that offspring number is non-zero, and one controlling the number of offspring produced provided that more than zero are produced (we assume that offspring number follows a negative binomial distribution, because this improved model fit relative to the simpler hurdle-Poisson model).
+
+We assume that the parameters controlling both the hurdle and the distribution of non-zero values are affected by four fixed effects (the female's genotype: STST, SRST, or SRSR), her isoline, the female's age, and the interaction between genotype and isoline. We also fit two random effects: isoline, and experimental block. All fixed effects were assumed to have a prior distribution following a normal distribution with mean 0 and SD = 5. 
+
+```{r}
+if(!file.exists("output/brms_model.rds")){
+
+  model_formula <- bf(
+    offspring ~ genotype * Isoline + female_age + (1 | Block), # formula for the mean
+    hu        ~ genotype * Isoline + female_age + (1 | Block)  # formula for the hurdle
+  )
+  
+  model_prior <- c(set_prior("normal(0, 5)", class = "b"),
+                   set_prior("normal(0, 5)", class = "b", dpar = "hu"))
+  
+  # imputed_data <- fitness_data %>%
+  #   select(offspring, genotype, body_size, female_age, Isoline, Block) %>%
+  #   mice(m = 5, print = FALSE) 
+  
+  model <- brm(model_formula,
+                        family = "hurdle_negbinomial",
+                        chains = 4, cores = 1, iter = 4000, inits = 0, seed = 12345,
+                        control = list(adapt_delta = 0.999, max_treedepth = 15),
+                        prior = model_prior,
+                        data = fitness_data)
+  saveRDS(model, file = "output/brms_model.rds")
+} else model <- readRDS("output/brms_model.rds")
+```
+
+## Perform a posterior predictive check
+
+The idea behind posterior predictive checking is that if our model is a good fit, then we should be able to use it to generate data that looks a lot like the data we observed. Here, we see 10 draws from the 'posterior predictive distribution' (thin lines), which indeed look quite similar to the distribution of the real data (thick line), suggested that our model approximates the processes that generated the real data well enough for reliable inference.
+
+```{r}
+pp_check(model, type = "dens_overlay")
+```
+
+## Inspect the model's parameter estimates
+
+```{r}
+bayesian_p_values <- as.data.frame(p_direction(model)) %>% 
+      mutate(pd = (100 - pd) / 100,
+             Parameter = gsub("[.]", ":", gsub("b_", "", Parameter)))
+
+random <- summary(model)$random # Finish
+
+summary(model)$fixed %>% as.data.frame() %>% 
+  rownames_to_column("Parameter") %>%
+  left_join(bayesian_p_values, by = "Parameter") %>%
+  rename(p = pd) %>% arrange(grepl("hu_", Parameter)) %>%
+  mutate(Parameter = gsub("hu_", "Hurdle - ", Parameter),
+         Estimate =  format(round(Estimate, 3), nsmall = 3),
+         Est.Error =  format(round(Est.Error, 3), nsmall = 3),
+         ` ` = ifelse(p < 0.05, "*", ""),
+         p = format(round(p, 4), nsmall = 4),
+         Rhat = format(round(Rhat, 3), nsmall = 3),
+         `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
+         `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
+         Eff.Sample = round(Eff.Sample, 0)
+         ) 
+```
+
+## Plot the estimated means for each genotype
+
+```{r make_figures, message=FALSE, warning=FALSE}
+new <- fitness_data %>% select(genotype, Isoline, body_size, female_age) %>%
+  mutate(body_size  = mean(body_size, na.rm = TRUE),
+         female_age = mean(female_age)) %>% 
+  distinct()
+
+predicted_mean <- data.frame(new, fitted(model, newdata = new, re_formula = NA)) %>% 
+  mutate(facet = "A. Mean offspring production")
+predicted_mean_when_fertile <- data.frame(new, fitted(model, newdata = new, dpar = "mu", re_formula = NA)) %>%
+  mutate(facet = "B. Mean offspring production\n(excluding infertile females)")
+predicted_prop_infertile <- data.frame(new, fitted(model, newdata = new, dpar = "hu", re_formula = NA)) %>% 
+  mutate(facet = "C. % fertile females",
+         Estimate = 100 * (1 - Estimate), Q2.5 = (1 - Q2.5) * 100, Q97.5 = (1 - Q97.5) * 100)
+
+
+posterior_means <- 
+  data.frame(new, as.data.frame(t(fitted(model, newdata = new, re_formula = NA, summary = FALSE)))) %>%
+  select(-body_size, -female_age, -Isoline) %>%
+  group_by(genotype) %>%
+  summarise_all(mean) %>% select(-genotype) %>% t() %>% as.data.frame() %>%
+  rename(STST = V1, SRST = V2, SRSR = V3)
+  
+predicted_mean_all_iso <- data.frame(
+  genotype = c("STST", "SRST", "SRSR"), Isoline = "All", 
+  posterior_means %>% lapply(posterior_summary) %>% do.call("rbind", .),
+  facet = "A. Mean offspring production") 
+
+posterior_means_when_fertile <- 
+  data.frame(new, as.data.frame(t(fitted(model, newdata = new, dpar = "mu", re_formula = NA, summary = FALSE)))) %>%
+  select(-body_size, -female_age, -Isoline) %>%
+  group_by(genotype) %>%
+  summarise_all(mean) %>% select(-genotype) %>% t() %>% as.data.frame() %>%
+  rename(STST = V1, SRST = V2, SRSR = V3)
+  
+predicted_mean_when_fertile_all_iso <- data.frame(
+  genotype = c("STST", "SRST", "SRSR"), Isoline = "All", 
+  posterior_means_when_fertile %>% lapply(posterior_summary) %>% do.call("rbind", .),
+  facet = "B. Mean offspring production\n(excluding infertile females)") 
+
+posterior_means_prop_infertile <- 
+  data.frame(new, as.data.frame(t(fitted(model, newdata = new, dpar = "hu", re_formula = NA, summary = FALSE)))) %>%
+  select(-body_size, -female_age, -Isoline) %>%
+  group_by(genotype) %>%
+  summarise_all(~ 100 * mean(.x)) %>% select(-genotype) %>% t() %>% as.data.frame() %>%
+  rename(STST = V1, SRST = V2, SRSR = V3)
+  
+predicted_prop_infertile_all_iso <- data.frame(
+  genotype = c("STST", "SRST", "SRSR"), Isoline = "All", 
+  posterior_means_prop_infertile %>% lapply(posterior_summary) %>% do.call("rbind", .),
+  facet = "C. % fertile females") 
+
+preds_figure1 <- bind_rows(predicted_mean_all_iso,
+                   predicted_mean_when_fertile_all_iso,
+                   predicted_prop_infertile_all_iso) %>%
+  mutate(genotype = factor(genotype, levels = c("STST", "SRST", "SRSR")))
+
+preds_figure2 <- bind_rows(predicted_mean,
+                         predicted_mean_when_fertile,
+                         predicted_prop_infertile) %>%
+  mutate(facet = factor(facet, levels = unique(facet)),
+         genotype = factor(genotype, levels = c("STST", "SRST", "SRSR"))) %>%
+  select(-body_size, -female_age)
+
+
+beeswarm_points <- bind_rows(
+  fitness_data %>% mutate(facet = "A. Mean offspring production"),
+  fitness_data %>% filter(offspring != 0) %>% mutate(facet = "B. Mean offspring production\n(excluding infertile females)")) %>% 
+  mutate(Fertility = ifelse(offspring == 0, "Sterile", "Fertile"),
+         genotype  = factor(genotype, levels = c("STST", "SRST", "SRSR"))) %>%
+    rename(Estimate = offspring) 
+  
+
+pos1 <- position_nudge(x = -0.17)
+pal <- c(brewer.pal(4, "RdPu")[2], brewer.pal(7, "Purples")[5])
+
+figure_1 <- preds_figure1 %>%
+  ggplot(aes(genotype, Estimate)) + 
+  geom_errorbar(aes(ymin = Q2.5, ymax = Q97.5), colour = "grey20", position = pos1, size = .8, width = 0.1) + 
+  geom_beeswarm(data = beeswarm_points, aes(colour = Fertility),
+                size = .7, alpha = 0.6) + 
+  geom_point(size = 3.1, pch = 21, colour = "black", position = pos1, fill = "grey20") + 
+  scale_colour_manual(values = pal) + 
+  facet_wrap(~facet, scale = "free_y") + 
+  labs(y = "Posterior estimate \u00B1 95% CIs", x = "Genotype") + 
+  theme_bw() + 
+  theme(strip.background = element_blank(),
+        text = element_text(family = "Lato", size = 12),
+        panel.grid.major.x = element_blank(), 
+        strip.text = element_text(hjust = 0))
+
+
+dodge <- position_dodge(0.66)
+figure_2 <- preds_figure2 %>%
+  ggplot(aes(genotype, Estimate, fill = Isoline)) + 
+  geom_errorbar(aes(ymin = Q2.5, ymax = Q97.5), size = .7, width = 0.3, colour = "grey40", position = dodge) + 
+  geom_point(size = 3.1, pch = 21, colour = "black", position = dodge) + 
+  facet_wrap(~facet, scale = "free_y") + 
+  scale_fill_brewer(palette = "Pastel1") +
+  labs(y = "Posterior estimate \u00B1 95% CIs", x = "Genotype") + 
+  theme_bw() + 
+  theme(strip.background = element_blank(),
+        text = element_text(family = "Lato", size = 12),
+        panel.grid.major.x = element_blank(), 
+        strip.text = element_text(hjust = 0))
+
+figure_1 %>% ggsave(filename = "figures/figure_1.pdf", width = 9, height = 4)
+figure_2 %>% ggsave(filename = "figures/figure_2.pdf", width = 9, height = 4)
+```
+
+
+```{r fig.showtext=TRUE, fig.width = 8, fig.height = 4.5}
+figure_1
+```
+
+```{r fig.showtext=TRUE, fig.width = 8, fig.height = 4.5}
+figure_2
+```
+
+
+## Calculated pairwise differences between genotypes
+
+```{r}
+compare_means <- function(mean1, mean2, posterior){
+  difference <- posterior[, mean2] - posterior[, mean1]
+  relative <- median(posterior[, mean2] / posterior[, mean1])
+  p_value <- as.numeric(p_direction(difference)) / 100
+  as_tibble(posterior_summary(as.mcmc(difference))) %>%
+    mutate(Comparison = paste(mean1, mean2, sep = " \u2192 "),
+           `% difference` = format(round(100 * relative, 1), nsmall = 1),
+           `95% CIs` = paste(" (", format(round(Q2.5, 1), nsmall = 1), " to ", format(round(Q97.5, 1), nsmall = 1), "%)", sep = ""),
+           `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = ""),
+           `Fitness trait` = NA,
+           p = p_value) %>%
+    select( -Q2.5, -Q97.5) %>%
+    select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `% difference`, p)
+}
+
+table_of_contrasts <- bind_rows(
+  compare_means("STST", "SRST", posterior_means),
+  compare_means("STST", "SRSR", posterior_means),
+  compare_means("SRST", "SRSR", posterior_means),
+  compare_means("STST", "SRST", posterior_means_when_fertile),
+  compare_means("STST", "SRSR", posterior_means_when_fertile),
+  compare_means("SRST", "SRSR", posterior_means_when_fertile),
+  compare_means("STST", "SRST", posterior_means_prop_infertile),
+  compare_means("STST", "SRSR", posterior_means_prop_infertile),
+  compare_means("SRST", "SRSR", posterior_means_prop_infertile)
+) %>% mutate(`Fitness trait` = rep(c("Mean offspring production",
+                                     "Mean offspring production (excluding infertile females)",
+                                     "% fertile females"), each = 3)) %>%
+  mutate(Est.Error = format(round(Est.Error, 2), nsmall = 2),
+         ` ` = ifelse(p < 0.05, "*", " "),
+         p = format(round(p, 4), nsmall = 4))
+
+table_of_contrasts %>%
+  kable() %>% kable_styling()
+```
+
+
