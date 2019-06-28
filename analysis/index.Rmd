@@ -11,7 +11,7 @@ This website presents all the code used for the forthcoming paper "High cost of 
 
 
 # Statistical analysis
-Click [here](model_functions.html) to see the code used to analyse and plot the female fecundity data.
+Click [here](statistics.html) to see the code used to analyse and plot the female fecundity data.
 
 # Population genetic model
-Click [here](run_model.html) to see the code used to run the model that derives expected frequencies of SR.
+Click [here](population_genetic_model.html) to see the code used to run the model that derives expected frequencies of SR.

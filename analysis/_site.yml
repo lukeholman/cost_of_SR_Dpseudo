@@ -1,7 +1,7 @@
-name: "SR in D. pseudobscura"
+name: "SR meiotic drive"
 output_dir: ../docs
 navbar:
-  title: "SR in D. pseudobscura"
+  title: "SR meiotic drive"
   left:
   - text: Home
     href: index.html
