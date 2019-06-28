@@ -141,7 +141,7 @@ predicted_mean <- data.frame(new, fitted(model, newdata = new, re_formula = NA))
   mutate(facet = "A. Mean offspring production")
 predicted_mean_when_fertile <- data.frame(new, fitted(model, newdata = new, dpar = "mu", re_formula = NA)) %>%
   mutate(facet = "B. Mean offspring production\n(excluding infertile females)")
-predicted_prop_infertile <- data.frame(new, fitted(model, newdata = new, dpar = "hu", re_formula = NA)) %>% 
+predicted_prop_fertile <- data.frame(new, fitted(model, newdata = new, dpar = "hu", re_formula = NA)) %>% 
   mutate(facet = "C. % fertile females",
          Estimate = 100 * (1 - Estimate), Q2.5 = (1 - Q2.5) * 100, Q97.5 = (1 - Q97.5) * 100)
 
@@ -170,26 +170,26 @@ predicted_mean_when_fertile_all_iso <- data.frame(
   posterior_means_when_fertile %>% lapply(posterior_summary) %>% do.call("rbind", .),
   facet = "B. Mean offspring production\n(excluding infertile females)") 
 
-posterior_means_prop_infertile <- 
+posterior_means_prop_fertile <- 
   data.frame(new, as.data.frame(t(fitted(model, newdata = new, dpar = "hu", re_formula = NA, summary = FALSE)))) %>%
   select(-body_size, -female_age, -Isoline) %>%
   group_by(genotype) %>%
-  summarise_all(~ 100 * mean(.x)) %>% select(-genotype) %>% t() %>% as.data.frame() %>%
+  summarise_all(~ 100 * (1 - mean(.x))) %>% select(-genotype) %>% t() %>% as.data.frame() %>%
   rename(STST = V1, SRST = V2, SRSR = V3)
   
-predicted_prop_infertile_all_iso <- data.frame(
+predicted_prop_fertile_all_iso <- data.frame(
   genotype = c("STST", "SRST", "SRSR"), Isoline = "All", 
-  posterior_means_prop_infertile %>% lapply(posterior_summary) %>% do.call("rbind", .),
+  posterior_means_prop_fertile %>% lapply(posterior_summary) %>% do.call("rbind", .),
   facet = "C. % fertile females") 
 
 preds_figure1 <- bind_rows(predicted_mean_all_iso,
                    predicted_mean_when_fertile_all_iso,
-                   predicted_prop_infertile_all_iso) %>%
+                   predicted_prop_fertile_all_iso) %>%
   mutate(genotype = factor(genotype, levels = c("STST", "SRST", "SRSR")))
 
 preds_figure2 <- bind_rows(predicted_mean,
                          predicted_mean_when_fertile,
-                         predicted_prop_infertile) %>%
+                         predicted_prop_fertile) %>%
   mutate(facet = factor(facet, levels = unique(facet)),
          genotype = factor(genotype, levels = c("STST", "SRST", "SRSR"))) %>%
   select(-body_size, -female_age)
@@ -252,20 +252,22 @@ figure_2
 
 ## Calculated pairwise differences between genotypes
 
+**Table 1**: Pairwise comparisons of genotypes for three measures of female fitness: mean offspring production, mean offspring production (not including females that produced zero offspring), and the % females that produced at least one offspring. The difference in means column shows the posterior estimate of the difference in means in its original units (i.e. offspring, or percentage points), where a negative difference means that genotype with more copies of SR has lower female fitness (parentheses show the 95% quantiles of this posterior, and the Est.Error column gives the average deviation from the mean). The relative difference column expresses the difference in relative terms; e.g. the first row shows that mean number of offspring produced by SRST females was 87.7% as much as that of STST females. Finally, the p column shows the posterior probability that the true difference in means is zero or of the opposite sign to the estiamte shown here (similar to a conventional p-value).
+
 ```{r}
 compare_means <- function(mean1, mean2, posterior){
   difference <- posterior[, mean2] - posterior[, mean1]
   relative <- median(posterior[, mean2] / posterior[, mean1])
-  p_value <- as.numeric(p_direction(difference)) / 100
+  p_value <- as.numeric(100 - p_direction(difference)) / 100
   as_tibble(posterior_summary(as.mcmc(difference))) %>%
     mutate(Comparison = paste(mean1, mean2, sep = " \u2192 "),
-           `% difference` = format(round(100 * relative, 1), nsmall = 1),
+           `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), "%", sep = ""),
            `95% CIs` = paste(" (", format(round(Q2.5, 1), nsmall = 1), " to ", format(round(Q97.5, 1), nsmall = 1), "%)", sep = ""),
            `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = ""),
            `Fitness trait` = NA,
            p = p_value) %>%
     select( -Q2.5, -Q97.5) %>%
-    select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `% difference`, p)
+    select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p)
 }
 
 table_of_contrasts <- bind_rows(
@@ -275,9 +277,9 @@ table_of_contrasts <- bind_rows(
   compare_means("STST", "SRST", posterior_means_when_fertile),
   compare_means("STST", "SRSR", posterior_means_when_fertile),
   compare_means("SRST", "SRSR", posterior_means_when_fertile),
-  compare_means("STST", "SRST", posterior_means_prop_infertile),
-  compare_means("STST", "SRSR", posterior_means_prop_infertile),
-  compare_means("SRST", "SRSR", posterior_means_prop_infertile)
+  compare_means("STST", "SRST", posterior_means_prop_fertile),
+  compare_means("STST", "SRSR", posterior_means_prop_fertile),
+  compare_means("SRST", "SRSR", posterior_means_prop_fertile)
 ) %>% mutate(`Fitness trait` = rep(c("Mean offspring production",
                                      "Mean offspring production (excluding infertile females)",
                                      "% fertile females"), each = 3)) %>%
