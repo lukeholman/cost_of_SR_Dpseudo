@@ -1,7 +1,5 @@
 ---
-title: "pop_gene_model"
-author: "lukeholman"
-date: "2019-03-19"
+title: "Population genetic model"
 output: workflowr::wflow_html
 ---
 

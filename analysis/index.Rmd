@@ -1,9 +1,17 @@
 ---
-title: "Home"
+title: "High cost of meiotic driving X chromosomes in female flies"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
 ---
 
-Welcome to my research website.
+This website presents all the code used for the forthcoming paper "High cost of meiotic driving X chromosomes in female flies" by William Larner, Tom Price, Luke Holman, and Nina Wedell.
+
+
+
+# Statistical analysis
+Click [here](model_functions.html) to see the code used to analyse and plot the female fecundity data.
+
+# Population genetic model
+Click [here](run_model.html) to see the code used to run the model that derives expected frequencies of SR.

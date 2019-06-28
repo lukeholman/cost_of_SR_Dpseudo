@@ -1,7 +1,7 @@
-name: "cost_of_SR_Dpseudo"
+name: "SR in D. pseudobscura"
 output_dir: ../docs
 navbar:
-  title: "cost_of_SR_Dpseudo"
+  title: "SR in D. pseudobscura"
   left:
   - text: Home
     href: index.html
