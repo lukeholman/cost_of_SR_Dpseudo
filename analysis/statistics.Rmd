@@ -62,7 +62,9 @@ bind_rows(means_by_isoline, means) %>%
   kable(digits = 2) %>% kable_styling()
 ```
 
-## Run the Bayesian hurdle model 
+## Fit a model to the data
+
+### Run the Bayesian hurdle model
 
 The model assumes that the response variable, offspring number, is the result of a 'hurdle' process. Essentially this means that the model consists of two sub-models: one controlling the probability that offspring number is non-zero, and one controlling the number of offspring produced provided that more than zero are produced (we assume that offspring number follows a negative binomial distribution, because this improved model fit relative to the simpler hurdle-Poisson model).
 
@@ -77,28 +79,37 @@ if(!file.exists("output/brms_model.rds")){
     hu        ~ genotype * Isoline + female_age + (1 | Block)  
   )
   
-  model_prior <- c(set_prior("normal(0, 5)", class = "b"),
-                   set_prior("normal(0, 5)", class = "b", dpar = "hu"))
+  # Find R^2 for a brms model, and its 95% CIs, and present neatly
+  neat_R2 <- function(model){
+    R2 <- bayes_R2(model) %>% round(2)
+    paste(R2[1,1], " (95% CIs = ", R2[1,3], "-", R2[1,4], ")", sep = "")
+  }
+  
+  # We set conservative, "regularising" priors - see McElreath's "Statistical Rethinking" textbook
+  model_prior <- c(set_prior("normal(0, 3)", class = "b"),
+                   set_prior("normal(0, 3)", class = "b", dpar = "hu"))
   
   model <- brm(model_formula,
-                        family = "hurdle_negbinomial",
-                        chains = 4, cores = 1, iter = 4000, inits = 0, seed = 12345,
-                        control = list(adapt_delta = 0.999, max_treedepth = 15),
-                        prior = model_prior,
-                        data = fitness_data)
+               family = "hurdle_negbinomial",
+               chains = 4, cores = 1, iter = 8000, inits = 0, seed = 12345,
+               control = list(adapt_delta = 0.999, max_treedepth = 15),
+               prior = model_prior, 
+               data = fitness_data)
+  
   saveRDS(model, file = "output/brms_model.rds")
+  saveRDS(neat_R2(model), file = "output/R2_of_brms_model.rds")
 } else model <- readRDS("output/brms_model.rds")
 ```
 
-## Perform a posterior predictive check
+### Graphically verify the model using a posterior predictive check
 
-The idea behind posterior predictive checking is that if our model is a good fit, then we should be able to use it to generate data that looks a lot like the data we observed. Here, we see 10 draws from the 'posterior predictive distribution' (thin lines), which indeed look quite similar to the distribution of the real data (thick line), suggested that our model approximates the processes that generated the real data well enough for reliable inference.
+The idea behind posterior predictive checking is that if our model is a good fit, then we should be able to use it to generate a dataset which looks a lot like the dataset we actually observed. Here, we see 11 draws from the 'posterior predictive distribution' (pale blue), which indeed look quite similar to the distribution of the real data (dark blue), suggesting that our model is a good enough approximation of the true data-generating process for reliable inference.
 
 ```{r}
-pp_check(model, type = "dens_overlay")
+pp_check(model, type = "hist", nsamples = 11, binwidth = 5)
 ```
 
-## Inspect the model's parameter estimates
+### Inspect the model's parameter estimates
 
 ```{r}
 bayesian_p_values <- as.data.frame(p_direction(model)) %>% 
@@ -129,31 +140,40 @@ summary(model)$fixed %>% as.data.frame() %>%
   kable() %>% kable_styling()
 ```
 
-## Plot the estimated means for each genotype
+## Use the model to generate posterior estimates of group means
+
+### Generate posterior predictions of the group means
+
+Here, we estimate the mean for three measures of female fitness using the model, for each genotype (across all isolines) and for each genotype-isoline combination. The model adjusts for variation due to experimental block and female age. 
 
 ```{r make_figures, message=FALSE, warning=FALSE}
+
+# Define the data for prediction. We use the average values for continuous predictors like female age
 new <- fitness_data %>% select(genotype, Isoline, body_size, female_age) %>%
   mutate(body_size  = mean(body_size, na.rm = TRUE),
          female_age = mean(female_age)) %>% 
   distinct()
 
+# Find the posterior medians and 95% CIs for each genotype/isoline combination
 predicted_mean <- data.frame(new, fitted(model, newdata = new, re_formula = NA)) %>% 
   mutate(facet = "A. Mean offspring production")
 predicted_mean_when_fertile <- data.frame(new, fitted(model, newdata = new, dpar = "mu", re_formula = NA)) %>%
   mutate(facet = "B. Mean offspring production\n(excluding infertile females)")
 predicted_prop_fertile <- data.frame(new, fitted(model, newdata = new, dpar = "hu", re_formula = NA)) %>% 
   mutate(facet = "C. % fertile females",
-         Estimate = 100 * (1 - Estimate), Q2.5 = (1 - Q2.5) * 100, Q97.5 = (1 - Q97.5) * 100)
+         Estimate = 100 * (1 - Estimate), # Convert to percentage of fertile females, instead of *proportion* that are *in*fertile
+         Q2.5 = (1 - Q2.5) * 100, 
+         Q97.5 = (1 - Q97.5) * 100)
 
-
+# Get the posterior averaged across the isolines
 posterior_means <- 
   data.frame(new, as.data.frame(t(fitted(model, newdata = new, re_formula = NA, summary = FALSE)))) %>%
   select(-body_size, -female_age, -Isoline) %>%
   group_by(genotype) %>%
   summarise_all(mean) %>% select(-genotype) %>% t() %>% as.data.frame() %>%
   rename(STST = V1, SRST = V2, SRSR = V3)
-  
-predicted_mean_all_iso <- data.frame(
+
+predicted_mean_all_iso <- data.frame( # Summarise it, for Figure 1  
   genotype = c("STST", "SRST", "SRSR"), Isoline = "All", 
   posterior_means %>% lapply(posterior_summary) %>% do.call("rbind", .),
   facet = "A. Mean offspring production") 
@@ -182,19 +202,23 @@ predicted_prop_fertile_all_iso <- data.frame(
   posterior_means_prop_fertile %>% lapply(posterior_summary) %>% do.call("rbind", .),
   facet = "C. % fertile females") 
 
+# Concatenate the predictions into one data frame for plotting
 preds_figure1 <- bind_rows(predicted_mean_all_iso,
-                   predicted_mean_when_fertile_all_iso,
-                   predicted_prop_fertile_all_iso) %>%
+                           predicted_mean_when_fertile_all_iso,
+                           predicted_prop_fertile_all_iso) %>%
   mutate(genotype = factor(genotype, levels = c("STST", "SRST", "SRSR")))
 
 preds_figure2 <- bind_rows(predicted_mean,
-                         predicted_mean_when_fertile,
-                         predicted_prop_fertile) %>%
+                           predicted_mean_when_fertile,
+                           predicted_prop_fertile) %>%
   mutate(facet = factor(facet, levels = unique(facet)),
          genotype = factor(genotype, levels = c("STST", "SRST", "SRSR"))) %>%
   select(-body_size, -female_age)
+```
 
+### Plot the posterior predictions of the group means
 
+```{r}
 beeswarm_points <- bind_rows(
   fitness_data %>% mutate(facet = "A. Mean offspring production"),
   fitness_data %>% filter(offspring != 0) %>% mutate(facet = "B. Mean offspring production\n(excluding infertile females)")) %>% 
@@ -240,7 +264,6 @@ figure_1 %>% ggsave(filename = "figures/figure_1.pdf", width = 9, height = 4)
 figure_2 %>% ggsave(filename = "figures/figure_2.pdf", width = 9, height = 4)
 ```
 
-
 ```{r fig.showtext=TRUE, fig.width = 8, fig.height = 4.5}
 figure_1
 ```
@@ -250,7 +273,7 @@ figure_2
 ```
 
 
-## Calculated pairwise differences between genotypes
+## Calculate pairwise differences between genotypes
 
 **Table 1**: Pairwise comparisons of genotypes for three measures of female fitness: mean offspring production, mean offspring production (not including females that produced zero offspring), and the % females that produced at least one offspring. The difference in means column shows the posterior estimate of the difference in means in its original units (i.e. offspring, or percentage points), where a negative difference means that genotype with more copies of SR has lower female fitness (parentheses show the 95% quantiles of this posterior, and the Est.Error column gives the average deviation from the mean). The relative difference column expresses the difference in relative terms; e.g. the first row shows that mean number of offspring produced by SRST females was 87.7% as much as that of STST females. Finally, the p column shows the posterior probability that the true difference in means is zero or of the opposite sign to the estiamte shown here (similar to a conventional p-value).
 
