@@ -27,10 +27,10 @@ real_world_data <- data.frame(
   freq_polyandry = c(0.58, 0.52, 0.73, 0.59, 0.73, 0.73, 0.92)
 )
 
-# The average of P1 and P2 in from GIRALDO-PEREZ et al, https://onlinelibrary.wiley.com/doi/pdf/10.1111/jeb.12792
+# The average of P1 and P2 in from Giraldo-Perez et al. 2016, https://onlinelibrary.wiley.com/doi/pdf/10.1111/jeb.12792
 average_paternity_SR_males <- 0.2105
 
-# The estimated frequency of SR male progeny who inherit SR
+# The estimated frequency of SR male progeny who inherit SR, REFERENCE?
 real_world_k <- 0.96
 ```
 
@@ -382,6 +382,8 @@ figure_3 <- simulation_output %>%
 figure_3 %>% ggsave(filename = "figures/figure_3.pdf", height = 4.9, width = 4.5)
 figure_3
 ```
+<br></br>
+**Figure 3**: Predicted equilibrium frequency of the SR allele, calculated from a population genetic model parameterised with estimates of fitness and meiotic drive strength from this study and earlier work. The model shows that SR reaches a lower equilibrium frequency when a high proportion of females mate with multiply (x-axis), and when SR males are inferior sperm competitors to ST males (y-axis). The seven red points correspond to the female mating frequency estimates from seven populations in REFERENCE, and the estimate of SR male siring success from Giraldo-Perez et al. 2016. The figure further assumes that SR males pass on the SR chromosome to 96% of their offspring, and that ST and SR males have equal survival and mating success. 
 
 
 
@@ -427,3 +429,5 @@ figure_4 <- observed_vs_expected_data %>%
 figure_4 %>% ggsave(filename = "figures/figure_4.pdf", height = 3.3, width = 8)
 figure_4
 ```
+<br></br>
+**Figure 4**: Comparison of the model predictions to the observed frequencies of SR in the seven populations sampled by REFERENCE. Each point represents one of the populations plotted on Figure 3, and the colour of the point indicates the frequency of female multiple mating in that population. More polyandrous populations contain fewer SR chromosomes, both in nature and in the model predictions, and the predictions are most accurate when we assume that SR males have equivalent survival and mating success to ST males (right panel). The dashed line shows $y=x$, illustrating that SR is rarer than expected (given the model's assumptions) in the three low-polyandry populations.
