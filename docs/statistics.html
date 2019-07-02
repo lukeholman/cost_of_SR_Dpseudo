@@ -332,7 +332,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-06-28
+<strong>Last updated:</strong> 2019-07-02
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -411,10 +411,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong44d4565"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 44d4565 </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong2ef4d13"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 2ef4d13 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong44d4565" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrong2ef4d13" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -424,7 +424,7 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
+    Ignored:    output/.DS_Store
 
 </code></pre>
 <p>
@@ -463,6 +463,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+2ef4d13
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-07-02
+</td>
+<td>
+re-run model
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+52ea758
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1032,8 +1066,10 @@ Across all isolines
 </tbody>
 </table>
 </div>
-<div id="run-the-bayesian-hurdle-model" class="section level2">
-<h2>Run the Bayesian hurdle model</h2>
+<div id="fit-a-model-to-the-data" class="section level2">
+<h2>Fit a model to the data</h2>
+<div id="run-the-bayesian-hurdle-model" class="section level3">
+<h3>Run the Bayesian hurdle model</h3>
 <p>The model assumes that the response variable, offspring number, is the result of a ‘hurdle’ process. Essentially this means that the model consists of two sub-models: one controlling the probability that offspring number is non-zero, and one controlling the number of offspring produced provided that more than zero are produced (we assume that offspring number follows a negative binomial distribution, because this improved model fit relative to the simpler hurdle-Poisson model).</p>
 <p>We assume that the parameters controlling both the hurdle and the distribution of non-zero values are affected by four fixed effects (the female’s genotype: STST, SRST, or SRSR), her isoline, the female’s age, and the interaction between genotype and isoline. We also fit two random effects: isoline, and experimental block. All fixed effects were assumed to have a prior distribution following a normal distribution with mean 0 and SD = 5.</p>
 <pre class="r"><code>if(!file.exists(&quot;output/brms_model.rds&quot;)){
@@ -1044,23 +1080,31 @@ Across all isolines
     hu        ~ genotype * Isoline + female_age + (1 | Block)  
   )
   
-  model_prior &lt;- c(set_prior(&quot;normal(0, 5)&quot;, class = &quot;b&quot;),
-                   set_prior(&quot;normal(0, 5)&quot;, class = &quot;b&quot;, dpar = &quot;hu&quot;))
+  # Find R^2 for a brms model, and its 95% CIs, and present neatly
+  neat_R2 &lt;- function(model){
+    R2 &lt;- bayes_R2(model) %&gt;% round(2)
+    paste(R2[1,1], &quot; (95% CIs = &quot;, R2[1,3], &quot;-&quot;, R2[1,4], &quot;)&quot;, sep = &quot;&quot;)
+  }
+  
+  # We set conservative, &quot;regularising&quot; priors - see McElreath&#39;s &quot;Statistical Rethinking&quot; textbook
+  model_prior &lt;- c(set_prior(&quot;normal(0, 3)&quot;, class = &quot;b&quot;),
+                   set_prior(&quot;normal(0, 3)&quot;, class = &quot;b&quot;, dpar = &quot;hu&quot;))
   
   model &lt;- brm(model_formula,
-                        family = &quot;hurdle_negbinomial&quot;,
-                        chains = 4, cores = 1, iter = 4000, inits = 0, seed = 12345,
-                        control = list(adapt_delta = 0.999, max_treedepth = 15),
-                        prior = model_prior,
-                        data = fitness_data)
+               family = &quot;hurdle_negbinomial&quot;,
+               chains = 4, cores = 1, iter = 8000, inits = 0, seed = 12345,
+               control = list(adapt_delta = 0.999, max_treedepth = 15),
+               prior = model_prior, 
+               data = fitness_data)
+  
   saveRDS(model, file = &quot;output/brms_model.rds&quot;)
+  saveRDS(neat_R2(model), file = &quot;output/R2_of_brms_model.rds&quot;)
 } else model &lt;- readRDS(&quot;output/brms_model.rds&quot;)</code></pre>
 </div>
-<div id="perform-a-posterior-predictive-check" class="section level2">
-<h2>Perform a posterior predictive check</h2>
-<p>The idea behind posterior predictive checking is that if our model is a good fit, then we should be able to use it to generate data that looks a lot like the data we observed. Here, we see 10 draws from the ‘posterior predictive distribution’ (thin lines), which indeed look quite similar to the distribution of the real data (thick line), suggested that our model approximates the processes that generated the real data well enough for reliable inference.</p>
-<pre class="r"><code>pp_check(model, type = &quot;dens_overlay&quot;)</code></pre>
-<pre><code>Using 10 posterior samples for ppc type &#39;dens_overlay&#39; by default.</code></pre>
+<div id="graphically-verify-the-model-using-a-posterior-predictive-check" class="section level3">
+<h3>Graphically verify the model using a posterior predictive check</h3>
+<p>The idea behind posterior predictive checking is that if our model is a good fit, then we should be able to use it to generate a dataset which looks a lot like the dataset we actually observed. Here, we see 11 draws from the ‘posterior predictive distribution’ (pale blue), which indeed look quite similar to the distribution of the real data (dark blue), suggesting that our model is a good enough approximation of the true data-generating process for reliable inference.</p>
+<pre class="r"><code>pp_check(model, type = &quot;hist&quot;, nsamples = 11, binwidth = 5)</code></pre>
 <p><img src="figure/statistics.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
@@ -1100,8 +1144,8 @@ lukeholman
 </div>
 </div>
 </div>
-<div id="inspect-the-models-parameter-estimates" class="section level2">
-<h2>Inspect the model’s parameter estimates</h2>
+<div id="inspect-the-models-parameter-estimates" class="section level3">
+<h3>Inspect the model’s parameter estimates</h3>
 <pre class="r"><code>bayesian_p_values &lt;- as.data.frame(p_direction(model)) %&gt;% 
       mutate(pd = (100 - pd) / 100,
              Parameter = gsub(&quot;[.]&quot;, &quot;:&quot;, gsub(&quot;b_&quot;, &quot;&quot;, Parameter)))
@@ -1165,7 +1209,7 @@ p
 Intercept
 </td>
 <td style="text-align:left;">
-4.049
+4.048
 </td>
 <td style="text-align:left;">
 0.269
@@ -1174,10 +1218,10 @@ Intercept
 3.520
 </td>
 <td style="text-align:left;">
-4.585
+4.575
 </td>
 <td style="text-align:right;">
-6153
+12066
 </td>
 <td style="text-align:left;">
 1.000
@@ -1194,25 +1238,25 @@ Intercept
 genotypeSRST
 </td>
 <td style="text-align:left;">
-0.366
+0.362
 </td>
 <td style="text-align:left;">
 0.169
 </td>
 <td style="text-align:left;">
-0.029
+0.034
 </td>
 <td style="text-align:left;">
-0.698
+0.692
 </td>
 <td style="text-align:right;">
-3221
+6284
 </td>
 <td style="text-align:left;">
-1.001
+1.000
 </td>
 <td style="text-align:left;">
-0.0166
+0.0156
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1223,25 +1267,25 @@ genotypeSRST
 genotypeSRSR
 </td>
 <td style="text-align:left;">
--0.423
+-0.429
 </td>
 <td style="text-align:left;">
-0.186
+0.184
 </td>
 <td style="text-align:left;">
--0.790
+-0.784
 </td>
 <td style="text-align:left;">
--0.065
+-0.067
 </td>
 <td style="text-align:right;">
-3580
+6408
 </td>
 <td style="text-align:left;">
-1.001
+1.000
 </td>
 <td style="text-align:left;">
-0.0111
+0.0109
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1252,25 +1296,25 @@ genotypeSRSR
 IsolineLew17
 </td>
 <td style="text-align:left;">
--0.061
+-0.065
 </td>
 <td style="text-align:left;">
 0.164
 </td>
 <td style="text-align:left;">
--0.378
+-0.381
 </td>
 <td style="text-align:left;">
-0.261
+0.258
 </td>
 <td style="text-align:right;">
-4053
+7275
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.3622
+0.3425
 </td>
 <td style="text-align:left;">
 </td>
@@ -1280,25 +1324,25 @@ IsolineLew17
 IsolineSloB3
 </td>
 <td style="text-align:left;">
-0.287
+0.281
 </td>
 <td style="text-align:left;">
-0.167
+0.165
 </td>
 <td style="text-align:left;">
--0.048
+-0.041
 </td>
 <td style="text-align:left;">
-0.612
+0.610
 </td>
 <td style="text-align:right;">
-3999
+7169
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.0424
+0.0453
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1309,25 +1353,25 @@ IsolineSloB3
 IsolineSloB7
 </td>
 <td style="text-align:left;">
-0.163
+0.156
 </td>
 <td style="text-align:left;">
-0.171
+0.169
 </td>
 <td style="text-align:left;">
--0.170
+-0.175
 </td>
 <td style="text-align:left;">
-0.496
+0.493
 </td>
 <td style="text-align:right;">
-3623
+7443
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.1717
+0.1784
 </td>
 <td style="text-align:left;">
 </td>
@@ -1337,25 +1381,25 @@ IsolineSloB7
 female_age
 </td>
 <td style="text-align:left;">
-0.023
+0.024
 </td>
 <td style="text-align:left;">
-0.058
+0.057
 </td>
 <td style="text-align:left;">
 -0.091
 </td>
 <td style="text-align:left;">
-0.138
+0.136
 </td>
 <td style="text-align:right;">
-9705
+25065
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.3435
+0.3369
 </td>
 <td style="text-align:left;">
 </td>
@@ -1365,25 +1409,25 @@ female_age
 genotypeSRST:IsolineLew17
 </td>
 <td style="text-align:left;">
--0.225
+-0.219
 </td>
 <td style="text-align:left;">
-0.242
+0.243
 </td>
 <td style="text-align:left;">
--0.690
+-0.693
 </td>
 <td style="text-align:left;">
-0.261
+0.252
 </td>
 <td style="text-align:right;">
-3965
+7324
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.1704
+0.1839
 </td>
 <td style="text-align:left;">
 </td>
@@ -1393,25 +1437,25 @@ genotypeSRST:IsolineLew17
 genotypeSRSR:IsolineLew17
 </td>
 <td style="text-align:left;">
--0.017
+-0.013
 </td>
 <td style="text-align:left;">
-0.255
+0.253
 </td>
 <td style="text-align:left;">
--0.513
+-0.510
 </td>
 <td style="text-align:left;">
-0.488
+0.473
 </td>
 <td style="text-align:right;">
-4135
+7164
 </td>
 <td style="text-align:left;">
-1.001
+1.000
 </td>
 <td style="text-align:left;">
-0.4712
+0.4832
 </td>
 <td style="text-align:left;">
 </td>
@@ -1421,25 +1465,25 @@ genotypeSRSR:IsolineLew17
 genotypeSRST:IsolineSloB3
 </td>
 <td style="text-align:left;">
--0.687
+-0.677
 </td>
 <td style="text-align:left;">
-0.253
+0.256
 </td>
 <td style="text-align:left;">
--1.187
+-1.180
 </td>
 <td style="text-align:left;">
--0.191
+-0.182
 </td>
 <td style="text-align:right;">
-4235
+8021
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.0045
+0.0047
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1450,25 +1494,25 @@ genotypeSRST:IsolineSloB3
 genotypeSRSR:IsolineSloB3
 </td>
 <td style="text-align:left;">
--0.849
+-0.842
 </td>
 <td style="text-align:left;">
-0.268
+0.265
 </td>
 <td style="text-align:left;">
--1.361
+-1.359
 </td>
 <td style="text-align:left;">
--0.314
+-0.320
 </td>
 <td style="text-align:right;">
-4732
+7635
 </td>
 <td style="text-align:left;">
-1.001
+1.000
 </td>
 <td style="text-align:left;">
-0.0009
+0.0008
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1479,25 +1523,25 @@ genotypeSRSR:IsolineSloB3
 genotypeSRST:IsolineSloB7
 </td>
 <td style="text-align:left;">
--0.547
+-0.539
 </td>
 <td style="text-align:left;">
-0.240
+0.242
 </td>
 <td style="text-align:left;">
--1.015
+-1.012
 </td>
 <td style="text-align:left;">
--0.069
+-0.060
 </td>
 <td style="text-align:right;">
-3817
+7571
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.0115
+0.0119
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1508,25 +1552,25 @@ genotypeSRST:IsolineSloB7
 genotypeSRSR:IsolineSloB7
 </td>
 <td style="text-align:left;">
--0.340
+-0.328
 </td>
 <td style="text-align:left;">
 0.263
 </td>
 <td style="text-align:left;">
--0.854
+-0.846
 </td>
 <td style="text-align:left;">
-0.176
+0.180
 </td>
 <td style="text-align:right;">
-4039
+7455
 </td>
 <td style="text-align:left;">
-1.001
+1.000
 </td>
 <td style="text-align:left;">
-0.0988
+0.1063
 </td>
 <td style="text-align:left;">
 </td>
@@ -1536,25 +1580,25 @@ genotypeSRSR:IsolineSloB7
 Hurdle - Intercept
 </td>
 <td style="text-align:left;">
--1.498
+-1.473
 </td>
 <td style="text-align:left;">
-1.190
+1.163
 </td>
 <td style="text-align:left;">
--3.834
+-3.727
 </td>
 <td style="text-align:left;">
-0.816
+0.817
 </td>
 <td style="text-align:right;">
-5225
+12506
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.1005
+0.1013
 </td>
 <td style="text-align:left;">
 </td>
@@ -1564,25 +1608,25 @@ Hurdle - Intercept
 Hurdle - genotypeSRST
 </td>
 <td style="text-align:left;">
-1.473
+1.415
 </td>
 <td style="text-align:left;">
-0.799
+0.717
 </td>
 <td style="text-align:left;">
-0.003
+0.059
 </td>
 <td style="text-align:left;">
-3.142
+2.887
 </td>
 <td style="text-align:right;">
-3454
+8704
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.0250
+0.0200
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1593,25 +1637,25 @@ Hurdle - genotypeSRST
 Hurdle - genotypeSRSR
 </td>
 <td style="text-align:left;">
-2.186
+2.109
 </td>
 <td style="text-align:left;">
-0.789
+0.698
 </td>
 <td style="text-align:left;">
-0.750
+0.771
 </td>
 <td style="text-align:left;">
-3.854
+3.505
 </td>
 <td style="text-align:right;">
-3472
+9094
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.0009
+0.0006
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1622,25 +1666,25 @@ Hurdle - genotypeSRSR
 Hurdle - IsolineLew17
 </td>
 <td style="text-align:left;">
--1.045
+-0.976
 </td>
 <td style="text-align:left;">
-1.206
+1.010
 </td>
 <td style="text-align:left;">
--3.607
+-3.089
 </td>
 <td style="text-align:left;">
-1.140
+0.888
 </td>
 <td style="text-align:right;">
-3525
+8175
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.1933
+0.1629
 </td>
 <td style="text-align:left;">
 </td>
@@ -1650,25 +1694,25 @@ Hurdle - IsolineLew17
 Hurdle - IsolineSloB3
 </td>
 <td style="text-align:left;">
--0.925
+-0.732
 </td>
 <td style="text-align:left;">
-1.195
+0.991
 </td>
 <td style="text-align:left;">
--3.408
+-2.771
 </td>
 <td style="text-align:left;">
-1.287
+1.110
 </td>
 <td style="text-align:right;">
-2814
+8117
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.2150
+0.2321
 </td>
 <td style="text-align:left;">
 </td>
@@ -1678,25 +1722,25 @@ Hurdle - IsolineSloB3
 Hurdle - IsolineSloB7
 </td>
 <td style="text-align:left;">
--0.666
+-0.641
 </td>
 <td style="text-align:left;">
-1.197
+1.034
 </td>
 <td style="text-align:left;">
--3.150
+-2.809
 </td>
 <td style="text-align:left;">
-1.504
+1.266
 </td>
 <td style="text-align:right;">
-3975
+8579
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.3049
+0.2712
 </td>
 <td style="text-align:left;">
 </td>
@@ -1706,25 +1750,25 @@ Hurdle - IsolineSloB7
 Hurdle - female_age
 </td>
 <td style="text-align:left;">
--0.327
+-0.322
 </td>
 <td style="text-align:left;">
-0.237
+0.238
 </td>
 <td style="text-align:left;">
--0.796
+-0.793
 </td>
 <td style="text-align:left;">
-0.131
+0.139
 </td>
 <td style="text-align:right;">
-10966
+27154
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.0831
+0.0880
 </td>
 <td style="text-align:left;">
 </td>
@@ -1734,25 +1778,25 @@ Hurdle - female_age
 Hurdle - genotypeSRST:IsolineLew17
 </td>
 <td style="text-align:left;">
-0.564
+0.480
 </td>
 <td style="text-align:left;">
-1.344
+1.149
 </td>
 <td style="text-align:left;">
--1.982
+-1.685
 </td>
 <td style="text-align:left;">
-3.384
+2.831
 </td>
 <td style="text-align:right;">
-3611
+8646
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.3439
+0.3469
 </td>
 <td style="text-align:left;">
 </td>
@@ -1762,25 +1806,25 @@ Hurdle - genotypeSRST:IsolineLew17
 Hurdle - genotypeSRSR:IsolineLew17
 </td>
 <td style="text-align:left;">
--0.833
+-0.846
 </td>
 <td style="text-align:left;">
-1.399
+1.195
 </td>
 <td style="text-align:left;">
--3.483
+-3.115
 </td>
 <td style="text-align:left;">
-2.078
+1.591
 </td>
 <td style="text-align:right;">
-3812
+9085
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.2704
+0.2361
 </td>
 <td style="text-align:left;">
 </td>
@@ -1790,25 +1834,25 @@ Hurdle - genotypeSRSR:IsolineLew17
 Hurdle - genotypeSRST:IsolineSloB3
 </td>
 <td style="text-align:left;">
-0.851
+0.647
 </td>
 <td style="text-align:left;">
-1.343
+1.148
 </td>
 <td style="text-align:left;">
--1.656
+-1.531
 </td>
 <td style="text-align:left;">
-3.658
+2.964
 </td>
 <td style="text-align:right;">
-3169
+9053
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.2689
+0.2890
 </td>
 <td style="text-align:left;">
 </td>
@@ -1818,25 +1862,25 @@ Hurdle - genotypeSRST:IsolineSloB3
 Hurdle - genotypeSRSR:IsolineSloB3
 </td>
 <td style="text-align:left;">
-1.078
+0.890
 </td>
 <td style="text-align:left;">
-1.307
+1.103
 </td>
 <td style="text-align:left;">
--1.358
+-1.161
 </td>
 <td style="text-align:left;">
-3.753
+3.129
 </td>
 <td style="text-align:right;">
-2985
+8540
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.2051
+0.2124
 </td>
 <td style="text-align:left;">
 </td>
@@ -1846,25 +1890,25 @@ Hurdle - genotypeSRSR:IsolineSloB3
 Hurdle - genotypeSRST:IsolineSloB7
 </td>
 <td style="text-align:left;">
--0.590
+-0.593
 </td>
 <td style="text-align:left;">
-1.402
+1.231
 </td>
 <td style="text-align:left;">
--3.270
+-2.953
 </td>
 <td style="text-align:left;">
-2.293
+1.871
 </td>
 <td style="text-align:right;">
-4095
+9058
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.3333
+0.3096
 </td>
 <td style="text-align:left;">
 </td>
@@ -1874,25 +1918,25 @@ Hurdle - genotypeSRST:IsolineSloB7
 Hurdle - genotypeSRSR:IsolineSloB7
 </td>
 <td style="text-align:left;">
-0.186
+0.181
 </td>
 <td style="text-align:left;">
-1.291
+1.131
 </td>
 <td style="text-align:left;">
--2.219
+-1.953
 </td>
 <td style="text-align:left;">
-2.827
+2.485
 </td>
 <td style="text-align:right;">
-3847
+8636
 </td>
 <td style="text-align:left;">
 1.000
 </td>
 <td style="text-align:left;">
-0.4508
+0.4470
 </td>
 <td style="text-align:left;">
 </td>
@@ -1902,10 +1946,10 @@ Hurdle - genotypeSRSR:IsolineSloB7
 sd(Block - Intercept)
 </td>
 <td style="text-align:left;">
-0.180
+0.184
 </td>
 <td style="text-align:left;">
-0.159
+0.156
 </td>
 <td style="text-align:left;">
 0.011
@@ -1914,10 +1958,10 @@ sd(Block - Intercept)
 0.568
 </td>
 <td style="text-align:right;">
-2097
+4120
 </td>
 <td style="text-align:left;">
-1.000
+1.002
 </td>
 <td style="text-align:left;">
 NA
@@ -1930,19 +1974,19 @@ NA
 sd(Block - Hurdle intercept)
 </td>
 <td style="text-align:left;">
-0.572
+0.570
 </td>
 <td style="text-align:left;">
-0.518
+0.532
 </td>
 <td style="text-align:left;">
-0.023
+0.025
 </td>
 <td style="text-align:left;">
-1.948
+1.947
 </td>
 <td style="text-align:right;">
-2326
+4627
 </td>
 <td style="text-align:left;">
 1.001
@@ -1965,30 +2009,38 @@ NA
 </ul></li>
 </ul>
 </div>
-<div id="plot-the-estimated-means-for-each-genotype" class="section level2">
-<h2>Plot the estimated means for each genotype</h2>
-<pre class="r"><code>new &lt;- fitness_data %&gt;% select(genotype, Isoline, body_size, female_age) %&gt;%
+</div>
+<div id="use-the-model-to-generate-posterior-estimates-of-group-means" class="section level2">
+<h2>Use the model to generate posterior estimates of group means</h2>
+<div id="generate-posterior-predictions-of-the-group-means" class="section level3">
+<h3>Generate posterior predictions of the group means</h3>
+<p>Here, we estimate the mean for three measures of female fitness using the model, for each genotype (across all isolines) and for each genotype-isoline combination. The model adjusts for variation due to experimental block and female age.</p>
+<pre class="r"><code># Define the data for prediction. We use the average values for continuous predictors like female age
+new &lt;- fitness_data %&gt;% select(genotype, Isoline, body_size, female_age) %&gt;%
   mutate(body_size  = mean(body_size, na.rm = TRUE),
          female_age = mean(female_age)) %&gt;% 
   distinct()
 
+# Find the posterior medians and 95% CIs for each genotype/isoline combination
 predicted_mean &lt;- data.frame(new, fitted(model, newdata = new, re_formula = NA)) %&gt;% 
   mutate(facet = &quot;A. Mean offspring production&quot;)
 predicted_mean_when_fertile &lt;- data.frame(new, fitted(model, newdata = new, dpar = &quot;mu&quot;, re_formula = NA)) %&gt;%
   mutate(facet = &quot;B. Mean offspring production\n(excluding infertile females)&quot;)
 predicted_prop_fertile &lt;- data.frame(new, fitted(model, newdata = new, dpar = &quot;hu&quot;, re_formula = NA)) %&gt;% 
   mutate(facet = &quot;C. % fertile females&quot;,
-         Estimate = 100 * (1 - Estimate), Q2.5 = (1 - Q2.5) * 100, Q97.5 = (1 - Q97.5) * 100)
+         Estimate = 100 * (1 - Estimate), # Convert to percentage of fertile females, instead of *proportion* that are *in*fertile
+         Q2.5 = (1 - Q2.5) * 100, 
+         Q97.5 = (1 - Q97.5) * 100)
 
-
+# Get the posterior averaged across the isolines
 posterior_means &lt;- 
   data.frame(new, as.data.frame(t(fitted(model, newdata = new, re_formula = NA, summary = FALSE)))) %&gt;%
   select(-body_size, -female_age, -Isoline) %&gt;%
   group_by(genotype) %&gt;%
   summarise_all(mean) %&gt;% select(-genotype) %&gt;% t() %&gt;% as.data.frame() %&gt;%
   rename(STST = V1, SRST = V2, SRSR = V3)
-  
-predicted_mean_all_iso &lt;- data.frame(
+
+predicted_mean_all_iso &lt;- data.frame( # Summarise it, for Figure 1  
   genotype = c(&quot;STST&quot;, &quot;SRST&quot;, &quot;SRSR&quot;), Isoline = &quot;All&quot;, 
   posterior_means %&gt;% lapply(posterior_summary) %&gt;% do.call(&quot;rbind&quot;, .),
   facet = &quot;A. Mean offspring production&quot;) 
@@ -2017,20 +2069,22 @@ predicted_prop_fertile_all_iso &lt;- data.frame(
   posterior_means_prop_fertile %&gt;% lapply(posterior_summary) %&gt;% do.call(&quot;rbind&quot;, .),
   facet = &quot;C. % fertile females&quot;) 
 
+# Concatenate the predictions into one data frame for plotting
 preds_figure1 &lt;- bind_rows(predicted_mean_all_iso,
-                   predicted_mean_when_fertile_all_iso,
-                   predicted_prop_fertile_all_iso) %&gt;%
+                           predicted_mean_when_fertile_all_iso,
+                           predicted_prop_fertile_all_iso) %&gt;%
   mutate(genotype = factor(genotype, levels = c(&quot;STST&quot;, &quot;SRST&quot;, &quot;SRSR&quot;)))
 
 preds_figure2 &lt;- bind_rows(predicted_mean,
-                         predicted_mean_when_fertile,
-                         predicted_prop_fertile) %&gt;%
+                           predicted_mean_when_fertile,
+                           predicted_prop_fertile) %&gt;%
   mutate(facet = factor(facet, levels = unique(facet)),
          genotype = factor(genotype, levels = c(&quot;STST&quot;, &quot;SRST&quot;, &quot;SRSR&quot;))) %&gt;%
-  select(-body_size, -female_age)
-
-
-beeswarm_points &lt;- bind_rows(
+  select(-body_size, -female_age)</code></pre>
+</div>
+<div id="plot-the-posterior-predictions-of-the-group-means" class="section level3">
+<h3>Plot the posterior predictions of the group means</h3>
+<pre class="r"><code>beeswarm_points &lt;- bind_rows(
   fitness_data %&gt;% mutate(facet = &quot;A. Mean offspring production&quot;),
   fitness_data %&gt;% filter(offspring != 0) %&gt;% mutate(facet = &quot;B. Mean offspring production\n(excluding infertile females)&quot;)) %&gt;% 
   mutate(Fertility = ifelse(offspring == 0, &quot;Sterile&quot;, &quot;Fertile&quot;),
@@ -2074,45 +2128,6 @@ figure_2 &lt;- preds_figure2 %&gt;%
 figure_1 %&gt;% ggsave(filename = &quot;figures/figure_1.pdf&quot;, width = 9, height = 4)
 figure_2 %&gt;% ggsave(filename = &quot;figures/figure_2.pdf&quot;, width = 9, height = 4)</code></pre>
 <pre class="r"><code>figure_1</code></pre>
-<p><img src="figure/statistics.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
-Past versions of unnamed-chunk-7-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-7-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-ffdc5d4
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2019-06-28
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>figure_2</code></pre>
 <p><img src="figure/statistics.Rmd/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
@@ -2151,9 +2166,12 @@ lukeholman
 </table>
 </div>
 </div>
+<pre class="r"><code>figure_2</code></pre>
+<p><img src="figure/statistics.Rmd/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
-<div id="calculated-pairwise-differences-between-genotypes" class="section level2">
-<h2>Calculated pairwise differences between genotypes</h2>
+</div>
+<div id="calculate-pairwise-differences-between-genotypes" class="section level2">
+<h2>Calculate pairwise differences between genotypes</h2>
 <p><strong>Table 1</strong>: Pairwise comparisons of genotypes for three measures of female fitness: mean offspring production, mean offspring production (not including females that produced zero offspring), and the % females that produced at least one offspring. The difference in means column shows the posterior estimate of the difference in means in its original units (i.e. offspring, or percentage points), where a negative difference means that genotype with more copies of SR has lower female fitness (parentheses show the 95% quantiles of this posterior, and the Est.Error column gives the average deviation from the mean). The relative difference column expresses the difference in relative terms; e.g. the first row shows that mean number of offspring produced by SRST females was 87.7% as much as that of STST females. Finally, the p column shows the posterior probability that the true difference in means is zero or of the opposite sign to the estiamte shown here (similar to a conventional p-value).</p>
 <pre class="r"><code>compare_means &lt;- function(mean1, mean2, posterior){
   difference &lt;- posterior[, mean2] - posterior[, mean1]
@@ -2223,16 +2241,16 @@ STST → SRST
 Mean offspring production
 </td>
 <td style="text-align:left;">
--8.53 (-23.1 to 4.7%)
+-8.14 (-22.6 to 5.2%)
 </td>
 <td style="text-align:left;">
-6.98
+7.00
 </td>
 <td style="text-align:left;">
-87.7%
+88.1%
 </td>
 <td style="text-align:left;">
-0.1014
+0.1147
 </td>
 <td style="text-align:left;">
 </td>
@@ -2245,13 +2263,13 @@ STST → SRSR
 Mean offspring production
 </td>
 <td style="text-align:left;">
--41.92 (-57.2 to -29.5%)
+-41.50 (-57.1 to -29.3%)
 </td>
 <td style="text-align:left;">
-7.27
+7.37
 </td>
 <td style="text-align:left;">
-38.3%
+38.4%
 </td>
 <td style="text-align:left;">
 0.0000
@@ -2268,13 +2286,13 @@ SRST → SRSR
 Mean offspring production
 </td>
 <td style="text-align:left;">
--33.39 (-47.6 to -21.5%)
+-33.36 (-46.9 to -21.8%)
 </td>
 <td style="text-align:left;">
-6.78
+6.69
 </td>
 <td style="text-align:left;">
-43.6%
+43.5%
 </td>
 <td style="text-align:left;">
 0.0000
@@ -2291,16 +2309,16 @@ STST → SRST
 Mean offspring production (excluding infertile females)
 </td>
 <td style="text-align:left;">
-0.46 (-12.5 to 13.5%)
+0.57 (-12.1 to 13.4%)
 </td>
 <td style="text-align:left;">
-6.55
+6.54
 </td>
 <td style="text-align:left;">
-100.6%
+100.8%
 </td>
 <td style="text-align:left;">
-0.4730
+0.4653
 </td>
 <td style="text-align:left;">
 </td>
@@ -2313,10 +2331,10 @@ STST → SRSR
 Mean offspring production (excluding infertile females)
 </td>
 <td style="text-align:left;">
--36.12 (-50.5 to -24.5%)
+-35.96 (-50.5 to -24.3%)
 </td>
 <td style="text-align:left;">
-6.85
+6.94
 </td>
 <td style="text-align:left;">
 49.1%
@@ -2336,13 +2354,13 @@ SRST → SRSR
 Mean offspring production (excluding infertile females)
 </td>
 <td style="text-align:left;">
--36.58 (-51.4 to -24.9%)
+-36.52 (-50.8 to -25.2%)
 </td>
 <td style="text-align:left;">
 6.90
 </td>
 <td style="text-align:left;">
-48.8%
+48.7%
 </td>
 <td style="text-align:left;">
 0.0000
@@ -2359,16 +2377,16 @@ STST → SRST
 % fertile females
 </td>
 <td style="text-align:left;">
--11.98 (-23.6 to -4.0%)
+-11.62 (-23.3 to -3.8%)
 </td>
 <td style="text-align:left;">
-5.04
+4.93
 </td>
 <td style="text-align:left;">
-88.1%
+88.4%
 </td>
 <td style="text-align:left;">
-0.0015
+0.0012
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2382,13 +2400,13 @@ STST → SRSR
 % fertile females
 </td>
 <td style="text-align:left;">
--22.54 (-37.8 to -12.3%)
+-22.08 (-37.2 to -12.1%)
 </td>
 <td style="text-align:left;">
-6.29
+6.25
 </td>
 <td style="text-align:left;">
-77.3%
+77.7%
 </td>
 <td style="text-align:left;">
 0.0000
@@ -2405,16 +2423,16 @@ SRST → SRSR
 % fertile females
 </td>
 <td style="text-align:left;">
--10.56 (-21.8 to -0.4%)
+-10.46 (-21.5 to -0.4%)
 </td>
 <td style="text-align:left;">
-5.40
+5.36
 </td>
 <td style="text-align:left;">
-87.6%
+87.7%
 </td>
 <td style="text-align:left;">
-0.0204
+0.0213
 </td>
 <td style="text-align:left;">
 <ul>
