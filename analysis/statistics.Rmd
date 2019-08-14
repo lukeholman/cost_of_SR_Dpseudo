@@ -367,7 +367,7 @@ figure_S1
 
 ## Calculate pairwise differences between genotypes
 
-**Table 1**: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The 'Difference in means' column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference means that genotype with more copies of _SR_ has lower female fitness, the parentheses show the 95% quantiles of the posterior difference in means, and the Error column gives the average absolute deviation. The 'Relative difference' column expresses each difference in relative terms; e.g. the first row shows that the mean number of offspring produced by _SR_/_ST_ females was 87.7% as much as the number produced by _ST_/_ST_ females. Finally, the $p$ column shows the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional $p$-value).
+**Table 1**: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The 'Difference in means' column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference indicates that the genotype with more copies of _SR_ has lower female fitness, the parentheses show the 95% quantiles of the posterior difference in means, and the Error column gives the average absolute deviation. The 'Relative difference' column expresses each difference in relative terms; e.g. the first row shows that _SR_/_ST_ females produced 91.5% as many offspring as _ST_/_ST_ females, on average. Finally, $p$ is the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional $p$-value).
 
 ```{r}
 compare_means <- function(mean1, mean2, posterior){
@@ -377,19 +377,34 @@ compare_means <- function(mean1, mean2, posterior){
     select(genotype, value) %>% mutate(draw = rep(1:(n() / 2), 2)) %>%
     spread(genotype, value)
   
-  difference <- posterior[, mean2] - posterior[, mean1]
-  relative <- median(posterior[, mean2] / posterior[, mean1])
-  p_value <- as.numeric(100 - p_direction(difference)) / 100
-  as_tibble(posterior_summary(as.mcmc(difference))) %>%
-    mutate(Comparison = paste(mean1, mean2, sep = " \u2192 "),
-           `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), "%", sep = ""),
-           `95% CIs` = paste(" (", format(round(Q2.5, 1), nsmall = 1), " to ", format(round(Q97.5, 1), nsmall = 1), "%)", sep = ""),
-           `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = ""),
-           `Fitness trait` = NA,
-           p = p_value) %>%
-    select( -Q2.5, -Q97.5) %>%
-    select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p) %>%
-    rename(Error = Est.Error)
+  abs_difference <- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] - posterior[, mean1])))
+  rel_diff <- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] / posterior[, mean1])))
+  p_value <- as.numeric(100 - p_direction(posterior[, mean2] - posterior[, mean1])) / 100
+  
+  
+  tibble(
+    Comparison = paste(mean1, mean2, sep = " \u2192 "),
+    `Fitness trait` = NA,
+    `95% CIs abs` = paste(" (", format(round(abs_difference$Q2.5, 1), nsmall = 1), " to ", format(round(abs_difference$Q97.5, 1), nsmall = 1), ")", sep = ""),
+    `Difference in means` = paste(format(round(abs_difference$Estimate, 2), nsmall = 2), `95% CIs abs`, sep = ""),
+    Error1 = abs_difference$Est.Error,
+    `95% CIs rel` = paste(" (", format(round(rel_diff$Q2.5, 1), nsmall = 1), " to ", format(round(rel_diff$Q97.5, 1), nsmall = 1), ")", sep = ""),
+    `Relative difference` = paste(format(round(rel_diff$Estimate, 2), nsmall = 2), `95% CIs rel`, sep = ""),
+    Error2 = rel_diff$Est.Error,
+    p = p_value
+  ) %>% select( -`95% CIs abs`, -`95% CIs rel`)
+  
+  #relative <- median(posterior[, mean2] / posterior[, mean1])
+  # as_tibble(posterior_summary(as.mcmc(difference))) %>%
+  #   mutate(Comparison = paste(mean1, mean2, sep = " \u2192 "),
+  #          `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), "%", sep = ""),
+  #          `95% CIs` = paste(" (", format(round(Q2.5, 1), nsmall = 1), " to ", format(round(Q97.5, 1), nsmall = 1), ")", sep = ""),
+  #          `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = ""),
+  #          `Fitness trait` = NA,
+  #          p = p_value) %>%
+  #   select( -Q2.5, -Q97.5) %>%
+  #   select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p) %>%
+  #   rename(Error = Est.Error)
 }
 
 table_of_contrasts <- bind_rows(
@@ -405,7 +420,8 @@ table_of_contrasts <- bind_rows(
 ) %>% mutate(`Fitness trait` = rep(c("Mean offspring production",
                                      "Mean offspring production (excluding infertile females)",
                                      "% fertile females"), each = 3)) %>%
-  mutate(Error = format(round(Error, 2), nsmall = 2),
+  mutate(Error1 = format(round(Error1, 2), nsmall = 2),
+         Error2 = format(round(Error2, 2), nsmall = 2),
          ` ` = ifelse(p < 0.05, "*", " "),
          p = format(round(p, 4), nsmall = 4))
 
