@@ -274,7 +274,7 @@ run_many_simulations <- function(parameters){
 
 
 ## Define the parameter space to investigate
-Used to define the parameter spaces that are plotted in Figure X.
+Used to define the parameter spaces that are plotted in Figure 2.
 ```{r}
 resolution <- 101
 gen <- 100
@@ -356,9 +356,9 @@ simulation_output <- readRDS("data/simulation_output.rds")
 ```
 
 
-## Make Figure 3
+## Make Figure 2
 ```{r fig.showtext=TRUE, fig.height = 4.9, fig.width = 4.5}
-figure_3 <- simulation_output %>% 
+figure_2 <- simulation_output %>% 
   filter(w_SR_male == 1) %>%
   mutate(k = paste("Strength of drive:", k)) %>%
   ggplot(aes(100 * freq_polyandry, 100 * paternity_of_SR_males, fill = 100 * prop_SR)) +
@@ -379,13 +379,11 @@ figure_3 <- simulation_output %>%
         strip.background = element_rect(colour = "black", fill = "grey90", size = .8),
         legend.position = "top")
 
-figure_3 %>% ggsave(filename = "figures/figure_3.pdf", height = 4.9, width = 4.5)
-figure_3
+figure_2 %>% ggsave(filename = "figures/figure_2.pdf", height = 4.9, width = 4.5)
+figure_2
 ```
 <br></br>
-**Figure 3**: Predicted equilibrium frequency of the SR allele, calculated from a population genetic model parameterised with estimates of fitness and meiotic drive strength from this study and earlier work. The model shows that SR reaches a lower equilibrium frequency when a high proportion of females mate with multiply (x-axis), and when SR males are inferior sperm competitors to ST males (y-axis). The seven red points correspond to the female mating frequency estimates from seven populations in REFERENCE, and the estimate of SR male siring success from Giraldo-Perez et al. 2016. The figure further assumes that SR males pass on the SR chromosome to 96% of their offspring, and that ST and SR males have equal survival and mating success. 
-
-
+**Figure 2**: Predicted equilibrium frequency of the _SR_ allele, calculated from the population genetic model. The model shows that _SR_ is predicted to reach a lower equilibrium frequency when a high proportion of females mate multiply (_x_-axis), and when _SR_ males are inferior sperm competitors to _ST_ males (y-axis). These two predictors interact, because sperm competition becomes more selectively important as polyandry becomes more common. The seven red points illustrate the range of female mating frequencies observed observed across seven North American populations, and their position on the y-axis (0.21) uses data on _SR_ male siring success from Giraldo-Perez et al. 2016. The figure further assumes that _SR_ males pass on the _SR_ chromosome to 96% of their offspring, and that _ST_ and _SR_ males have equal survival and mating success. 
 
 
 ## Make Figure 4
@@ -410,13 +408,13 @@ observed_vs_expected_data <-
   left_join(real_world_data, by = "freq_polyandry") %>%
   rename(predicted_p_SR = prop_SR)
 
-figure_4 <- observed_vs_expected_data %>%
+figure_3 <- observed_vs_expected_data %>%
   mutate(w_SR_male = paste("Fitness of SR males:", w_SR_male)) %>%
   ggplot(aes(real_freq_SR, 100 * predicted_p_SR, fill = 100*freq_polyandry)) +
   geom_abline(slope = 1, intercept=0, linetype=2) + 
   geom_point(pch=21, size = 3) + 
-  scale_x_continuous(limits =c(0,35)) +
-  scale_y_continuous(limits =c(0,35)) +
+  scale_x_continuous(limits =c(0, 31)) +
+  scale_y_continuous(limits =c(0, 31)) +
   scale_fill_distiller(palette = "Reds", direction = 1, name = "% polyandry") + 
   labs(x="Observed frequency of SR (%)",
        y="Predicted frequency of SR (%)") + 
@@ -426,8 +424,8 @@ figure_4 <- observed_vs_expected_data %>%
         text = element_text(family = "Lato", size = 12)
 )
 
-figure_4 %>% ggsave(filename = "figures/figure_4.pdf", height = 3.3, width = 8)
-figure_4
+figure_3 %>% ggsave(filename = "figures/figure_3.pdf", height = 3.3, width = 8)
+figure_3
 ```
 <br></br>
-**Figure 4**: Comparison of the model predictions to the observed frequencies of SR in the seven populations sampled by REFERENCE. Each point represents one of the populations plotted on Figure 3, and the colour of the point indicates the frequency of female multiple mating in that population. More polyandrous populations contain fewer SR chromosomes, both in nature and in the model predictions, and the predictions are most accurate when we assume that SR males have equivalent survival and mating success to ST males (right panel). The dashed line shows $y=x$, illustrating that SR is rarer than expected (given the model's assumptions) in the three low-polyandry populations.
+**Figure 3**: Comparison of the _SR_ frequencies predicted by the model with the frequencies observed in the wild across seven North American populations. Each point represents one of the populations plotted in Figure 2, and the colour of the point indicates the frequency of female multiple mating in that population. More polyandrous populations contain a lower frequency of _SR_ chromosomes, both in nature and in the model predictions, and the predictions are most accurate when we assume that _SR_ males have similar or equal survival and mating success to _ST_ males (middle and right panel). The dashed line shows $y=x$, such that plots in which the points are closer to the line indicate a better match between the predicted and observed allele frequencies.
