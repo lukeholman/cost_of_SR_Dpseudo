@@ -513,10 +513,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreee5f7926c0ebfdf8a7498e250b093b90dd0ab3c88targetblanke5f7926a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/e5f7926c0ebfdf8a7498e250b093b90dd0ab3c88" target="_blank">e5f7926</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotree20ca27115357780191c6da0b38dbf7b18abccce4targetblank20ca271a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/20ca27115357780191c6da0b38dbf7b18abccce4" target="_blank">20ca271</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreee5f7926c0ebfdf8a7498e250b093b90dd0ab3c88targetblanke5f7926a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotree20ca27115357780191c6da0b38dbf7b18abccce4targetblank20ca271a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -526,11 +526,8 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    output/.DS_Store
-
-Unstaged changes:
-    Modified:   figures/figure_2.pdf
-    Modified:   figures/figure_3.pdf
 
 </code></pre>
 <p>
@@ -569,6 +566,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/20ca27115357780191c6da0b38dbf7b18abccce4/analysis/statistics.Rmd" target="_blank">20ca271</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-08-14
+</td>
+<td>
+working nicely
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lukeholman/cost_of_SR_Dpseudo/2f429818eab660df251b39bccbf05823862b6e31/docs/statistics.html" target="_blank">2f42981</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-08-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1397,6 +1428,8 @@ lukeholman
 <h3>Inspect the parameter estimates</h3>
 <div id="genotype-only-model" class="section level4">
 <h4>Genotype-only model</h4>
+<p>This model contains the fixed factor genotype, and the random effect block.</p>
+<p>The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the ‘Hurdle’ parameters), and the number of progeny produced assuming that at least some are (other parameters).</p>
 <pre class="r"><code>bayesian_p_values &lt;- as.data.frame(p_direction(genotype_only_model)) %&gt;% 
       mutate(pd = (100 - pd) / 100,
              Parameter = gsub(&quot;[.]&quot;, &quot;:&quot;, gsub(&quot;b_&quot;, &quot;&quot;, Parameter)))
@@ -1410,11 +1443,13 @@ summary(genotype_only_model)$fixed %&gt;%
   as.data.frame() %&gt;% 
   rownames_to_column(&quot;Parameter&quot;) %&gt;%
   left_join(bayesian_p_values, by = &quot;Parameter&quot;) %&gt;%
-  rename(p = pd) %&gt;% arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
+  rename(p = pd) %&gt;% 
+  arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
   rbind(random) %&gt;%
+  rename(Error = Est.Error) %&gt;%
   mutate(Parameter = gsub(&quot;hu_&quot;, &quot;Hurdle - &quot;, Parameter),
          Estimate =  format(round(Estimate, 3), nsmall = 3),
-         Est.Error =  format(round(Est.Error, 3), nsmall = 3),
+         Error = format(round(Error, 3), nsmall = 3),
          ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot;&quot;),
          ` ` = replace(` `, is.na(` `), &quot;&quot;),
          p = format(round(p, 4), nsmall = 4),
@@ -1434,7 +1469,7 @@ Parameter
 Estimate
 </th>
 <th style="text-align:left;">
-Est.Error
+Error
 </th>
 <th style="text-align:left;">
 l-95% CI
@@ -1751,6 +1786,8 @@ NA
 </div>
 <div id="genotype-by-isoline-model" class="section level4">
 <h4>Genotype-by-isoline model</h4>
+<p>This model contains the fixed factor genotype, the fixed factor isoline, and their interaction, as well as the random effect block.</p>
+<p>The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the ‘Hurdle’ parameters), and the number of progeny produced assuming that at least some are (other parameters).</p>
 <pre class="r"><code>bayesian_p_values &lt;- as.data.frame(p_direction(full_model)) %&gt;% 
       mutate(pd = (100 - pd) / 100,
              Parameter = gsub(&quot;[.]&quot;, &quot;:&quot;, gsub(&quot;b_&quot;, &quot;&quot;, Parameter)))
@@ -1764,11 +1801,13 @@ summary(full_model)$fixed %&gt;%
   as.data.frame() %&gt;% 
   rownames_to_column(&quot;Parameter&quot;) %&gt;%
   left_join(bayesian_p_values, by = &quot;Parameter&quot;) %&gt;%
-  rename(p = pd) %&gt;% arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
+  rename(p = pd) %&gt;% 
+  arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
   rbind(random) %&gt;%
+  rename(Error = Est.Error) %&gt;%
   mutate(Parameter = gsub(&quot;hu_&quot;, &quot;Hurdle - &quot;, Parameter),
          Estimate =  format(round(Estimate, 3), nsmall = 3),
-         Est.Error =  format(round(Est.Error, 3), nsmall = 3),
+         Error =  format(round(Error, 3), nsmall = 3),
          ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot;&quot;),
          ` ` = replace(` `, is.na(` `), &quot;&quot;),
          p = format(round(p, 4), nsmall = 4),
@@ -1788,7 +1827,7 @@ Parameter
 Estimate
 </th>
 <th style="text-align:left;">
-Est.Error
+Error
 </th>
 <th style="text-align:left;">
 l-95% CI
@@ -2814,6 +2853,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/2f429818eab660df251b39bccbf05823862b6e31/docs/figure/statistics.Rmd/unnamed-chunk-10-1.png" target="_blank">2f42981</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-08-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/e5f7926c0ebfdf8a7498e250b093b90dd0ab3c88/docs/figure/statistics.Rmd/unnamed-chunk-10-1.png" target="_blank">e5f7926</a>
