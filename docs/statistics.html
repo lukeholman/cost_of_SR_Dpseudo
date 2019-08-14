@@ -513,10 +513,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotree20ca27115357780191c6da0b38dbf7b18abccce4targetblank20ca271a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/20ca27115357780191c6da0b38dbf7b18abccce4" target="_blank">20ca271</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreedd8c525a1a8b649db44f9f994a9a116619762a54targetblankdd8c525a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/dd8c525a1a8b649db44f9f994a9a116619762a54" target="_blank">dd8c525</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotree20ca27115357780191c6da0b38dbf7b18abccce4targetblank20ca271a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreedd8c525a1a8b649db44f9f994a9a116619762a54targetblankdd8c525a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -526,7 +526,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
     Ignored:    output/.DS_Store
 
 </code></pre>
@@ -566,6 +565,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/dd8c525a1a8b649db44f9f994a9a116619762a54/analysis/statistics.Rmd" target="_blank">dd8c525</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-08-14
+</td>
+<td>
+tweak table 1
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lukeholman/cost_of_SR_Dpseudo/cc9b8322d9cda29584ec334d00fe3e8c685c87f2/docs/statistics.html" target="_blank">cc9b832</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-08-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2884,7 +2917,7 @@ lukeholman
 </div>
 <div id="calculate-pairwise-differences-between-genotypes" class="section level2">
 <h2>Calculate pairwise differences between genotypes</h2>
-<p><strong>Table 1</strong>: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The ‘Difference in means’ column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference means that genotype with more copies of <em>SR</em> has lower female fitness, the parentheses show the 95% quantiles of the posterior difference in means, and the Error column gives the average absolute deviation. The ‘Relative difference’ column expresses each difference in relative terms; e.g. the first row shows that the mean number of offspring produced by <em>SR</em>/<em>ST</em> females was 87.7% as much as the number produced by <em>ST</em>/<em>ST</em> females. Finally, the <span class="math inline">\(p\)</span> column shows the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional <span class="math inline">\(p\)</span>-value).</p>
+<p><strong>Table 1</strong>: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The ‘Difference in means’ column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference indicates that the genotype with more copies of <em>SR</em> has lower female fitness, the parentheses show the 95% quantiles of the posterior difference in means, and the Error column gives the average absolute deviation. The ‘Relative difference’ column expresses each difference in relative terms; e.g. the first row shows that <em>SR</em>/<em>ST</em> females produced 91.5% as many offspring as <em>ST</em>/<em>ST</em> females, on average. Finally, <span class="math inline">\(p\)</span> is the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional <span class="math inline">\(p\)</span>-value).</p>
 <pre class="r"><code>compare_means &lt;- function(mean1, mean2, posterior){
   
   posterior &lt;- posterior %&gt;%
@@ -2892,19 +2925,34 @@ lukeholman
     select(genotype, value) %&gt;% mutate(draw = rep(1:(n() / 2), 2)) %&gt;%
     spread(genotype, value)
   
-  difference &lt;- posterior[, mean2] - posterior[, mean1]
-  relative &lt;- median(posterior[, mean2] / posterior[, mean1])
-  p_value &lt;- as.numeric(100 - p_direction(difference)) / 100
-  as_tibble(posterior_summary(as.mcmc(difference))) %&gt;%
-    mutate(Comparison = paste(mean1, mean2, sep = &quot; \u2192 &quot;),
-           `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), &quot;%&quot;, sep = &quot;&quot;),
-           `95% CIs` = paste(&quot; (&quot;, format(round(Q2.5, 1), nsmall = 1), &quot; to &quot;, format(round(Q97.5, 1), nsmall = 1), &quot;%)&quot;, sep = &quot;&quot;),
-           `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = &quot;&quot;),
-           `Fitness trait` = NA,
-           p = p_value) %&gt;%
-    select( -Q2.5, -Q97.5) %&gt;%
-    select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p) %&gt;%
-    rename(Error = Est.Error)
+  abs_difference &lt;- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] - posterior[, mean1])))
+  rel_diff &lt;- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] / posterior[, mean1])))
+  p_value &lt;- as.numeric(100 - p_direction(posterior[, mean2] - posterior[, mean1])) / 100
+  
+  
+  tibble(
+    Comparison = paste(mean1, mean2, sep = &quot; \u2192 &quot;),
+    `Fitness trait` = NA,
+    `95% CIs abs` = paste(&quot; (&quot;, format(round(abs_difference$Q2.5, 1), nsmall = 1), &quot; to &quot;, format(round(abs_difference$Q97.5, 1), nsmall = 1), &quot;)&quot;, sep = &quot;&quot;),
+    `Difference in means` = paste(format(round(abs_difference$Estimate, 2), nsmall = 2), `95% CIs abs`, sep = &quot;&quot;),
+    Error1 = abs_difference$Est.Error,
+    `95% CIs rel` = paste(&quot; (&quot;, format(round(rel_diff$Q2.5, 1), nsmall = 1), &quot; to &quot;, format(round(rel_diff$Q97.5, 1), nsmall = 1), &quot;)&quot;, sep = &quot;&quot;),
+    `Relative difference` = paste(format(round(rel_diff$Estimate, 2), nsmall = 2), `95% CIs rel`, sep = &quot;&quot;),
+    Error2 = rel_diff$Est.Error,
+    p = p_value
+  ) %&gt;% select( -`95% CIs abs`, -`95% CIs rel`)
+  
+  #relative &lt;- median(posterior[, mean2] / posterior[, mean1])
+  # as_tibble(posterior_summary(as.mcmc(difference))) %&gt;%
+  #   mutate(Comparison = paste(mean1, mean2, sep = &quot; \u2192 &quot;),
+  #          `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), &quot;%&quot;, sep = &quot;&quot;),
+  #          `95% CIs` = paste(&quot; (&quot;, format(round(Q2.5, 1), nsmall = 1), &quot; to &quot;, format(round(Q97.5, 1), nsmall = 1), &quot;)&quot;, sep = &quot;&quot;),
+  #          `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = &quot;&quot;),
+  #          `Fitness trait` = NA,
+  #          p = p_value) %&gt;%
+  #   select( -Q2.5, -Q97.5) %&gt;%
+  #   select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p) %&gt;%
+  #   rename(Error = Est.Error)
 }
 
 table_of_contrasts &lt;- bind_rows(
@@ -2920,7 +2968,8 @@ table_of_contrasts &lt;- bind_rows(
 ) %&gt;% mutate(`Fitness trait` = rep(c(&quot;Mean offspring production&quot;,
                                      &quot;Mean offspring production (excluding infertile females)&quot;,
                                      &quot;% fertile females&quot;), each = 3)) %&gt;%
-  mutate(Error = format(round(Error, 2), nsmall = 2),
+  mutate(Error1 = format(round(Error1, 2), nsmall = 2),
+         Error2 = format(round(Error2, 2), nsmall = 2),
          ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot; &quot;),
          p = format(round(p, 4), nsmall = 4))
 
@@ -2939,10 +2988,13 @@ Fitness trait
 Difference in means
 </th>
 <th style="text-align:left;">
-Error
+Error1
 </th>
 <th style="text-align:left;">
 Relative difference
+</th>
+<th style="text-align:left;">
+Error2
 </th>
 <th style="text-align:left;">
 p
@@ -2960,13 +3012,16 @@ STST → SRST
 Mean offspring production
 </td>
 <td style="text-align:left;">
--5.53 (-18.0 to 6.5%)
+-5.53 (-18.0 to 6.5)
 </td>
 <td style="text-align:left;">
 6.23
 </td>
 <td style="text-align:left;">
-91.5%
+0.92 (0.7 to 1.1)
+</td>
+<td style="text-align:left;">
+0.09
 </td>
 <td style="text-align:left;">
 0.1842
@@ -2982,13 +3037,16 @@ STST → SRSR
 Mean offspring production
 </td>
 <td style="text-align:left;">
--38.37 (-50.5 to -27.6%)
+-38.37 (-50.5 to -27.6)
 </td>
 <td style="text-align:left;">
 5.91
 </td>
 <td style="text-align:left;">
-40.8%
+0.41 (0.3 to 0.5)
+</td>
+<td style="text-align:left;">
+0.05
 </td>
 <td style="text-align:left;">
 0.0000
@@ -3005,13 +3063,16 @@ SRST → SRSR
 Mean offspring production
 </td>
 <td style="text-align:left;">
--32.84 (-44.6 to -22.6%)
+-32.84 (-44.6 to -22.6)
 </td>
 <td style="text-align:left;">
 5.67
 </td>
 <td style="text-align:left;">
-44.5%
+0.45 (0.4 to 0.6)
+</td>
+<td style="text-align:left;">
+0.05
 </td>
 <td style="text-align:left;">
 0.0000
@@ -3028,13 +3089,16 @@ STST → SRST
 Mean offspring production (excluding infertile females)
 </td>
 <td style="text-align:left;">
-2.04 (-9.9 to 14.2%)
+2.04 (-9.9 to 14.2)
 </td>
 <td style="text-align:left;">
 6.12
 </td>
 <td style="text-align:left;">
-103.0%
+1.03 (0.9 to 1.2)
+</td>
+<td style="text-align:left;">
+0.09
 </td>
 <td style="text-align:left;">
 0.3693
@@ -3050,13 +3114,16 @@ STST → SRSR
 Mean offspring production (excluding infertile females)
 </td>
 <td style="text-align:left;">
--32.88 (-44.5 to -22.3%)
+-32.88 (-44.5 to -22.3)
 </td>
 <td style="text-align:left;">
 5.70
 </td>
 <td style="text-align:left;">
-51.2%
+0.51 (0.4 to 0.6)
+</td>
+<td style="text-align:left;">
+0.05
 </td>
 <td style="text-align:left;">
 0.0000
@@ -3073,13 +3140,16 @@ SRST → SRSR
 Mean offspring production (excluding infertile females)
 </td>
 <td style="text-align:left;">
--34.93 (-47.0 to -24.6%)
+-34.93 (-47.0 to -24.6)
 </td>
 <td style="text-align:left;">
 5.81
 </td>
 <td style="text-align:left;">
-49.7%
+0.50 (0.4 to 0.6)
+</td>
+<td style="text-align:left;">
+0.05
 </td>
 <td style="text-align:left;">
 0.0000
@@ -3096,13 +3166,16 @@ STST → SRST
 % fertile females
 </td>
 <td style="text-align:left;">
-0.11 (0.0 to 0.2%)
+0.11 (0.0 to 0.2)
 </td>
 <td style="text-align:left;">
 0.04
 </td>
 <td style="text-align:left;">
-384.8%
+4.42 (1.6 to 10.6)
+</td>
+<td style="text-align:left;">
+2.45
 </td>
 <td style="text-align:left;">
 0.0007
@@ -3119,13 +3192,16 @@ STST → SRSR
 % fertile females
 </td>
 <td style="text-align:left;">
-0.20 (0.1 to 0.3%)
+0.20 (0.1 to 0.3)
 </td>
 <td style="text-align:left;">
 0.05
 </td>
 <td style="text-align:left;">
-627.0%
+7.17 (2.8 to 16.9)
+</td>
+<td style="text-align:left;">
+3.87
 </td>
 <td style="text-align:left;">
 0.0000
@@ -3142,13 +3218,16 @@ SRST → SRSR
 % fertile females
 </td>
 <td style="text-align:left;">
-0.09 (0.0 to 0.2%)
+0.09 (0.0 to 0.2)
 </td>
 <td style="text-align:left;">
 0.05
 </td>
 <td style="text-align:left;">
-162.6%
+1.69 (1.0 to 2.8)
+</td>
+<td style="text-align:left;">
+0.46
 </td>
 <td style="text-align:left;">
 0.0278
