@@ -416,7 +416,7 @@ div.section {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -425,7 +425,7 @@ div.section {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -434,17 +434,17 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-08-14
+<strong>Last updated:</strong> 2019-11-05
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>cost_of_SR_Dpseudo/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
 </p>
 <p>
 This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.3.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -453,12 +453,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -513,10 +513,22 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreedd8c525a1a8b649db44f9f994a9a116619762a54targetblankdd8c525a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/dd8c525a1a8b649db44f9f994a9a116619762a54" target="_blank">dd8c525</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreedd8c525a1a8b649db44f9f994a9a116619762a54targetblankdd8c525a" class="panel-collapse collapse">
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreeca8d1bb5925144d62f37691bd7ae547a29ebfcaetargetblankca8d1bba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/ca8d1bb5925144d62f37691bd7ae547a29ebfcae" target="_blank">ca8d1bb</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreeca8d1bb5925144d62f37691bd7ae547a29ebfcaetargetblankca8d1bba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -527,6 +539,32 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  code/pdf_supplementary_material.Rmd
+    Untracked:  code/pdf_supplementary_material.pdf
+    Untracked:  data/SR_sex_ratio_data.csv
+    Untracked:  figures/SR_figure.pdf
+    Untracked:  figures/SR_figure_by_isoline.pdf
+    Untracked:  output/R2_of_body_size_model.rds
+    Untracked:  output/SR_model_comparison.rds
+    Untracked:  output/body_size_model.rds
+    Untracked:  output/bodysize_model_table.rds
+    Untracked:  output/full_model_table.rds
+    Untracked:  output/no_isoline_model_table.rds
+    Untracked:  output/preds_all_isolines.rds
+    Untracked:  output/preds_by_isoline.rds
+    Untracked:  output/sample_size_table.rds
+    Untracked:  output/sex_ratio_genotype_model.rds
+    Untracked:  output/sex_ratio_interaction_model.rds
+    Untracked:  output/sex_ratio_isoline_model.rds
+
+Unstaged changes:
+    Modified:   analysis/population_genetic_model.Rmd
+    Modified:   analysis/statistics.Rmd
+    Modified:   figures/figure_1.pdf
+    Modified:   figures/figure_2.pdf
+    Modified:   figures/figure_S1.pdf
 
 </code></pre>
 <p>
@@ -565,6 +603,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lukeholman/cost_of_SR_Dpseudo/a0fac3a5965e5186d2dec6fe57782634e78d8e29/docs/statistics.html" target="_blank">a0fac3a</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-08-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -904,11 +959,25 @@ library(kableExtra)
 library(ggbeeswarm)
 library(RColorBrewer)
 library(showtext)
+library(lme4)
+library(lmerTest)
+library(gridExtra)
+library(tidybayes)
+
 font_add_google(name = &quot;Lato&quot;, family = &quot;Lato&quot;, regular.wt = 400, bold.wt = 700)
 showtext_auto()
 options(stringsAsFactors = FALSE)
 
-SE &lt;- function(x) sd(x) / sqrt(length(x))</code></pre>
+SE &lt;- function(x) sd(x) / sqrt(length(x))
+
+get_fixed_effects_with_p_values &lt;- function(brms_model){
+  fixed_effects &lt;- data.frame(summary(brms_model)$fixed) %&gt;%
+    rownames_to_column(&quot;Parameter&quot;)
+  fixed_effects$p &lt;- (100 - as.data.frame(bayestestR::p_direction(brms_model))$pd) / 100
+  fixed_effects %&gt;% select(Parameter, everything()) %&gt;%
+    rename(`l-95% CI` = l.95..CI, `u-95% CI` = u.95..CI) %&gt;%
+    mutate(` ` = ifelse(p &lt; 0.05, &quot;\\*&quot;, &quot; &quot;))
+}</code></pre>
 </div>
 <div id="load-the-data" class="section level2">
 <h2>Load the data</h2>
@@ -916,7 +985,10 @@ SE &lt;- function(x) sd(x) / sqrt(length(x))</code></pre>
   filter(!is.na(genotype)) %&gt;%
   rename(body_size = `Body size`,
          female_age = `F age`) %&gt;%
-  mutate(genotype = factor(genotype, levels = c(&quot;STST&quot;, &quot;SRST&quot;, &quot;SRSR&quot;)))</code></pre>
+  mutate(genotype = factor(genotype, levels = c(&quot;STST&quot;, &quot;SRST&quot;, &quot;SRSR&quot;)))
+
+sex_ratio_data &lt;- read.csv(&quot;data/SR_sex_ratio_data.csv&quot;, stringsAsFactors = FALSE)
+sex_ratio_data$n &lt;- with(sex_ratio_data, male + female)</code></pre>
 </div>
 <div id="make-a-table-of-summary-statistics-and-sample-sizes" class="section level2">
 <h2>Make a table of summary statistics and sample sizes</h2>
@@ -940,11 +1012,18 @@ means &lt;- fitness_data %&gt;%
     n_females_producing_offspring = sum(offspring != 0),
     Percent_females_producing_offspring = 100 * n_females_producing_offspring / n()) 
 
-
-bind_rows(means_by_isoline, means) %&gt;%
+sample_size_table &lt;- bind_rows(means_by_isoline, means) %&gt;%
   rename_all(function(x) gsub(&quot;_&quot;, &quot; &quot;, x)) %&gt;%
   rename_all(function(x) gsub(&quot;Percent&quot;, &quot;%&quot;, x)) %&gt;%
-  rename(Genotype = genotype) %&gt;%
+  rename(Genotype = genotype) 
+
+for_export &lt;- sample_size_table
+names(for_export) &lt;- c(&quot;Genotype&quot;, &quot;Isoline&quot;, &quot;n females&quot;,
+                       &quot;Mean productivity&quot;, &quot;SE&quot;, &quot;n productive&quot;, &quot;% productive&quot;)
+
+for_export %&gt;% write_rds(&quot;output/sample_size_table.rds&quot;)
+
+sample_size_table %&gt;%
   kable(digits = 2) %&gt;% kable_styling()</code></pre>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -1345,6 +1424,15 @@ Across all isolines
     hu        ~ genotype + female_age + (1 | Block)  
   )
   
+  # This model added in response to a reviewer request. 
+  # I don&#39;t think this model is much use here, since body size is a mediator variable;
+  # see the diagram at the top of this page: https://en.wikipedia.org/wiki/Mediation_(statistics)
+  # Moreover, many females have no body size measurement, so the sample size is smaller
+  body_size_model &lt;- bf(
+    offspring ~ genotype + female_age + body_size + (1 | Block), 
+    hu        ~ genotype + female_age + body_size + (1 | Block)  
+  )
+  
   
   # Find R^2 for a brms model, and its 95% CIs, and present neatly
   neat_R2 &lt;- function(model){
@@ -1379,30 +1467,42 @@ Across all isolines
                              save_all_pars = TRUE, 
                              prior = model_prior, 
                              data = fitness_data)
-
+  
+  # Added after peer review:
+  body_size_model &lt;- brm(body_size_model,
+                             family = &quot;hurdle_negbinomial&quot;,
+                             chains = 4, cores = 1, iter = 40000, inits = 0, seed = 12345,
+                             control = list(adapt_delta = 0.9999, max_treedepth = 15),
+                             save_all_pars = TRUE, 
+                             prior = model_prior, 
+                             data = fitness_data)
+  
   saveRDS(post_prob(full_model, no_interaction, genotype_only_model), 
           file = &quot;output/model_comparison.rds&quot;)
   saveRDS(full_model, file = &quot;output/full_model.rds&quot;)
   saveRDS(genotype_only_model, file = &quot;output/genotype_only_model.rds&quot;)
+  saveRDS(body_size_model, file = &quot;output/body_size_model.rds&quot;)
   saveRDS(neat_R2(full_model), file = &quot;output/R2_of_full_model.rds&quot;)
   saveRDS(neat_R2(genotype_only_model), file = &quot;output/R2_of_genotype_only_model.rds&quot;)
+  saveRDS(neat_R2(body_size_model), file = &quot;output/R2_of_body_size_model.rds&quot;)
 } else{
   full_model &lt;- readRDS(&quot;output/full_model.rds&quot;)
   genotype_only_model &lt;- readRDS(&quot;output/genotype_only_model.rds&quot;)
   model_probabilities &lt;- readRDS(&quot;output/model_comparison.rds&quot;)
+  body_size_model &lt;- readRDS(&quot;output/body_size_model.rds&quot;)
 }</code></pre>
 </div>
 <div id="graphically-verify-the-fit-of-the-model-using-a-posterior-predictive-check" class="section level3">
 <h3>Graphically verify the fit of the model using a posterior predictive check</h3>
 <p>The idea behind posterior predictive checking is that if our model is a good fit, then we should be able to use it to generate a dataset which looks a lot like the dataset we actually observed. Here, we see 11 draws from the ‘posterior predictive distribution’ (pale blue), which indeed look quite similar to the distribution of the real data (dark blue), suggesting that our model is a good enough approximation of the true data-generating process for reliable inference.</p>
 <pre class="r"><code>pp_check(genotype_only_model, type = &quot;hist&quot;, nsamples = 11, binwidth = 5)</code></pre>
-<p><img src="figure/statistics.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/statistics.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
-Past versions of unnamed-chunk-5-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div id="fig-unnamed-chunk-4-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1421,29 +1521,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/e5f7926c0ebfdf8a7498e250b093b90dd0ab3c88/docs/figure/statistics.Rmd/unnamed-chunk-5-1.png" target="_blank">e5f7926</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2019-08-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/13a5603ccb547a1fd1dd2626371948fea40f3d47/docs/figure/statistics.Rmd/unnamed-chunk-5-1.png" target="_blank">13a5603</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2019-07-02
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/ffdc5d44370af9cba1f49ab7045fd537d8a2191c/docs/figure/statistics.Rmd/unnamed-chunk-5-1.png" target="_blank">ffdc5d4</a>
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/ffdc5d44370af9cba1f49ab7045fd537d8a2191c/docs/figure/statistics.Rmd/unnamed-chunk-4-1.png" target="_blank">ffdc5d4</a>
 </td>
 <td>
 lukeholman
@@ -1459,38 +1537,34 @@ lukeholman
 </div>
 <div id="inspect-the-parameter-estimates" class="section level3 tabset">
 <h3>Inspect the parameter estimates</h3>
+<pre class="r"><code>make_model_table &lt;- function(model){ # helper function for the 3 tables here
+  random &lt;- as.data.frame(summary(model)$random[[1]]) %&gt;%
+    rownames_to_column(&quot;Parameter&quot;) %&gt;%
+    mutate(p = NA,
+           Parameter = c(&quot;sd(Block - Intercept)&quot;, &quot;sd(Block - Hurdle intercept)&quot;),
+           ` ` = &quot;&quot;)
+  
+  rbind(get_fixed_effects_with_p_values(model), random) %&gt;%
+    mutate(Parameter = gsub(&quot;hu_&quot;, &quot;Hurdle - &quot;, Parameter),
+           Estimate =  format(round(Estimate, 3), nsmall = 3),
+           Est.Error =  format(round(Est.Error, 3), nsmall = 3),
+           ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot;&quot;),
+           ` ` = replace(` `, is.na(` `), &quot;&quot;),
+           p = format(round(p, 4), nsmall = 4),
+           Rhat = format(round(Rhat, 3), nsmall = 3),
+           `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
+           `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
+           Bulk_ESS = round(Bulk_ESS, 0),
+           Tail_ESS = round(Tail_ESS, 0)
+    ) 
+}</code></pre>
 <div id="genotype-only-model" class="section level4">
 <h4>Genotype-only model</h4>
 <p>This model contains the fixed factor genotype, and the random effect block.</p>
 <p>The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the ‘Hurdle’ parameters), and the number of progeny produced assuming that at least some are (other parameters).</p>
-<pre class="r"><code>bayesian_p_values &lt;- as.data.frame(p_direction(genotype_only_model)) %&gt;% 
-      mutate(pd = (100 - pd) / 100,
-             Parameter = gsub(&quot;[.]&quot;, &quot;:&quot;, gsub(&quot;b_&quot;, &quot;&quot;, Parameter)))
-
-random &lt;- as.data.frame(summary(genotype_only_model)$random[[1]]) %&gt;%
-  rownames_to_column(&quot;Parameter&quot;) %&gt;%
-  mutate(p = NA,
-         Parameter = c(&quot;sd(Block - Intercept)&quot;, &quot;sd(Block - Hurdle intercept)&quot;))
-
-summary(genotype_only_model)$fixed %&gt;% 
-  as.data.frame() %&gt;% 
-  rownames_to_column(&quot;Parameter&quot;) %&gt;%
-  left_join(bayesian_p_values, by = &quot;Parameter&quot;) %&gt;%
-  rename(p = pd) %&gt;% 
-  arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
-  rbind(random) %&gt;%
-  rename(Error = Est.Error) %&gt;%
-  mutate(Parameter = gsub(&quot;hu_&quot;, &quot;Hurdle - &quot;, Parameter),
-         Estimate =  format(round(Estimate, 3), nsmall = 3),
-         Error = format(round(Error, 3), nsmall = 3),
-         ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot;&quot;),
-         ` ` = replace(` `, is.na(` `), &quot;&quot;),
-         p = format(round(p, 4), nsmall = 4),
-         Rhat = format(round(Rhat, 3), nsmall = 3),
-         `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
-         `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
-         Eff.Sample = round(Eff.Sample, 0)
-         ) %&gt;% 
+<pre class="r"><code>no_isoline_model_table &lt;- make_model_table(genotype_only_model)
+saveRDS(no_isoline_model_table, &quot;output/no_isoline_model_table.rds&quot;)
+no_isoline_model_table %&gt;% 
   kable() %&gt;% kable_styling()</code></pre>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -1502,7 +1576,7 @@ Parameter
 Estimate
 </th>
 <th style="text-align:left;">
-Error
+Est.Error
 </th>
 <th style="text-align:left;">
 l-95% CI
@@ -1510,11 +1584,14 @@ l-95% CI
 <th style="text-align:left;">
 u-95% CI
 </th>
-<th style="text-align:right;">
-Eff.Sample
-</th>
 <th style="text-align:left;">
 Rhat
+</th>
+<th style="text-align:right;">
+Bulk_ESS
+</th>
+<th style="text-align:right;">
+Tail_ESS
 </th>
 <th style="text-align:left;">
 p
@@ -1540,14 +1617,49 @@ Intercept
 <td style="text-align:left;">
 4.705
 </td>
+<td style="text-align:left;">
+1.000
+</td>
 <td style="text-align:right;">
-74753
+76247
+</td>
+<td style="text-align:right;">
+51126
+</td>
+<td style="text-align:left;">
+0.0000
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - Intercept
+</td>
+<td style="text-align:left;">
+-2.304
+</td>
+<td style="text-align:left;">
+0.940
+</td>
+<td style="text-align:left;">
+-4.180
+</td>
+<td style="text-align:left;">
+-0.486
 </td>
 <td style="text-align:left;">
 1.000
 </td>
+<td style="text-align:right;">
+79331
+</td>
+<td style="text-align:right;">
+56507
+</td>
 <td style="text-align:left;">
-0.0000
+0.0067
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1569,11 +1681,14 @@ genotypeSRST
 <td style="text-align:left;">
 0.206
 </td>
-<td style="text-align:right;">
-74642
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+74772
+</td>
+<td style="text-align:right;">
+62501
 </td>
 <td style="text-align:left;">
 0.3693
@@ -1597,11 +1712,14 @@ genotypeSRSR
 <td style="text-align:left;">
 -0.482
 </td>
-<td style="text-align:right;">
-77615
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+77722
+</td>
+<td style="text-align:right;">
+61179
 </td>
 <td style="text-align:left;">
 0.0000
@@ -1626,46 +1744,20 @@ female_age
 <td style="text-align:left;">
 0.095
 </td>
-<td style="text-align:right;">
-105447
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+105585
+</td>
+<td style="text-align:right;">
+57494
 </td>
 <td style="text-align:left;">
 0.4280
 </td>
 <td style="text-align:left;">
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - Intercept
-</td>
-<td style="text-align:left;">
--2.304
-</td>
-<td style="text-align:left;">
-0.940
-</td>
-<td style="text-align:left;">
--4.180
-</td>
-<td style="text-align:left;">
--0.486
-</td>
-<td style="text-align:right;">
-79058
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.0067
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1683,11 +1775,14 @@ Hurdle - genotypeSRST
 <td style="text-align:left;">
 2.533
 </td>
-<td style="text-align:right;">
-55950
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+57326
+</td>
+<td style="text-align:right;">
+49312
 </td>
 <td style="text-align:left;">
 0.0007
@@ -1712,11 +1807,14 @@ Hurdle - genotypeSRSR
 <td style="text-align:left;">
 3.113
 </td>
-<td style="text-align:right;">
-54153
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+55547
+</td>
+<td style="text-align:right;">
+49201
 </td>
 <td style="text-align:left;">
 0.0000
@@ -1741,11 +1839,14 @@ Hurdle - female_age
 <td style="text-align:left;">
 0.170
 </td>
-<td style="text-align:right;">
-101832
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+101961
+</td>
+<td style="text-align:right;">
+57083
 </td>
 <td style="text-align:left;">
 0.1257
@@ -1769,11 +1870,14 @@ sd(Block - Intercept)
 <td style="text-align:left;">
 0.453
 </td>
-<td style="text-align:right;">
-18287
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+17685
+</td>
+<td style="text-align:right;">
+32248
 </td>
 <td style="text-align:left;">
 NA
@@ -1797,11 +1901,14 @@ sd(Block - Hurdle intercept)
 <td style="text-align:left;">
 1.176
 </td>
-<td style="text-align:right;">
-22756
-</td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+25228
+</td>
+<td style="text-align:right;">
+33771
 </td>
 <td style="text-align:left;">
 NA
@@ -1821,34 +1928,9 @@ NA
 <h4>Genotype-by-isoline model</h4>
 <p>This model contains the fixed factor genotype, the fixed factor isoline, and their interaction, as well as the random effect block.</p>
 <p>The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the ‘Hurdle’ parameters), and the number of progeny produced assuming that at least some are (other parameters).</p>
-<pre class="r"><code>bayesian_p_values &lt;- as.data.frame(p_direction(full_model)) %&gt;% 
-      mutate(pd = (100 - pd) / 100,
-             Parameter = gsub(&quot;[.]&quot;, &quot;:&quot;, gsub(&quot;b_&quot;, &quot;&quot;, Parameter)))
-
-random &lt;- as.data.frame(summary(full_model)$random[[1]]) %&gt;%
-  rownames_to_column(&quot;Parameter&quot;) %&gt;%
-  mutate(p = NA,
-         Parameter = c(&quot;sd(Block - Intercept)&quot;, &quot;sd(Block - Hurdle intercept)&quot;))
-
-summary(full_model)$fixed %&gt;% 
-  as.data.frame() %&gt;% 
-  rownames_to_column(&quot;Parameter&quot;) %&gt;%
-  left_join(bayesian_p_values, by = &quot;Parameter&quot;) %&gt;%
-  rename(p = pd) %&gt;% 
-  arrange(grepl(&quot;hu_&quot;, Parameter)) %&gt;%
-  rbind(random) %&gt;%
-  rename(Error = Est.Error) %&gt;%
-  mutate(Parameter = gsub(&quot;hu_&quot;, &quot;Hurdle - &quot;, Parameter),
-         Estimate =  format(round(Estimate, 3), nsmall = 3),
-         Error =  format(round(Error, 3), nsmall = 3),
-         ` ` = ifelse(p &lt; 0.05, &quot;*&quot;, &quot;&quot;),
-         ` ` = replace(` `, is.na(` `), &quot;&quot;),
-         p = format(round(p, 4), nsmall = 4),
-         Rhat = format(round(Rhat, 3), nsmall = 3),
-         `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
-         `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
-         Eff.Sample = round(Eff.Sample, 0)
-         ) %&gt;% 
+<pre class="r"><code>full_model_table &lt;- make_model_table(genotype_only_model)
+saveRDS(full_model_table, &quot;output/full_model_table.rds&quot;)
+full_model_table %&gt;% 
   kable() %&gt;% kable_styling()</code></pre>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -1860,7 +1942,7 @@ Parameter
 Estimate
 </th>
 <th style="text-align:left;">
-Error
+Est.Error
 </th>
 <th style="text-align:left;">
 l-95% CI
@@ -1868,11 +1950,14 @@ l-95% CI
 <th style="text-align:left;">
 u-95% CI
 </th>
-<th style="text-align:right;">
-Eff.Sample
-</th>
 <th style="text-align:left;">
 Rhat
+</th>
+<th style="text-align:right;">
+Bulk_ESS
+</th>
+<th style="text-align:right;">
+Tail_ESS
 </th>
 <th style="text-align:left;">
 p
@@ -1887,22 +1972,25 @@ p
 Intercept
 </td>
 <td style="text-align:left;">
-4.048
+4.244
 </td>
 <td style="text-align:left;">
-0.267
+0.236
 </td>
 <td style="text-align:left;">
-3.528
+3.782
 </td>
 <td style="text-align:left;">
-4.574
-</td>
-<td style="text-align:right;">
-71105
+4.705
 </td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+76247
+</td>
+<td style="text-align:right;">
+51126
 </td>
 <td style="text-align:left;">
 0.0000
@@ -1913,370 +2001,126 @@ Intercept
 </tr>
 <tr>
 <td style="text-align:left;">
-genotypeSRST
+Hurdle - Intercept
 </td>
 <td style="text-align:left;">
-0.364
+-2.304
 </td>
 <td style="text-align:left;">
-0.168
+0.940
 </td>
 <td style="text-align:left;">
-0.037
+-4.180
 </td>
 <td style="text-align:left;">
-0.696
-</td>
-<td style="text-align:right;">
-38430
+-0.486
 </td>
 <td style="text-align:left;">
 1.000
 </td>
+<td style="text-align:right;">
+79331
+</td>
+<td style="text-align:right;">
+56507
+</td>
 <td style="text-align:left;">
-0.0145
+0.0067
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST
+</td>
+<td style="text-align:left;">
+0.030
+</td>
+<td style="text-align:left;">
+0.089
+</td>
+<td style="text-align:left;">
+-0.143
+</td>
+<td style="text-align:left;">
+0.206
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+74772
+</td>
+<td style="text-align:right;">
+62501
+</td>
+<td style="text-align:left;">
+0.3693
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 genotypeSRSR
 </td>
 <td style="text-align:left;">
--0.426
+-0.669
 </td>
 <td style="text-align:left;">
-0.183
+0.094
 </td>
 <td style="text-align:left;">
--0.783
+-0.851
 </td>
 <td style="text-align:left;">
--0.064
-</td>
-<td style="text-align:right;">
-39651
+-0.482
 </td>
 <td style="text-align:left;">
 1.000
 </td>
+<td style="text-align:right;">
+77722
+</td>
+<td style="text-align:right;">
+61179
+</td>
 <td style="text-align:left;">
-0.0106
+0.0000
 </td>
 <td style="text-align:left;">
 <ul>
 <li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-IsolineLew17
-</td>
-<td style="text-align:left;">
--0.064
-</td>
-<td style="text-align:left;">
-0.162
-</td>
-<td style="text-align:left;">
--0.383
-</td>
-<td style="text-align:left;">
-0.253
-</td>
-<td style="text-align:right;">
-43006
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.3465
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-IsolineSloB3
-</td>
-<td style="text-align:left;">
-0.283
-</td>
-<td style="text-align:left;">
-0.165
-</td>
-<td style="text-align:left;">
--0.042
-</td>
-<td style="text-align:left;">
-0.607
-</td>
-<td style="text-align:right;">
-43349
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.0434
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-IsolineSloB7
-</td>
-<td style="text-align:left;">
-0.158
-</td>
-<td style="text-align:left;">
-0.168
-</td>
-<td style="text-align:left;">
--0.171
-</td>
-<td style="text-align:left;">
-0.487
-</td>
-<td style="text-align:right;">
-43284
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.1735
-</td>
-<td style="text-align:left;">
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 female_age
 </td>
 <td style="text-align:left;">
-0.023
+-0.010
 </td>
 <td style="text-align:left;">
-0.057
+0.053
 </td>
 <td style="text-align:left;">
--0.089
+-0.113
 </td>
 <td style="text-align:left;">
-0.135
-</td>
-<td style="text-align:right;">
-116178
+0.095
 </td>
 <td style="text-align:left;">
 1.000
 </td>
-<td style="text-align:left;">
-0.3422
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genotypeSRST:IsolineLew17
-</td>
-<td style="text-align:left;">
--0.220
-</td>
-<td style="text-align:left;">
-0.243
-</td>
-<td style="text-align:left;">
--0.698
-</td>
-<td style="text-align:left;">
-0.255
+<td style="text-align:right;">
+105585
 </td>
 <td style="text-align:right;">
-43832
+57494
 </td>
 <td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.1831
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genotypeSRSR:IsolineLew17
-</td>
-<td style="text-align:left;">
--0.015
-</td>
-<td style="text-align:left;">
-0.253
-</td>
-<td style="text-align:left;">
--0.512
-</td>
-<td style="text-align:left;">
-0.480
-</td>
-<td style="text-align:right;">
-43000
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.4758
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genotypeSRST:IsolineSloB3
-</td>
-<td style="text-align:left;">
--0.682
-</td>
-<td style="text-align:left;">
-0.251
-</td>
-<td style="text-align:left;">
--1.175
-</td>
-<td style="text-align:left;">
--0.190
-</td>
-<td style="text-align:right;">
-47069
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.0033
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genotypeSRSR:IsolineSloB3
-</td>
-<td style="text-align:left;">
--0.845
-</td>
-<td style="text-align:left;">
-0.267
-</td>
-<td style="text-align:left;">
--1.368
-</td>
-<td style="text-align:left;">
--0.318
-</td>
-<td style="text-align:right;">
-47414
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.0009
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genotypeSRST:IsolineSloB7
-</td>
-<td style="text-align:left;">
--0.540
-</td>
-<td style="text-align:left;">
-0.239
-</td>
-<td style="text-align:left;">
--1.011
-</td>
-<td style="text-align:left;">
--0.073
-</td>
-<td style="text-align:right;">
-45588
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.0117
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genotypeSRSR:IsolineSloB7
-</td>
-<td style="text-align:left;">
--0.331
-</td>
-<td style="text-align:left;">
-0.260
-</td>
-<td style="text-align:left;">
--0.843
-</td>
-<td style="text-align:left;">
-0.175
-</td>
-<td style="text-align:right;">
-45084
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.1011
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - Intercept
-</td>
-<td style="text-align:left;">
--1.472
-</td>
-<td style="text-align:left;">
-1.135
-</td>
-<td style="text-align:left;">
--3.708
-</td>
-<td style="text-align:left;">
-0.765
-</td>
-<td style="text-align:right;">
-67332
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.0947
+0.4280
 </td>
 <td style="text-align:left;">
 </td>
@@ -2286,25 +2130,28 @@ Hurdle - Intercept
 Hurdle - genotypeSRST
 </td>
 <td style="text-align:left;">
-1.412
+1.488
 </td>
 <td style="text-align:left;">
-0.712
+0.505
 </td>
 <td style="text-align:left;">
-0.056
+0.542
 </td>
 <td style="text-align:left;">
-2.865
-</td>
-<td style="text-align:right;">
-48615
+2.533
 </td>
 <td style="text-align:left;">
 1.000
 </td>
+<td style="text-align:right;">
+57326
+</td>
+<td style="text-align:right;">
+49312
+</td>
 <td style="text-align:left;">
-0.0204
+0.0007
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2315,25 +2162,28 @@ Hurdle - genotypeSRST
 Hurdle - genotypeSRSR
 </td>
 <td style="text-align:left;">
-2.104
+2.093
 </td>
 <td style="text-align:left;">
-0.700
+0.489
 </td>
 <td style="text-align:left;">
-0.788
+1.191
 </td>
 <td style="text-align:left;">
-3.540
-</td>
-<td style="text-align:right;">
-48347
+3.113
 </td>
 <td style="text-align:left;">
 1.000
 </td>
+<td style="text-align:right;">
+55547
+</td>
+<td style="text-align:right;">
+49201
+</td>
 <td style="text-align:left;">
-0.0005
+0.0000
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2341,280 +2191,31 @@ Hurdle - genotypeSRSR
 </tr>
 <tr>
 <td style="text-align:left;">
-Hurdle - IsolineLew17
-</td>
-<td style="text-align:left;">
--0.978
-</td>
-<td style="text-align:left;">
-1.021
-</td>
-<td style="text-align:left;">
--3.104
-</td>
-<td style="text-align:left;">
-0.904
-</td>
-<td style="text-align:right;">
-47112
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.1673
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - IsolineSloB3
-</td>
-<td style="text-align:left;">
--0.738
-</td>
-<td style="text-align:left;">
-0.982
-</td>
-<td style="text-align:left;">
--2.768
-</td>
-<td style="text-align:left;">
-1.080
-</td>
-<td style="text-align:right;">
-46047
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.2286
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - IsolineSloB7
-</td>
-<td style="text-align:left;">
--0.644
-</td>
-<td style="text-align:left;">
-1.030
-</td>
-<td style="text-align:left;">
--2.792
-</td>
-<td style="text-align:left;">
-1.255
-</td>
-<td style="text-align:right;">
-45123
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.2709
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 Hurdle - female_age
 </td>
 <td style="text-align:left;">
--0.324
+-0.240
 </td>
 <td style="text-align:left;">
-0.234
+0.210
 </td>
 <td style="text-align:left;">
--0.787
+-0.651
 </td>
 <td style="text-align:left;">
-0.131
-</td>
-<td style="text-align:right;">
-122650
+0.170
 </td>
 <td style="text-align:left;">
 1.000
 </td>
-<td style="text-align:left;">
-0.0825
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - genotypeSRST:IsolineLew17
-</td>
-<td style="text-align:left;">
-0.496
-</td>
-<td style="text-align:left;">
-1.163
-</td>
-<td style="text-align:left;">
--1.702
-</td>
-<td style="text-align:left;">
-2.858
+<td style="text-align:right;">
+101961
 </td>
 <td style="text-align:right;">
-50557
+57083
 </td>
 <td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.3420
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - genotypeSRSR:IsolineLew17
-</td>
-<td style="text-align:left;">
--0.836
-</td>
-<td style="text-align:left;">
-1.203
-</td>
-<td style="text-align:left;">
--3.152
-</td>
-<td style="text-align:left;">
-1.590
-</td>
-<td style="text-align:right;">
-51634
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.2373
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - genotypeSRST:IsolineSloB3
-</td>
-<td style="text-align:left;">
-0.661
-</td>
-<td style="text-align:left;">
-1.147
-</td>
-<td style="text-align:left;">
--1.534
-</td>
-<td style="text-align:left;">
-2.971
-</td>
-<td style="text-align:right;">
-49740
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.2843
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - genotypeSRSR:IsolineSloB3
-</td>
-<td style="text-align:left;">
-0.900
-</td>
-<td style="text-align:left;">
-1.094
-</td>
-<td style="text-align:left;">
--1.160
-</td>
-<td style="text-align:left;">
-3.121
-</td>
-<td style="text-align:right;">
-47974
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.2061
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - genotypeSRST:IsolineSloB7
-</td>
-<td style="text-align:left;">
--0.591
-</td>
-<td style="text-align:left;">
-1.231
-</td>
-<td style="text-align:left;">
--2.981
-</td>
-<td style="text-align:left;">
-1.886
-</td>
-<td style="text-align:right;">
-49543
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.3100
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hurdle - genotypeSRSR:IsolineSloB7
-</td>
-<td style="text-align:left;">
-0.188
-</td>
-<td style="text-align:left;">
-1.133
-</td>
-<td style="text-align:left;">
--1.958
-</td>
-<td style="text-align:left;">
-2.496
-</td>
-<td style="text-align:right;">
-46082
-</td>
-<td style="text-align:left;">
-1.000
-</td>
-<td style="text-align:left;">
-0.4416
+0.1257
 </td>
 <td style="text-align:left;">
 </td>
@@ -2624,22 +2225,25 @@ Hurdle - genotypeSRSR:IsolineSloB7
 sd(Block - Intercept)
 </td>
 <td style="text-align:left;">
-0.180
+0.137
 </td>
 <td style="text-align:left;">
-0.152
+0.125
 </td>
 <td style="text-align:left;">
-0.010
+0.006
 </td>
 <td style="text-align:left;">
-0.556
-</td>
-<td style="text-align:right;">
-22763
+0.453
 </td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+17685
+</td>
+<td style="text-align:right;">
+32248
 </td>
 <td style="text-align:left;">
 NA
@@ -2652,22 +2256,25 @@ NA
 sd(Block - Hurdle intercept)
 </td>
 <td style="text-align:left;">
-0.559
+0.328
 </td>
 <td style="text-align:left;">
-0.516
+0.344
 </td>
 <td style="text-align:left;">
-0.023
+0.011
 </td>
 <td style="text-align:left;">
-1.882
-</td>
-<td style="text-align:right;">
-24476
+1.176
 </td>
 <td style="text-align:left;">
 1.000
+</td>
+<td style="text-align:right;">
+25228
+</td>
+<td style="text-align:right;">
+33771
 </td>
 <td style="text-align:left;">
 NA
@@ -2680,6 +2287,431 @@ NA
 </ul></li>
 </ul></li>
 </ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="model-including-body-size" class="section level4">
+<h4>Model including body size</h4>
+<p>This is the same as the top model (i.e. the Genotype-only model), except that it also includes body size a predictor in both components of the hurdle model. Note also that this analysis is restricted to females for which a body size measurement was available, reducing the sample size from 440 to 338 females.</p>
+<pre class="r"><code>bodysize_model_table &lt;- make_model_table(body_size_model)
+saveRDS(bodysize_model_table, &quot;output/bodysize_model_table.rds&quot;)
+bodysize_model_table %&gt;% 
+  kable() %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:left;">
+Estimate
+</th>
+<th style="text-align:left;">
+Est.Error
+</th>
+<th style="text-align:left;">
+l-95% CI
+</th>
+<th style="text-align:left;">
+u-95% CI
+</th>
+<th style="text-align:left;">
+Rhat
+</th>
+<th style="text-align:right;">
+Bulk_ESS
+</th>
+<th style="text-align:right;">
+Tail_ESS
+</th>
+<th style="text-align:left;">
+p
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:left;">
+2.501
+</td>
+<td style="text-align:left;">
+0.841
+</td>
+<td style="text-align:left;">
+0.860
+</td>
+<td style="text-align:left;">
+4.172
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+78603
+</td>
+<td style="text-align:right;">
+61911
+</td>
+<td style="text-align:left;">
+0.0014
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - Intercept
+</td>
+<td style="text-align:left;">
+-0.813
+</td>
+<td style="text-align:left;">
+2.746
+</td>
+<td style="text-align:left;">
+-6.253
+</td>
+<td style="text-align:left;">
+4.498
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+97985
+</td>
+<td style="text-align:right;">
+61318
+</td>
+<td style="text-align:left;">
+0.3853
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST
+</td>
+<td style="text-align:left;">
+0.046
+</td>
+<td style="text-align:left;">
+0.118
+</td>
+<td style="text-align:left;">
+-0.184
+</td>
+<td style="text-align:left;">
+0.280
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+54937
+</td>
+<td style="text-align:right;">
+56365
+</td>
+<td style="text-align:left;">
+0.3480
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRSR
+</td>
+<td style="text-align:left;">
+-0.623
+</td>
+<td style="text-align:left;">
+0.113
+</td>
+<td style="text-align:left;">
+-0.842
+</td>
+<td style="text-align:left;">
+-0.400
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+62405
+</td>
+<td style="text-align:right;">
+59369
+</td>
+<td style="text-align:left;">
+0.0000
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+female_age
+</td>
+<td style="text-align:left;">
+-0.004
+</td>
+<td style="text-align:left;">
+0.065
+</td>
+<td style="text-align:left;">
+-0.131
+</td>
+<td style="text-align:left;">
+0.123
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+89886
+</td>
+<td style="text-align:right;">
+60265
+</td>
+<td style="text-align:left;">
+0.4763
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+body_size
+</td>
+<td style="text-align:left;">
+1.072
+</td>
+<td style="text-align:left;">
+0.539
+</td>
+<td style="text-align:left;">
+0.005
+</td>
+<td style="text-align:left;">
+2.124
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+72909
+</td>
+<td style="text-align:right;">
+61737
+</td>
+<td style="text-align:left;">
+0.0246
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRST
+</td>
+<td style="text-align:left;">
+1.577
+</td>
+<td style="text-align:left;">
+0.579
+</td>
+<td style="text-align:left;">
+0.503
+</td>
+<td style="text-align:left;">
+2.767
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+51814
+</td>
+<td style="text-align:right;">
+50939
+</td>
+<td style="text-align:left;">
+0.0018
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - genotypeSRSR
+</td>
+<td style="text-align:left;">
+2.338
+</td>
+<td style="text-align:left;">
+0.534
+</td>
+<td style="text-align:left;">
+1.350
+</td>
+<td style="text-align:left;">
+3.458
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+52524
+</td>
+<td style="text-align:right;">
+47783
+</td>
+<td style="text-align:left;">
+0.0000
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - female_age
+</td>
+<td style="text-align:left;">
+-0.378
+</td>
+<td style="text-align:left;">
+0.228
+</td>
+<td style="text-align:left;">
+-0.827
+</td>
+<td style="text-align:left;">
+0.065
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+91787
+</td>
+<td style="text-align:right;">
+58967
+</td>
+<td style="text-align:left;">
+0.0478
+</td>
+<td style="text-align:left;">
+<ul>
+<li></td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hurdle - body_size
+</td>
+<td style="text-align:left;">
+-0.594
+</td>
+<td style="text-align:left;">
+1.708
+</td>
+<td style="text-align:left;">
+-3.916
+</td>
+<td style="text-align:left;">
+2.789
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+88482
+</td>
+<td style="text-align:right;">
+60276
+</td>
+<td style="text-align:left;">
+0.3627
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sd(Block - Intercept)
+</td>
+<td style="text-align:left;">
+0.153
+</td>
+<td style="text-align:left;">
+0.133
+</td>
+<td style="text-align:left;">
+0.008
+</td>
+<td style="text-align:left;">
+0.477
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+18485
+</td>
+<td style="text-align:right;">
+26949
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sd(Block - Hurdle intercept)
+</td>
+<td style="text-align:left;">
+0.319
+</td>
+<td style="text-align:left;">
+0.306
+</td>
+<td style="text-align:left;">
+0.011
+</td>
+<td style="text-align:left;">
+1.108
+</td>
+<td style="text-align:left;">
+1.000
+</td>
+<td style="text-align:right;">
+28166
+</td>
+<td style="text-align:right;">
+39262
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table></li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -2812,58 +2844,7 @@ figure_S1 &lt;- figureS1_data[[1]] %&gt;%
 figure_1 %&gt;% ggsave(filename = &quot;figures/figure_1.pdf&quot;, width = 9, height = 4)
 figure_S1 %&gt;% ggsave(filename = &quot;figures/figure_S1.pdf&quot;, width = 9, height = 4)</code></pre>
 <pre class="r"><code>figure_1</code></pre>
-<p><img src="figure/statistics.Rmd/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
-Past versions of unnamed-chunk-9-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-9-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/e5f7926c0ebfdf8a7498e250b093b90dd0ab3c88/docs/figure/statistics.Rmd/unnamed-chunk-9-1.png" target="_blank">e5f7926</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2019-08-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/13a5603ccb547a1fd1dd2626371948fea40f3d47/docs/figure/statistics.Rmd/unnamed-chunk-9-1.png" target="_blank">13a5603</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2019-07-02
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><br></br> <strong>Figure 1</strong>: The black points and error bars show the posterior estimates of the genotype means for A) offspring production, B) offspring production among the set of females that produced at least one offspring, and C) the percentage of females that produced offspring. The estimates are all derived from a single hurdle model which adjusts for variation due to female age and experimental block, and each estimate is the average across the four isolines (see Figure S1 for estimates split by isoline). The points show the raw values of offspring production for individual females, and are coloured purple for females that produced no offspring. The error bars show the 95% credible intervals on each estimate.</p>
-<pre class="r"><code>figure_S1</code></pre>
-<p><img src="figure/statistics.Rmd/unnamed-chunk-10-1.png" width="835.2" style="display: block; margin: auto;" /></p>
+<p><img src="figure/statistics.Rmd/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
 Past versions of unnamed-chunk-10-1.png
@@ -2912,12 +2893,14 @@ lukeholman
 </table>
 </div>
 </div>
-<p><br></br> <strong>Figure S1</strong>: The same information as in Figure 1, except split by isoline.</p>
+<p><br></br> <strong>Figure 1</strong>: The black points and error bars show the posterior estimates of the genotype means for A) offspring production, B) offspring production among the set of females that produced at least one offspring, and C) the percentage of females that produced offspring. The estimates are all derived from a single hurdle model which adjusts for variation due to female age and experimental block, and each estimate is the average across the four isolines (see Figure S1 for estimates split by isoline). The points show the raw values of offspring production for individual females, and are coloured purple for females that produced no offspring. The error bars show the 95% credible intervals on each estimate.</p>
+<pre class="r"><code>figure_S1</code></pre>
+<p><img src="figure/statistics.Rmd/unnamed-chunk-11-1.png" width="835.2" style="display: block; margin: auto;" /> <br></br> <strong>Figure S1</strong>: The same information as in Figure 1, except split by isoline.</p>
 </div>
 </div>
 <div id="calculate-pairwise-differences-between-genotypes" class="section level2">
 <h2>Calculate pairwise differences between genotypes</h2>
-<p><strong>Table 1</strong>: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The ‘Difference in means’ column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference indicates that the genotype with more copies of <em>SR</em> has lower female fitness, the parentheses show the 95% quantiles of the posterior difference in means, and the Error column gives the average absolute deviation. The ‘Relative difference’ column expresses each difference in relative terms; e.g. the first row shows that <em>SR</em>/<em>ST</em> females produced 91.5% as many offspring as <em>ST</em>/<em>ST</em> females, on average. Finally, <span class="math inline">\(p\)</span> is the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional <span class="math inline">\(p\)</span>-value).</p>
+<p><strong>Table 1</strong>: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The ‘Difference in means’ column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference indicates that the genotype with more copies of SR has lower female fitness, the parentheses show the error and 95% quantiles of the posterior difference in means. The ‘Relative difference’ column expresses each difference in relative terms; e.g. the first row shows that the mean number of offspring produced by SR/ST females was 92% as much as the number produced by ST/ST females, with 95% confidence limits of 70-110%. Finally, <span class="math inline">\(p\)</span> is the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional <span class="math inline">\(p\)</span>-value).</p>
 <pre class="r"><code>compare_means &lt;- function(mean1, mean2, posterior){
   
   posterior &lt;- posterior %&gt;%
@@ -2928,7 +2911,6 @@ lukeholman
   abs_difference &lt;- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] - posterior[, mean1])))
   rel_diff &lt;- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] / posterior[, mean1])))
   p_value &lt;- as.numeric(100 - p_direction(posterior[, mean2] - posterior[, mean1])) / 100
-  
   
   tibble(
     Comparison = paste(mean1, mean2, sep = &quot; \u2192 &quot;),
@@ -2941,18 +2923,7 @@ lukeholman
     Error2 = rel_diff$Est.Error,
     p = p_value
   ) %&gt;% select( -`95% CIs abs`, -`95% CIs rel`)
-  
-  #relative &lt;- median(posterior[, mean2] / posterior[, mean1])
-  # as_tibble(posterior_summary(as.mcmc(difference))) %&gt;%
-  #   mutate(Comparison = paste(mean1, mean2, sep = &quot; \u2192 &quot;),
-  #          `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), &quot;%&quot;, sep = &quot;&quot;),
-  #          `95% CIs` = paste(&quot; (&quot;, format(round(Q2.5, 1), nsmall = 1), &quot; to &quot;, format(round(Q97.5, 1), nsmall = 1), &quot;)&quot;, sep = &quot;&quot;),
-  #          `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = &quot;&quot;),
-  #          `Fitness trait` = NA,
-  #          p = p_value) %&gt;%
-  #   select( -Q2.5, -Q97.5) %&gt;%
-  #   select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p) %&gt;%
-  #   rename(Error = Est.Error)
+ 
 }
 
 table_of_contrasts &lt;- bind_rows(
@@ -3245,6 +3216,1725 @@ SRST → SRSR
 </ul></li>
 </ul></li>
 </ul>
+</div>
+<div id="make-wing-length-figure" class="section level2">
+<h2>Make wing length figure</h2>
+<pre class="r"><code>p1 &lt;- fitness_data %&gt;% 
+  filter(!is.na(body_size)) %&gt;%
+  ggplot(aes(genotype, body_size, colour = genotype)) + 
+  geom_quasirandom(alpha = 0.5) + 
+  stat_summary(fun.data = &quot;mean_cl_boot&quot;, colour = &quot;grey20&quot;) +
+  theme_bw() + ylab(NULL) + xlab(&quot;Genotype&quot;) +
+  theme(strip.background = element_blank(),
+        legend.position = &quot;none&quot;,
+        panel.grid.major.x = element_blank(), 
+        strip.text = element_text(hjust = 0))
+
+p2 &lt;- fitness_data %&gt;% 
+  filter(!is.na(body_size)) %&gt;%
+  ggplot(aes(body_size, fill = genotype)) + 
+    geom_density(alpha = 0.3) + 
+    theme_bw() + 
+    coord_flip() + xlab(NULL) + ylab(&quot;Density&quot;) +
+    theme(strip.background = element_blank(),
+          legend.position = &quot;none&quot;,
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          panel.grid.major.x = element_blank(), 
+          panel.grid.minor.x = element_blank(), 
+          strip.text = element_text(hjust = 0))
+
+grid.arrange(p1, p2,
+             widths = c(0.7, 0.32),
+             ncol = 2, left = &quot;Wing vein length (mm)&quot;
+)</code></pre>
+<p><img src="figure/statistics.Rmd/body_size_fig-1.png" width="672" style="display: block; margin: auto;" /> <br></br> <strong>Figure 2:</strong> Distribution of wing lengths for each genotype, showing the individual values (left) or the frequency distribution (right).</p>
+<div id="associated-statistics-for-figure-2" class="section level3">
+<h3>Associated statistics for Figure 2</h3>
+<div id="mody-size-means" class="section level4">
+<h4>Mody size means</h4>
+<pre class="r"><code>body_size_model_data &lt;- fitness_data %&gt;%
+  filter(!is.na(body_size)) %&gt;%
+  mutate(body_size_scaled = as.numeric(scale(body_size)))
+
+body_size_model_data %&gt;%
+  group_by(genotype) %&gt;%
+  summarise(`Mean wing vein length (mm)` = mean(body_size),
+            SE = sd(body_size) / sqrt(n())) %&gt;%
+  kable(digits=3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+genotype
+</th>
+<th style="text-align:right;">
+Mean wing vein length (mm)
+</th>
+<th style="text-align:right;">
+SE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:right;">
+1.532
+</td>
+<td style="text-align:right;">
+0.009
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:right;">
+1.628
+</td>
+<td style="text-align:right;">
+0.005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:right;">
+1.571
+</td>
+<td style="text-align:right;">
+0.008
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="linear-mixed-model" class="section level4">
+<h4>Linear mixed model</h4>
+<p>Note that body size data is missing for one body size - isoline combination, so we did not fit the interaction term (preventing rank deficiency). The model shows that body size differs significantly among genotypes and isolines.</p>
+<pre class="r"><code>body_size_model &lt;- lmer(body_size_scaled ~ genotype + Isoline + (1 | Block), 
+                      data = body_size_model_data)
+summary(body_size_model)</code></pre>
+<pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+lmerModLmerTest]
+Formula: body_size_scaled ~ genotype + Isoline + (1 | Block)
+   Data: body_size_model_data
+
+REML criterion at convergence: 799.9
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.8321 -0.5805  0.1347  0.6665  3.6208 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ Block    (Intercept) 0.0000   0.0000  
+ Residual             0.6028   0.7764  
+Number of obs: 338, groups:  Block, 6
+
+Fixed effects:
+               Estimate Std. Error        df t value Pr(&gt;|t|)    
+(Intercept)    -0.03817    0.09786 332.00000  -0.390   0.6967    
+genotypeSRST    1.10351    0.10863 332.00000  10.158  &lt; 2e-16 ***
+genotypeSRSR    0.45672    0.10970 332.00000   4.163  4.0e-05 ***
+IsolineLew 17  -1.10869    0.10595 332.00000 -10.464  &lt; 2e-16 ***
+IsolineSlo B3  -0.52049    0.12968 332.00000  -4.014  7.4e-05 ***
+IsolineSlo B7  -0.27158    0.12367 332.00000  -2.196   0.0288 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Correlation of Fixed Effects:
+            (Intr) gnSRST gnSRSR IslL17 IslSB3
+genotypSRST -0.573                            
+genotypSRSR -0.574  0.556                     
+IsolineLw17 -0.550  0.021  0.025              
+IsolineSlB3 -0.272 -0.219 -0.226  0.396       
+IsolineSlB7 -0.554  0.126  0.138  0.426  0.307</code></pre>
+<pre class="r"><code>anova(body_size_model)</code></pre>
+<pre><code>Type III Analysis of Variance Table with Satterthwaite&#39;s method
+         Sum Sq Mean Sq NumDF DenDF F value    Pr(&gt;F)    
+genotype 64.133  32.067     2   332  53.194 &lt; 2.2e-16 ***
+Isoline  69.825  23.275     3   332  38.610 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="sample-sizes-for-the-body-size-data" class="section level4">
+<h4>Sample sizes for the body size data</h4>
+<pre class="r"><code>sample_sizes &lt;- body_size_model_data %&gt;%
+  group_by(genotype, Isoline) %&gt;%
+  summarise(n = n())
+
+overall &lt;- sample_sizes %&gt;%
+  group_by(genotype) %&gt;%
+  summarise(n =sum(n)) %&gt;%
+  mutate(Isoline = &quot;Across all isolines&quot;) %&gt;%
+  select(!! names(sample_sizes))
+
+sample_sizes %&gt;%
+  bind_rows(overall) %&gt;%
+  kable(digits=3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+genotype
+</th>
+<th style="text-align:left;">
+Isoline
+</th>
+<th style="text-align:right;">
+n
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Lew 13
+</td>
+<td style="text-align:right;">
+37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Lew 17
+</td>
+<td style="text-align:right;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Slo B7
+</td>
+<td style="text-align:right;">
+34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Lew 13
+</td>
+<td style="text-align:right;">
+36
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Lew 17
+</td>
+<td style="text-align:right;">
+34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Slo B3
+</td>
+<td style="text-align:right;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Slo B7
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Lew 13
+</td>
+<td style="text-align:right;">
+36
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Lew 17
+</td>
+<td style="text-align:right;">
+33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Slo B3
+</td>
+<td style="text-align:right;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Slo B7
+</td>
+<td style="text-align:right;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Across all isolines
+</td>
+<td style="text-align:right;">
+110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Across all isolines
+</td>
+<td style="text-align:right;">
+115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Across all isolines
+</td>
+<td style="text-align:right;">
+113
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="analysis-of-offspring-sex-ratio" class="section level2">
+<h2>Analysis of offspring sex ratio</h2>
+<pre class="r"><code>if(!file.exists(&quot;output/SR_model_comparison.rds&quot;)){
+  sex_ratio_genotype &lt;- brm(
+    female | trials(n) ~ genotype,
+    data = sex_ratio_data,
+    save_all_pars = TRUE,
+    family = &quot;binomial&quot;,
+    chains = 4, iter = 40000, cores = 1)
+  
+  sex_ratio_isoline &lt;- brm(
+    female | trials(n) ~ genotype + isoline,
+    data = sex_ratio_data,
+    save_all_pars = TRUE,
+    family = &quot;binomial&quot;,
+    chains = 4, iter = 40000, cores = 1)
+  
+  sex_ratio_interaction &lt;- brm(
+    female | trials(n) ~ genotype * isoline,
+    data = sex_ratio_data,
+    save_all_pars = TRUE,
+    family = &quot;binomial&quot;,
+    chains = 4, iter = 40000, cores = 1)
+  
+  # Save model tables
+  sex_ratio_genotype_model &lt;- get_fixed_effects_with_p_values(sex_ratio_genotype)
+  sex_ratio_isoline_model &lt;- get_fixed_effects_with_p_values(sex_ratio_isoline)
+  sex_ratio_interaction_model &lt;- get_fixed_effects_with_p_values(sex_ratio_interaction)
+  
+  # Calculate posterior model probabilities
+  SR_model_comparison &lt;- post_prob(sex_ratio_genotype, 
+                                   sex_ratio_isoline, 
+                                   sex_ratio_interaction)
+  
+  # Predict sex ratio across all isolines, or within each isoline
+  new &lt;- sex_ratio_data %&gt;% 
+    select(isoline, genotype) %&gt;% mutate(n = 100)
+  preds_all_isolines &lt;- as_tibble(as.data.frame(fitted(sex_ratio_genotype, new[1:3,], summary = FALSE)))
+  preds_by_isoline &lt;- as_tibble(as.data.frame(fitted(sex_ratio_interaction, new, summary = FALSE)))
+  names(preds_all_isolines) &lt;- new$genotype[1:3]
+  names(preds_by_isoline) &lt;- paste(new$genotype, new$isoline, sep = &quot;_&quot;)
+  
+  saveRDS(sex_ratio_genotype_model, file = &quot;output/sex_ratio_genotype_model.rds&quot;)
+  saveRDS(sex_ratio_isoline_model, file = &quot;output/sex_ratio_isoline_model.rds&quot;)
+  saveRDS(sex_ratio_interaction_model, file = &quot;output/sex_ratio_interaction_model.rds&quot;)
+  saveRDS(SR_model_comparison, file = &quot;output/SR_model_comparison.rds&quot;)
+  saveRDS(preds_all_isolines, file = &quot;output/preds_all_isolines.rds&quot;)
+  saveRDS(preds_by_isoline, file = &quot;output/preds_by_isoline.rds&quot;)
+} else {
+  sex_ratio_genotype_model &lt;- readRDS(&quot;output/sex_ratio_genotype_model.rds&quot;)
+  sex_ratio_isoline_model &lt;- readRDS(&quot;output/sex_ratio_isoline_model.rds&quot;)
+  sex_ratio_interaction_model &lt;- readRDS(&quot;output/sex_ratio_interaction_model.rds&quot;)
+  SR_model_comparison &lt;- readRDS(&quot;output/SR_model_comparison.rds&quot;)
+  preds_all_isolines &lt;- readRDS(&quot;output/preds_all_isolines.rds&quot;)
+  preds_by_isoline &lt;- readRDS(&quot;output/preds_by_isoline.rds&quot;)
+  sex_ratio_genotype_model &lt;- readRDS(&quot;output/sex_ratio_genotype_model.rds&quot;)
+}</code></pre>
+<div id="posterior-model-probabilities" class="section level3">
+<h3>Posterior model probabilities</h3>
+<p>The top model (with &gt;99% probability) contains genotype and isoline (just the main effects). The model with an interaction, and the model lacking the isoline effect, had much lower probability. This indicated that SR/ST genotype affected the offspring sex ratio, and so did isoline, but there was little/no evidence for an interaction.</p>
+<pre class="r"><code>round(sort(SR_model_comparison, decreasing=T), 3) %&gt;% 
+  kable() %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+x
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+sex_ratio_isoline
+</td>
+<td style="text-align:right;">
+0.998
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex_ratio_interaction
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex_ratio_genotype
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="model-results" class="section level3 tabset">
+<h3>Model results</h3>
+<div id="top-model-genotype-isoline" class="section level4">
+<h4>Top model (genotype + isoline)</h4>
+<pre class="r"><code>sex_ratio_isoline_model %&gt;% kable(digits = 3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Est.Error
+</th>
+<th style="text-align:right;">
+l-95% CI
+</th>
+<th style="text-align:right;">
+u-95% CI
+</th>
+<th style="text-align:right;">
+Rhat
+</th>
+<th style="text-align:right;">
+Bulk_ESS
+</th>
+<th style="text-align:right;">
+Tail_ESS
+</th>
+<th style="text-align:right;">
+p
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+0.489
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+0.412
+</td>
+<td style="text-align:right;">
+0.567
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+56319
+</td>
+<td style="text-align:right;">
+51708
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST
+</td>
+<td style="text-align:right;">
+-0.079
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+-0.157
+</td>
+<td style="text-align:right;">
+-0.001
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+60060
+</td>
+<td style="text-align:right;">
+60779
+</td>
+<td style="text-align:right;">
+0.024
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSTST
+</td>
+<td style="text-align:right;">
+-0.343
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+-0.419
+</td>
+<td style="text-align:right;">
+-0.266
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+58177
+</td>
+<td style="text-align:right;">
+59750
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+isolineLew17
+</td>
+<td style="text-align:right;">
+-0.127
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+<td style="text-align:right;">
+-0.201
+</td>
+<td style="text-align:right;">
+-0.053
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+66307
+</td>
+<td style="text-align:right;">
+61416
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+isolineSloB3
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+0.014
+</td>
+<td style="text-align:right;">
+0.167
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+66116
+</td>
+<td style="text-align:right;">
+62194
+</td>
+<td style="text-align:right;">
+0.011
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+isolineSloB7
+</td>
+<td style="text-align:right;">
+0.029
+</td>
+<td style="text-align:right;">
+0.038
+</td>
+<td style="text-align:right;">
+-0.044
+</td>
+<td style="text-align:right;">
+0.103
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+65743
+</td>
+<td style="text-align:right;">
+63237
+</td>
+<td style="text-align:right;">
+0.218
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="genotype-x-isoline-model" class="section level4">
+<h4>Genotype x isoline model</h4>
+<pre class="r"><code>sex_ratio_interaction_model %&gt;% 
+  kable(digits = 3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Est.Error
+</th>
+<th style="text-align:right;">
+l-95% CI
+</th>
+<th style="text-align:right;">
+u-95% CI
+</th>
+<th style="text-align:right;">
+Rhat
+</th>
+<th style="text-align:right;">
+Bulk_ESS
+</th>
+<th style="text-align:right;">
+Tail_ESS
+</th>
+<th style="text-align:right;">
+p
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+0.449
+</td>
+<td style="text-align:right;">
+0.061
+</td>
+<td style="text-align:right;">
+0.329
+</td>
+<td style="text-align:right;">
+0.568
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+33421
+</td>
+<td style="text-align:right;">
+43738
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.072
+</td>
+<td style="text-align:right;">
+-0.140
+</td>
+<td style="text-align:right;">
+0.141
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+35127
+</td>
+<td style="text-align:right;">
+46899
+</td>
+<td style="text-align:right;">
+0.497
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSTST
+</td>
+<td style="text-align:right;">
+-0.333
+</td>
+<td style="text-align:right;">
+0.075
+</td>
+<td style="text-align:right;">
+-0.480
+</td>
+<td style="text-align:right;">
+-0.188
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+34863
+</td>
+<td style="text-align:right;">
+46478
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+isolineLew17
+</td>
+<td style="text-align:right;">
+-0.066
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:right;">
+-0.231
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+37387
+</td>
+<td style="text-align:right;">
+46530
+</td>
+<td style="text-align:right;">
+0.219
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+isolineSloB3
+</td>
+<td style="text-align:right;">
+0.159
+</td>
+<td style="text-align:right;">
+0.109
+</td>
+<td style="text-align:right;">
+-0.054
+</td>
+<td style="text-align:right;">
+0.374
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+37794
+</td>
+<td style="text-align:right;">
+46381
+</td>
+<td style="text-align:right;">
+0.072
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+isolineSloB7
+</td>
+<td style="text-align:right;">
+0.077
+</td>
+<td style="text-align:right;">
+0.090
+</td>
+<td style="text-align:right;">
+-0.097
+</td>
+<td style="text-align:right;">
+0.256
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+36637
+</td>
+<td style="text-align:right;">
+47785
+</td>
+<td style="text-align:right;">
+0.196
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST:isolineLew17
+</td>
+<td style="text-align:right;">
+-0.137
+</td>
+<td style="text-align:right;">
+0.103
+</td>
+<td style="text-align:right;">
+-0.339
+</td>
+<td style="text-align:right;">
+0.063
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+39994
+</td>
+<td style="text-align:right;">
+49801
+</td>
+<td style="text-align:right;">
+0.091
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSTST:isolineLew17
+</td>
+<td style="text-align:right;">
+-0.007
+</td>
+<td style="text-align:right;">
+0.104
+</td>
+<td style="text-align:right;">
+-0.211
+</td>
+<td style="text-align:right;">
+0.198
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+39186
+</td>
+<td style="text-align:right;">
+51138
+</td>
+<td style="text-align:right;">
+0.473
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST:isolineSloB3
+</td>
+<td style="text-align:right;">
+-0.165
+</td>
+<td style="text-align:right;">
+0.127
+</td>
+<td style="text-align:right;">
+-0.413
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+39986
+</td>
+<td style="text-align:right;">
+48663
+</td>
+<td style="text-align:right;">
+0.097
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSTST:isolineSloB3
+</td>
+<td style="text-align:right;">
+-0.015
+</td>
+<td style="text-align:right;">
+0.123
+</td>
+<td style="text-align:right;">
+-0.257
+</td>
+<td style="text-align:right;">
+0.227
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+37808
+</td>
+<td style="text-align:right;">
+48852
+</td>
+<td style="text-align:right;">
+0.453
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST:isolineSloB7
+</td>
+<td style="text-align:right;">
+-0.064
+</td>
+<td style="text-align:right;">
+0.107
+</td>
+<td style="text-align:right;">
+-0.276
+</td>
+<td style="text-align:right;">
+0.145
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+38611
+</td>
+<td style="text-align:right;">
+50063
+</td>
+<td style="text-align:right;">
+0.276
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSTST:isolineSloB7
+</td>
+<td style="text-align:right;">
+-0.038
+</td>
+<td style="text-align:right;">
+0.108
+</td>
+<td style="text-align:right;">
+-0.250
+</td>
+<td style="text-align:right;">
+0.171
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+37795
+</td>
+<td style="text-align:right;">
+46401
+</td>
+<td style="text-align:right;">
+0.362
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="genotype-only-model-1" class="section level4">
+<h4>Genotype only model</h4>
+<pre class="r"><code>sex_ratio_genotype_model %&gt;% 
+  kable(digits = 3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Parameter
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Est.Error
+</th>
+<th style="text-align:right;">
+l-95% CI
+</th>
+<th style="text-align:right;">
+u-95% CI
+</th>
+<th style="text-align:right;">
+Rhat
+</th>
+<th style="text-align:right;">
+Bulk_ESS
+</th>
+<th style="text-align:right;">
+Tail_ESS
+</th>
+<th style="text-align:right;">
+p
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+0.469
+</td>
+<td style="text-align:right;">
+0.033
+</td>
+<td style="text-align:right;">
+0.405
+</td>
+<td style="text-align:right;">
+0.535
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+33010
+</td>
+<td style="text-align:right;">
+35369
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSRST
+</td>
+<td style="text-align:right;">
+-0.067
+</td>
+<td style="text-align:right;">
+0.040
+</td>
+<td style="text-align:right;">
+-0.146
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+38579
+</td>
+<td style="text-align:right;">
+44774
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genotypeSTST
+</td>
+<td style="text-align:right;">
+-0.317
+</td>
+<td style="text-align:right;">
+0.039
+</td>
+<td style="text-align:right;">
+-0.393
+</td>
+<td style="text-align:right;">
+-0.240
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+37679
+</td>
+<td style="text-align:right;">
+42883
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:left;">
+*
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="estimated-offspring-sex-ratio-by-genotype" class="section level3">
+<h3>Estimated offspring sex ratio by genotype</h3>
+<pre class="r"><code>preds_all_isolines %&gt;%
+  map(~ posterior_summary(.x)) %&gt;% do.call(&quot;rbind&quot;, .) %&gt;% as_tibble() %&gt;%
+  mutate(Genotype = names(preds_all_isolines)) %&gt;%
+  select(Genotype, everything()) %&gt;% 
+  kable(digits = 3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Genotype
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Est.Error
+</th>
+<th style="text-align:right;">
+Q2.5
+</th>
+<th style="text-align:right;">
+Q97.5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:right;">
+61.523
+</td>
+<td style="text-align:right;">
+0.789
+</td>
+<td style="text-align:right;">
+59.979
+</td>
+<td style="text-align:right;">
+63.074
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:right;">
+59.925
+</td>
+<td style="text-align:right;">
+0.523
+</td>
+<td style="text-align:right;">
+58.902
+</td>
+<td style="text-align:right;">
+60.948
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:right;">
+53.813
+</td>
+<td style="text-align:right;">
+0.500
+</td>
+<td style="text-align:right;">
+52.825
+</td>
+<td style="text-align:right;">
+54.789
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="estimated-offspring-sex-ratio-by-genotype-and-isoline" class="section level3">
+<h3>Estimated offspring sex ratio by genotype and isoline</h3>
+<pre class="r"><code>preds_by_isoline %&gt;%
+  map(~ posterior_summary(.x)) %&gt;% do.call(&quot;rbind&quot;, .) %&gt;% as_tibble() %&gt;%
+  mutate(Genotype = sex_ratio_data$genotype,
+         Isoline = sex_ratio_data$isoline) %&gt;%
+  select(Genotype, Isoline, everything()) %&gt;% 
+  kable(digits = 3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Genotype
+</th>
+<th style="text-align:left;">
+Isoline
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Est.Error
+</th>
+<th style="text-align:right;">
+Q2.5
+</th>
+<th style="text-align:right;">
+Q97.5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Lew 13
+</td>
+<td style="text-align:right;">
+61.025
+</td>
+<td style="text-align:right;">
+1.448
+</td>
+<td style="text-align:right;">
+58.153
+</td>
+<td style="text-align:right;">
+63.824
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Lew 13
+</td>
+<td style="text-align:right;">
+61.044
+</td>
+<td style="text-align:right;">
+0.901
+</td>
+<td style="text-align:right;">
+59.270
+</td>
+<td style="text-align:right;">
+62.817
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Lew 13
+</td>
+<td style="text-align:right;">
+52.881
+</td>
+<td style="text-align:right;">
+1.074
+</td>
+<td style="text-align:right;">
+50.774
+</td>
+<td style="text-align:right;">
+54.982
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Slo B7
+</td>
+<td style="text-align:right;">
+62.839
+</td>
+<td style="text-align:right;">
+1.550
+</td>
+<td style="text-align:right;">
+59.786
+</td>
+<td style="text-align:right;">
+65.850
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Slo B7
+</td>
+<td style="text-align:right;">
+61.346
+</td>
+<td style="text-align:right;">
+1.052
+</td>
+<td style="text-align:right;">
+59.269
+</td>
+<td style="text-align:right;">
+63.404
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Slo B7
+</td>
+<td style="text-align:right;">
+53.856
+</td>
+<td style="text-align:right;">
+0.997
+</td>
+<td style="text-align:right;">
+51.896
+</td>
+<td style="text-align:right;">
+55.803
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Lew 17
+</td>
+<td style="text-align:right;">
+59.448
+</td>
+<td style="text-align:right;">
+1.423
+</td>
+<td style="text-align:right;">
+56.653
+</td>
+<td style="text-align:right;">
+62.235
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Lew 17
+</td>
+<td style="text-align:right;">
+56.126
+</td>
+<td style="text-align:right;">
+1.088
+</td>
+<td style="text-align:right;">
+53.988
+</td>
+<td style="text-align:right;">
+58.248
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Lew 17
+</td>
+<td style="text-align:right;">
+51.066
+</td>
+<td style="text-align:right;">
+1.052
+</td>
+<td style="text-align:right;">
+49.002
+</td>
+<td style="text-align:right;">
+53.131
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRSR
+</td>
+<td style="text-align:left;">
+Slo B3
+</td>
+<td style="text-align:right;">
+64.726
+</td>
+<td style="text-align:right;">
+2.072
+</td>
+<td style="text-align:right;">
+60.584
+</td>
+<td style="text-align:right;">
+68.705
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SRST
+</td>
+<td style="text-align:left;">
+Slo B3
+</td>
+<td style="text-align:right;">
+60.912
+</td>
+<td style="text-align:right;">
+1.251
+</td>
+<td style="text-align:right;">
+58.461
+</td>
+<td style="text-align:right;">
+63.345
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STST
+</td>
+<td style="text-align:left;">
+Slo B3
+</td>
+<td style="text-align:right;">
+56.470
+</td>
+<td style="text-align:right;">
+0.896
+</td>
+<td style="text-align:right;">
+54.708
+</td>
+<td style="text-align:right;">
+58.228
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="hypothesis-testing" class="section level3">
+<h3>Hypothesis testing</h3>
+<p>Here, we calculate the posterior difference in the mean sex ratio between each of the 3 genotypes:</p>
+<pre class="r"><code>get_p &lt;- function(x) (100 - as.numeric(p_direction(x)))/100
+
+
+data.frame(
+  Comparison = c(&quot;SR/SR - ST/ST&quot;, &quot;SR/ST - ST/ST&quot;, &quot;SR/SR - SR/ST&quot;),
+  rbind(posterior_summary(preds_all_isolines$SRSR - preds_all_isolines$STST),
+        posterior_summary(preds_all_isolines$SRST - preds_all_isolines$STST),
+        posterior_summary(preds_all_isolines$SRSR - preds_all_isolines$SRST))
+) %&gt;% mutate(
+  p = c(get_p(preds_all_isolines$SRSR - preds_all_isolines$STST),
+        get_p(preds_all_isolines$SRST - preds_all_isolines$STST),
+        get_p(preds_all_isolines$SRSR - preds_all_isolines$SRST))
+) %&gt;%
+  kable(digits = 3) %&gt;% kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Comparison
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Est.Error
+</th>
+<th style="text-align:right;">
+Q2.5
+</th>
+<th style="text-align:right;">
+Q97.5
+</th>
+<th style="text-align:right;">
+p
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SR/SR - ST/ST
+</td>
+<td style="text-align:right;">
+7.711
+</td>
+<td style="text-align:right;">
+0.933
+</td>
+<td style="text-align:right;">
+5.874
+</td>
+<td style="text-align:right;">
+9.538
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SR/ST - ST/ST
+</td>
+<td style="text-align:right;">
+6.112
+</td>
+<td style="text-align:right;">
+0.726
+</td>
+<td style="text-align:right;">
+4.698
+</td>
+<td style="text-align:right;">
+7.539
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SR/SR - SR/ST
+</td>
+<td style="text-align:right;">
+1.598
+</td>
+<td style="text-align:right;">
+0.946
+</td>
+<td style="text-align:right;">
+-0.251
+</td>
+<td style="text-align:right;">
+3.462
+</td>
+<td style="text-align:right;">
+0.046
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="figure-showing-sex-ratios" class="section level3">
+<h3>Figure showing sex ratios</h3>
+<pre class="r"><code>SR_figure &lt;- gather(preds_all_isolines) %&gt;%
+  ggplot(aes(key, value, fill = key)) + 
+  geom_eye() + 
+  geom_hline(yintercept = 50, linetype = 2) + 
+  coord_cartesian(ylim = c(49, 65)) + 
+  theme_bw() +
+  theme(legend.position = &quot;none&quot;) + 
+  ylab(&quot;% daughters among adult offspring\n(posterior estimate)&quot;) + 
+  xlab(&quot;Maternal genotype&quot;) 
+
+SR_figure</code></pre>
+<p><img src="figure/statistics.Rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="figure-showing-sex-ratios---split-by-isoline" class="section level3">
+<h3>Figure showing sex ratios - split by isoline</h3>
+<pre class="r"><code>SR_figure2 &lt;- gather(preds_by_isoline) %&gt;%
+  mutate(split = strsplit(key, split = &quot;_&quot;),
+         Genotype = map_chr(split, ~.x[1]),
+         isoline = paste(map_chr(split, ~.x[2]), &quot;isoline&quot;)) %&gt;%
+  select(value, Genotype, isoline) %&gt;%
+  ggplot(aes(Genotype, value, fill = Genotype)) + 
+  geom_eye() + 
+  geom_hline(yintercept = 50, linetype = 2) + 
+  facet_wrap(~isoline) + 
+  coord_cartesian(ylim = c(48, 71.3)) + 
+  theme_bw() +
+  theme(legend.position = &quot;none&quot;) + 
+  ylab(&quot;% daughters among adult offspring\n(posterior estimate)&quot;) + 
+  xlab(&quot;Maternal genotype&quot;)
+
+SR_figure2</code></pre>
+<p><img src="figure/statistics.Rmd/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -3268,48 +4958,77 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] showtext_0.5-1     showtextdb_2.0     sysfonts_0.7.2    
- [4] RColorBrewer_1.1-2 ggbeeswarm_0.6.0   kableExtra_0.9.0  
- [7] bayestestR_0.2.2   brms_2.9.0         Rcpp_1.0.2        
-[10] forcats_0.4.0      stringr_1.4.0      dplyr_0.8.0.1     
-[13] purrr_0.3.2        readr_1.1.1        tidyr_0.8.2       
-[16] tibble_2.0.99.9000 ggplot2_3.1.0      tidyverse_1.2.1   
+ [1] tidybayes_1.1.0    gridExtra_2.3      lmerTest_3.0-1    
+ [4] lme4_1.1-17        Matrix_1.2-14      showtext_0.5-1    
+ [7] showtextdb_2.0     sysfonts_0.7.2     RColorBrewer_1.1-2
+[10] ggbeeswarm_0.6.0   kableExtra_0.9.0   bayestestR_0.2.2  
+[13] brms_2.10.0        Rcpp_1.0.2         forcats_0.4.0     
+[16] stringr_1.4.0      dplyr_0.8.3        purrr_0.3.2       
+[19] readr_1.1.1        tidyr_0.8.2        tibble_2.1.3      
+[22] ggplot2_3.1.0      tidyverse_1.2.1   
 
 loaded via a namespace (and not attached):
-  [1] colorspace_1.3-2     ggridges_0.5.0       rsconnect_0.8.8     
-  [4] rprojroot_1.3-2      markdown_1.0         base64enc_0.1-3     
-  [7] fs_1.3.1             rstudioapi_0.10      rstan_2.18.2        
- [10] DT_0.4               mvtnorm_1.0-11       lubridate_1.7.4     
- [13] xml2_1.2.0           bridgesampling_0.4-0 knitr_1.23          
- [16] shinythemes_1.1.1    bayesplot_1.6.0      jsonlite_1.6        
- [19] workflowr_1.3.0      broom_0.5.0          shiny_1.3.2         
- [22] compiler_3.5.1       httr_1.4.0           backports_1.1.2     
- [25] assertthat_0.2.1     Matrix_1.2-14        lazyeval_0.2.2      
- [28] cli_1.1.0            later_0.8.0          htmltools_0.3.6     
- [31] prettyunits_1.0.2    tools_3.5.1          igraph_1.2.1        
- [34] coda_0.19-2          gtable_0.2.0         glue_1.3.1.9000     
- [37] reshape2_1.4.3       cellranger_1.1.0     nlme_3.1-137        
- [40] crosstalk_1.0.0      insight_0.3.0        xfun_0.8            
- [43] ps_1.3.0             rvest_0.3.2          mime_0.7            
- [46] miniUI_0.1.1.1       gtools_3.8.1         zoo_1.8-3           
- [49] scales_1.0.0         colourpicker_1.0     hms_0.4.2           
- [52] promises_1.0.1       Brobdingnag_1.2-5    parallel_3.5.1      
- [55] inline_0.3.15        shinystan_2.5.0      curl_3.3            
- [58] yaml_2.2.0           gridExtra_2.3        loo_2.1.0           
- [61] StanHeaders_2.18.0   stringi_1.4.3        highr_0.8           
- [64] dygraphs_1.1.1.6     pkgbuild_1.0.2       rlang_0.4.0         
- [67] pkgconfig_2.0.2      matrixStats_0.54.0   evaluate_0.14       
- [70] lattice_0.20-35      labeling_0.3         rstantools_1.5.0    
- [73] htmlwidgets_1.2      tidyselect_0.2.5     processx_3.2.1      
- [76] plyr_1.8.4           magrittr_1.5         R6_2.4.0            
- [79] pillar_1.3.1.9000    haven_1.1.2          whisker_0.3-2       
- [82] withr_2.1.2          xts_0.11-0           abind_1.4-5         
- [85] modelr_0.1.2         crayon_1.3.4         rmarkdown_1.13      
- [88] grid_3.5.1           readxl_1.1.0         callr_2.0.4         
- [91] git2r_0.23.0         threejs_0.3.1        digest_0.6.20       
- [94] xtable_1.8-4         httpuv_1.5.1         stats4_3.5.1        
- [97] munsell_0.5.0        beeswarm_0.2.3       viridisLite_0.3.0   
-[100] vipor_0.4.5          shinyjs_1.0         </code></pre>
+  [1] readxl_1.1.0              backports_1.1.2          
+  [3] Hmisc_4.1-1               workflowr_1.4.0          
+  [5] plyr_1.8.4                igraph_1.2.1             
+  [7] lazyeval_0.2.2            splines_3.5.1            
+  [9] svUnit_0.7-12             crosstalk_1.0.0          
+ [11] rstantools_2.0.0          inline_0.3.15            
+ [13] digest_0.6.20             htmltools_0.3.6          
+ [15] rsconnect_0.8.8           checkmate_1.8.5          
+ [17] magrittr_1.5              cluster_2.0.7-1          
+ [19] modelr_0.1.2              matrixStats_0.54.0       
+ [21] xts_0.11-0                prettyunits_1.0.2        
+ [23] colorspace_1.3-2          rvest_0.3.2              
+ [25] haven_1.1.2               xfun_0.8                 
+ [27] callr_2.0.4               crayon_1.3.4             
+ [29] jsonlite_1.6              survival_2.42-6          
+ [31] zoo_1.8-3                 glue_1.3.1.9000          
+ [33] gtable_0.2.0              pkgbuild_1.0.2           
+ [35] rstan_2.19.2              abind_1.4-5              
+ [37] scales_1.0.0              mvtnorm_1.0-11           
+ [39] miniUI_0.1.1.1            htmlTable_1.12           
+ [41] viridisLite_0.3.0         xtable_1.8-4             
+ [43] ggstance_0.3.1            foreign_0.8-71           
+ [45] Formula_1.2-3             stats4_3.5.1             
+ [47] StanHeaders_2.19.0        DT_0.4                   
+ [49] htmlwidgets_1.3           httr_1.4.0               
+ [51] threejs_0.3.1             arrayhelpers_1.0-20160527
+ [53] acepack_1.4.1             pkgconfig_2.0.2          
+ [55] loo_2.1.0                 nnet_7.3-12              
+ [57] tidyselect_0.2.5          labeling_0.3             
+ [59] rlang_0.4.0               reshape2_1.4.3           
+ [61] later_0.8.0               munsell_0.5.0            
+ [63] cellranger_1.1.0          tools_3.5.1              
+ [65] cli_1.1.0                 broom_0.5.0              
+ [67] ggridges_0.5.0            evaluate_0.14            
+ [69] yaml_2.2.0                processx_3.2.1           
+ [71] knitr_1.23                fs_1.3.1                 
+ [73] nlme_3.1-137              whisker_0.3-2            
+ [75] mime_0.7                  xml2_1.2.0               
+ [77] compiler_3.5.1            bayesplot_1.6.0          
+ [79] shinythemes_1.1.1         rstudioapi_0.10          
+ [81] beeswarm_0.2.3            curl_3.3                 
+ [83] stringi_1.4.3             highr_0.8                
+ [85] ps_1.3.0                  Brobdingnag_1.2-5        
+ [87] lattice_0.20-35           nloptr_1.0.4             
+ [89] markdown_1.0              shinyjs_1.0              
+ [91] pillar_1.3.1.9000         bridgesampling_0.4-0     
+ [93] data.table_1.12.2         insight_0.3.0            
+ [95] httpuv_1.5.1              R6_2.4.0                 
+ [97] latticeExtra_0.6-28       promises_1.0.1           
+ [99] vipor_0.4.5               colourpicker_1.0         
+[101] MASS_7.3-50               gtools_3.8.1             
+[103] assertthat_0.2.1          rprojroot_1.3-2          
+[105] withr_2.1.2               shinystan_2.5.0          
+[107] parallel_3.5.1            hms_0.4.2                
+[109] rpart_4.1-13              grid_3.5.1               
+[111] coda_0.19-2               minqa_1.2.4              
+[113] rmarkdown_1.13            git2r_0.23.0             
+[115] numDeriv_2016.8-1         shiny_1.3.2              
+[117] lubridate_1.7.4           base64enc_0.1-3          
+[119] dygraphs_1.1.1.6         </code></pre>
+</div>
 </div>
 </div>
 
