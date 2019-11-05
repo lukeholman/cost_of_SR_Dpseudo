@@ -14,11 +14,25 @@ library(kableExtra)
 library(ggbeeswarm)
 library(RColorBrewer)
 library(showtext)
+library(lme4)
+library(lmerTest)
+library(gridExtra)
+library(tidybayes)
+
 font_add_google(name = "Lato", family = "Lato", regular.wt = 400, bold.wt = 700)
 showtext_auto()
 options(stringsAsFactors = FALSE)
 
 SE <- function(x) sd(x) / sqrt(length(x))
+
+get_fixed_effects_with_p_values <- function(brms_model){
+  fixed_effects <- data.frame(summary(brms_model)$fixed) %>%
+    rownames_to_column("Parameter")
+  fixed_effects$p <- (100 - as.data.frame(bayestestR::p_direction(brms_model))$pd) / 100
+  fixed_effects %>% select(Parameter, everything()) %>%
+    rename(`l-95% CI` = l.95..CI, `u-95% CI` = u.95..CI) %>%
+    mutate(` ` = ifelse(p < 0.05, "\\*", " "))
+}
 ```
 
 ## Load the data
@@ -28,6 +42,9 @@ fitness_data <- read_csv("data/SR_fitness_data.csv") %>%
   rename(body_size = `Body size`,
          female_age = `F age`) %>%
   mutate(genotype = factor(genotype, levels = c("STST", "SRST", "SRSR")))
+
+sex_ratio_data <- read.csv("data/SR_sex_ratio_data.csv", stringsAsFactors = FALSE)
+sex_ratio_data$n <- with(sex_ratio_data, male + female)
 ```
 
 
@@ -54,11 +71,18 @@ means <- fitness_data %>%
     n_females_producing_offspring = sum(offspring != 0),
     Percent_females_producing_offspring = 100 * n_females_producing_offspring / n()) 
 
-
-bind_rows(means_by_isoline, means) %>%
+sample_size_table <- bind_rows(means_by_isoline, means) %>%
   rename_all(function(x) gsub("_", " ", x)) %>%
   rename_all(function(x) gsub("Percent", "%", x)) %>%
-  rename(Genotype = genotype) %>%
+  rename(Genotype = genotype) 
+
+for_export <- sample_size_table
+names(for_export) <- c("Genotype", "Isoline", "n females",
+                       "Mean productivity", "SE", "n productive", "% productive")
+
+for_export %>% write_rds("output/sample_size_table.rds")
+
+sample_size_table %>%
   kable(digits = 2) %>% kable_styling()
 ```
 
@@ -70,7 +94,7 @@ The model assumes that the response variable, offspring number, is the result of
 
 We assume that the parameters controlling both the hurdle and the distribution of non-zero values are affected by four fixed effects (the female's genotype: STST, SRST, or SRSR), her isoline, the female's age, and the interaction between genotype and isoline. We also fit two random effects: isoline, and experimental block. All fixed effects were assumed to have a prior distribution following a normal distribution with mean 0 and SD = 5. 
 
-```{r}
+```{r load_all}
 if(!file.exists("output/brms_model.rds")){
  
   # The hurdle and the mean have the same set of predictors
@@ -87,6 +111,15 @@ if(!file.exists("output/brms_model.rds")){
   model_formula3 <- bf(
     offspring ~ genotype + female_age + (1 | Block), 
     hu        ~ genotype + female_age + (1 | Block)  
+  )
+  
+  # This model added in response to a reviewer request. 
+  # I don't think this model is much use here, since body size is a mediator variable;
+  # see the diagram at the top of this page: https://en.wikipedia.org/wiki/Mediation_(statistics)
+  # Moreover, many females have no body size measurement, so the sample size is smaller
+  body_size_model <- bf(
+    offspring ~ genotype + female_age + body_size + (1 | Block), 
+    hu        ~ genotype + female_age + body_size + (1 | Block)  
   )
   
   
@@ -123,19 +156,30 @@ if(!file.exists("output/brms_model.rds")){
                              save_all_pars = TRUE, 
                              prior = model_prior, 
                              data = fitness_data)
-
+  
+  # Added after peer review:
+  body_size_model <- brm(body_size_model,
+                             family = "hurdle_negbinomial",
+                             chains = 4, cores = 1, iter = 40000, inits = 0, seed = 12345,
+                             control = list(adapt_delta = 0.9999, max_treedepth = 15),
+                             save_all_pars = TRUE, 
+                             prior = model_prior, 
+                             data = fitness_data)
+  
   saveRDS(post_prob(full_model, no_interaction, genotype_only_model), 
           file = "output/model_comparison.rds")
   saveRDS(full_model, file = "output/full_model.rds")
   saveRDS(genotype_only_model, file = "output/genotype_only_model.rds")
+  saveRDS(body_size_model, file = "output/body_size_model.rds")
   saveRDS(neat_R2(full_model), file = "output/R2_of_full_model.rds")
   saveRDS(neat_R2(genotype_only_model), file = "output/R2_of_genotype_only_model.rds")
+  saveRDS(neat_R2(body_size_model), file = "output/R2_of_body_size_model.rds")
 } else{
   full_model <- readRDS("output/full_model.rds")
   genotype_only_model <- readRDS("output/genotype_only_model.rds")
   model_probabilities <- readRDS("output/model_comparison.rds")
+  body_size_model <- readRDS("output/body_size_model.rds")
 }
-
 ```
 
 ### Graphically verify the fit of the model using a posterior predictive check
@@ -148,6 +192,31 @@ pp_check(genotype_only_model, type = "hist", nsamples = 11, binwidth = 5)
 
 ### Inspect the parameter estimates {.tabset}
 
+```{r}
+make_model_table <- function(model){ # helper function for the 3 tables here
+  random <- as.data.frame(summary(model)$random[[1]]) %>%
+    rownames_to_column("Parameter") %>%
+    mutate(p = NA,
+           Parameter = c("sd(Block - Intercept)", "sd(Block - Hurdle intercept)"),
+           ` ` = "")
+  
+  rbind(get_fixed_effects_with_p_values(model), random) %>%
+    mutate(Parameter = gsub("hu_", "Hurdle - ", Parameter),
+           Estimate =  format(round(Estimate, 3), nsmall = 3),
+           Est.Error =  format(round(Est.Error, 3), nsmall = 3),
+           ` ` = ifelse(p < 0.05, "*", ""),
+           ` ` = replace(` `, is.na(` `), ""),
+           p = format(round(p, 4), nsmall = 4),
+           Rhat = format(round(Rhat, 3), nsmall = 3),
+           `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
+           `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
+           Bulk_ESS = round(Bulk_ESS, 0),
+           Tail_ESS = round(Tail_ESS, 0)
+    ) 
+}
+```
+
+
 #### Genotype-only model
 
 This model contains the fixed factor genotype, and the random effect block. 
@@ -155,34 +224,9 @@ This model contains the fixed factor genotype, and the random effect block.
 The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the 'Hurdle' parameters), and the number of progeny produced assuming that at least some are (other parameters).
 
 ```{r}
-bayesian_p_values <- as.data.frame(p_direction(genotype_only_model)) %>% 
-      mutate(pd = (100 - pd) / 100,
-             Parameter = gsub("[.]", ":", gsub("b_", "", Parameter)))
-
-random <- as.data.frame(summary(genotype_only_model)$random[[1]]) %>%
-  rownames_to_column("Parameter") %>%
-  mutate(p = NA,
-         Parameter = c("sd(Block - Intercept)", "sd(Block - Hurdle intercept)"))
-
-summary(genotype_only_model)$fixed %>% 
-  as.data.frame() %>% 
-  rownames_to_column("Parameter") %>%
-  left_join(bayesian_p_values, by = "Parameter") %>%
-  rename(p = pd) %>% 
-  arrange(grepl("hu_", Parameter)) %>%
-  rbind(random) %>%
-  rename(Error = Est.Error) %>%
-  mutate(Parameter = gsub("hu_", "Hurdle - ", Parameter),
-         Estimate =  format(round(Estimate, 3), nsmall = 3),
-         Error = format(round(Error, 3), nsmall = 3),
-         ` ` = ifelse(p < 0.05, "*", ""),
-         ` ` = replace(` `, is.na(` `), ""),
-         p = format(round(p, 4), nsmall = 4),
-         Rhat = format(round(Rhat, 3), nsmall = 3),
-         `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
-         `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
-         Eff.Sample = round(Eff.Sample, 0)
-         ) %>% 
+no_isoline_model_table <- make_model_table(genotype_only_model)
+saveRDS(no_isoline_model_table, "output/no_isoline_model_table.rds")
+no_isoline_model_table %>% 
   kable() %>% kable_styling()
 ```
 
@@ -193,36 +237,23 @@ This model contains the fixed factor genotype, the fixed factor isoline, and the
 The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the 'Hurdle' parameters), and the number of progeny produced assuming that at least some are (other parameters).
 
 ```{r}
-bayesian_p_values <- as.data.frame(p_direction(full_model)) %>% 
-      mutate(pd = (100 - pd) / 100,
-             Parameter = gsub("[.]", ":", gsub("b_", "", Parameter)))
-
-random <- as.data.frame(summary(full_model)$random[[1]]) %>%
-  rownames_to_column("Parameter") %>%
-  mutate(p = NA,
-         Parameter = c("sd(Block - Intercept)", "sd(Block - Hurdle intercept)"))
-
-summary(full_model)$fixed %>% 
-  as.data.frame() %>% 
-  rownames_to_column("Parameter") %>%
-  left_join(bayesian_p_values, by = "Parameter") %>%
-  rename(p = pd) %>% 
-  arrange(grepl("hu_", Parameter)) %>%
-  rbind(random) %>%
-  rename(Error = Est.Error) %>%
-  mutate(Parameter = gsub("hu_", "Hurdle - ", Parameter),
-         Estimate =  format(round(Estimate, 3), nsmall = 3),
-         Error =  format(round(Error, 3), nsmall = 3),
-         ` ` = ifelse(p < 0.05, "*", ""),
-         ` ` = replace(` `, is.na(` `), ""),
-         p = format(round(p, 4), nsmall = 4),
-         Rhat = format(round(Rhat, 3), nsmall = 3),
-         `l-95% CI` = format(round(`l-95% CI`, 3), nsmall = 3),
-         `u-95% CI` = format(round(`u-95% CI`, 3), nsmall = 3),
-         Eff.Sample = round(Eff.Sample, 0)
-         ) %>% 
+full_model_table <- make_model_table(genotype_only_model)
+saveRDS(full_model_table, "output/full_model_table.rds")
+full_model_table %>% 
   kable() %>% kable_styling()
 ```
+
+#### Model including body size
+
+This is the same as the top model (i.e. the Genotype-only model), except that it also includes body size a predictor in both components of the hurdle model. Note also that this analysis is restricted to females for which a body size measurement was available, reducing the sample size from 440 to 338 females.
+
+```{r}
+bodysize_model_table <- make_model_table(body_size_model)
+saveRDS(bodysize_model_table, "output/bodysize_model_table.rds")
+bodysize_model_table %>% 
+  kable() %>% kable_styling()
+```
+
 
 ## Use the model to generate posterior estimates of group means
 
@@ -365,9 +396,10 @@ figure_S1
 **Figure S1**: The same information as in Figure 1, except split by isoline.
 
 
+
 ## Calculate pairwise differences between genotypes
 
-**Table 1**: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The 'Difference in means' column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference indicates that the genotype with more copies of _SR_ has lower female fitness, the parentheses show the 95% quantiles of the posterior difference in means, and the Error column gives the average absolute deviation. The 'Relative difference' column expresses each difference in relative terms; e.g. the first row shows that _SR_/_ST_ females produced 91.5% as many offspring as _ST_/_ST_ females, on average. Finally, $p$ is the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional $p$-value).
+**Table 1**: Pairwise comparisons of genotypes for the three measures of female fitness shown in Figure 1: mean offspring production, mean offspring production among females that produced at least one offspring, and the % females that produced at least one offspring. The 'Difference in means' column shows the posterior estimate of the difference between the genotype means, in the original units (i.e. offspring number, or percentage points). A negative difference indicates that the genotype with more copies of SR has lower female fitness, the parentheses show the error and 95% quantiles of the posterior difference in means. The ‘Relative difference’ column expresses each difference in relative terms; e.g. the first row shows that the mean number of offspring produced by SR/ST females was 92% as much as the number produced by ST/ST females, with 95% confidence limits of 70-110%. Finally, $p$ is the posterior probability that the true difference in means is zero or of the opposite sign to the estimate shown here (similar to a conventional $p$-value).
 
 ```{r}
 compare_means <- function(mean1, mean2, posterior){
@@ -381,7 +413,6 @@ compare_means <- function(mean1, mean2, posterior){
   rel_diff <- as_tibble(posterior_summary(as.mcmc(posterior[, mean2] / posterior[, mean1])))
   p_value <- as.numeric(100 - p_direction(posterior[, mean2] - posterior[, mean1])) / 100
   
-  
   tibble(
     Comparison = paste(mean1, mean2, sep = " \u2192 "),
     `Fitness trait` = NA,
@@ -393,18 +424,7 @@ compare_means <- function(mean1, mean2, posterior){
     Error2 = rel_diff$Est.Error,
     p = p_value
   ) %>% select( -`95% CIs abs`, -`95% CIs rel`)
-  
-  #relative <- median(posterior[, mean2] / posterior[, mean1])
-  # as_tibble(posterior_summary(as.mcmc(difference))) %>%
-  #   mutate(Comparison = paste(mean1, mean2, sep = " \u2192 "),
-  #          `Relative difference` = paste(format(round(100 * relative, 1), nsmall = 1), "%", sep = ""),
-  #          `95% CIs` = paste(" (", format(round(Q2.5, 1), nsmall = 1), " to ", format(round(Q97.5, 1), nsmall = 1), ")", sep = ""),
-  #          `Difference in means` = paste(format(round(Estimate, 2), nsmall = 2), `95% CIs`, sep = ""),
-  #          `Fitness trait` = NA,
-  #          p = p_value) %>%
-  #   select( -Q2.5, -Q97.5) %>%
-  #   select(Comparison, `Fitness trait`, `Difference in means`, Est.Error, `Relative difference`, p) %>%
-  #   rename(Error = Est.Error)
+ 
 }
 
 table_of_contrasts <- bind_rows(
@@ -429,4 +449,263 @@ table_of_contrasts %>%
   kable() %>% kable_styling()
 ```
 
+
+## Make wing length figure
+
+```{r body_size_fig}
+p1 <- fitness_data %>% 
+  filter(!is.na(body_size)) %>%
+  ggplot(aes(genotype, body_size, colour = genotype)) + 
+  geom_quasirandom(alpha = 0.5) + 
+  stat_summary(fun.data = "mean_cl_boot", colour = "grey20") +
+  theme_bw() + ylab(NULL) + xlab("Genotype") +
+  theme(strip.background = element_blank(),
+        legend.position = "none",
+        panel.grid.major.x = element_blank(), 
+        strip.text = element_text(hjust = 0))
+
+p2 <- fitness_data %>% 
+  filter(!is.na(body_size)) %>%
+  ggplot(aes(body_size, fill = genotype)) + 
+    geom_density(alpha = 0.3) + 
+    theme_bw() + 
+    coord_flip() + xlab(NULL) + ylab("Density") +
+    theme(strip.background = element_blank(),
+          legend.position = "none",
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          panel.grid.major.x = element_blank(), 
+          panel.grid.minor.x = element_blank(), 
+          strip.text = element_text(hjust = 0))
+
+grid.arrange(p1, p2,
+             widths = c(0.7, 0.32),
+             ncol = 2, left = "Wing vein length (mm)"
+)
+```
+<br></br>
+**Figure 2:** Distribution of wing lengths for each genotype, showing the individual values (left) or the frequency distribution (right).
+
+```{r echo=FALSE}
+ggsave(
+  grid.arrange(p1 + theme(text = element_text(family = "Lato", size = 12)), 
+               p2 + theme(text = element_text(family = "Lato", size = 12)), 
+               widths = c(0.7, 0.32),
+               ncol = 2, left = "Wing vein length (mm)"
+  ), filename = "figures/figure_2.pdf", height = 3.3, width = 5)
+```
+
+
+### Associated statistics for Figure 2
+
+#### Mody size means
+```{r}
+body_size_model_data <- fitness_data %>%
+  filter(!is.na(body_size)) %>%
+  mutate(body_size_scaled = as.numeric(scale(body_size)))
+
+body_size_model_data %>%
+  group_by(genotype) %>%
+  summarise(`Mean wing vein length (mm)` = mean(body_size),
+            SE = sd(body_size) / sqrt(n())) %>%
+  kable(digits=3) %>% kable_styling()
+```
+
+#### Linear mixed model
+Note that body size data is missing for one body size - isoline combination, so we did not fit the interaction term (preventing rank deficiency). The model shows that body size differs significantly among genotypes and isolines.
+```{r}
+body_size_model <- lmer(body_size_scaled ~ genotype + Isoline + (1 | Block), 
+                      data = body_size_model_data)
+summary(body_size_model)
+anova(body_size_model)
+```
+
+#### Sample sizes for the body size data
+```{r}
+sample_sizes <- body_size_model_data %>%
+  group_by(genotype, Isoline) %>%
+  summarise(n = n())
+
+overall <- sample_sizes %>%
+  group_by(genotype) %>%
+  summarise(n =sum(n)) %>%
+  mutate(Isoline = "Across all isolines") %>%
+  select(!! names(sample_sizes))
+
+sample_sizes %>%
+  bind_rows(overall) %>%
+  kable(digits=3) %>% kable_styling()
+```
+
+## Analysis of offspring sex ratio
+
+```{r}
+if(!file.exists("output/SR_model_comparison.rds")){
+  sex_ratio_genotype <- brm(
+    female | trials(n) ~ genotype,
+    data = sex_ratio_data,
+    save_all_pars = TRUE,
+    family = "binomial",
+    chains = 4, iter = 40000, cores = 1)
+  
+  sex_ratio_isoline <- brm(
+    female | trials(n) ~ genotype + isoline,
+    data = sex_ratio_data,
+    save_all_pars = TRUE,
+    family = "binomial",
+    chains = 4, iter = 40000, cores = 1)
+  
+  sex_ratio_interaction <- brm(
+    female | trials(n) ~ genotype * isoline,
+    data = sex_ratio_data,
+    save_all_pars = TRUE,
+    family = "binomial",
+    chains = 4, iter = 40000, cores = 1)
+  
+  # Save model tables
+  sex_ratio_genotype_model <- get_fixed_effects_with_p_values(sex_ratio_genotype)
+  sex_ratio_isoline_model <- get_fixed_effects_with_p_values(sex_ratio_isoline)
+  sex_ratio_interaction_model <- get_fixed_effects_with_p_values(sex_ratio_interaction)
+  
+  # Calculate posterior model probabilities
+  SR_model_comparison <- post_prob(sex_ratio_genotype, 
+                                   sex_ratio_isoline, 
+                                   sex_ratio_interaction)
+  
+  # Predict sex ratio across all isolines, or within each isoline
+  new <- sex_ratio_data %>% 
+    select(isoline, genotype) %>% mutate(n = 100)
+  preds_all_isolines <- as_tibble(as.data.frame(fitted(sex_ratio_genotype, new[1:3,], summary = FALSE)))
+  preds_by_isoline <- as_tibble(as.data.frame(fitted(sex_ratio_interaction, new, summary = FALSE)))
+  names(preds_all_isolines) <- new$genotype[1:3]
+  names(preds_by_isoline) <- paste(new$genotype, new$isoline, sep = "_")
+  
+  saveRDS(sex_ratio_genotype_model, file = "output/sex_ratio_genotype_model.rds")
+  saveRDS(sex_ratio_isoline_model, file = "output/sex_ratio_isoline_model.rds")
+  saveRDS(sex_ratio_interaction_model, file = "output/sex_ratio_interaction_model.rds")
+  saveRDS(SR_model_comparison, file = "output/SR_model_comparison.rds")
+  saveRDS(preds_all_isolines, file = "output/preds_all_isolines.rds")
+  saveRDS(preds_by_isoline, file = "output/preds_by_isoline.rds")
+} else {
+  sex_ratio_genotype_model <- readRDS("output/sex_ratio_genotype_model.rds")
+  sex_ratio_isoline_model <- readRDS("output/sex_ratio_isoline_model.rds")
+  sex_ratio_interaction_model <- readRDS("output/sex_ratio_interaction_model.rds")
+  SR_model_comparison <- readRDS("output/SR_model_comparison.rds")
+  preds_all_isolines <- readRDS("output/preds_all_isolines.rds")
+  preds_by_isoline <- readRDS("output/preds_by_isoline.rds")
+  sex_ratio_genotype_model <- readRDS("output/sex_ratio_genotype_model.rds")
+}
+```
+
+### Posterior model probabilities
+The top model (with >99% probability) contains genotype and isoline (just the main effects). The model with an interaction, and the model lacking the isoline effect, had much lower probability. This indicated that SR/ST genotype affected the offspring sex ratio, and so did isoline, but there was little/no evidence for an interaction.
+```{r}
+round(sort(SR_model_comparison, decreasing=T), 3) %>% 
+  kable() %>% kable_styling()
+```
+
+### Model results {.tabset}
+
+#### Top model (genotype + isoline)
+```{r}
+sex_ratio_isoline_model %>% kable(digits = 3) %>% kable_styling()
+```
+
+#### Genotype x isoline model
+```{r}
+sex_ratio_interaction_model %>% 
+  kable(digits = 3) %>% kable_styling()
+```
+
+#### Genotype only model
+```{r}
+sex_ratio_genotype_model %>% 
+  kable(digits = 3) %>% kable_styling()
+```
+
+### Estimated offspring sex ratio by genotype
+```{r}
+preds_all_isolines %>%
+  map(~ posterior_summary(.x)) %>% do.call("rbind", .) %>% as_tibble() %>%
+  mutate(Genotype = names(preds_all_isolines)) %>%
+  select(Genotype, everything()) %>% 
+  kable(digits = 3) %>% kable_styling()
+```
+
+### Estimated offspring sex ratio by genotype and isoline
+```{r}
+preds_by_isoline %>%
+  map(~ posterior_summary(.x)) %>% do.call("rbind", .) %>% as_tibble() %>%
+  mutate(Genotype = sex_ratio_data$genotype,
+         Isoline = sex_ratio_data$isoline) %>%
+  select(Genotype, Isoline, everything()) %>% 
+  kable(digits = 3) %>% kable_styling()
+```
+
+### Hypothesis testing
+Here, we calculate the posterior difference in the mean sex ratio between each of the 3 genotypes:
+```{r}
+get_p <- function(x) (100 - as.numeric(p_direction(x)))/100
+
+
+data.frame(
+  Comparison = c("SR/SR - ST/ST", "SR/ST - ST/ST", "SR/SR - SR/ST"),
+  rbind(posterior_summary(preds_all_isolines$SRSR - preds_all_isolines$STST),
+        posterior_summary(preds_all_isolines$SRST - preds_all_isolines$STST),
+        posterior_summary(preds_all_isolines$SRSR - preds_all_isolines$SRST))
+) %>% mutate(
+  p = c(get_p(preds_all_isolines$SRSR - preds_all_isolines$STST),
+        get_p(preds_all_isolines$SRST - preds_all_isolines$STST),
+        get_p(preds_all_isolines$SRSR - preds_all_isolines$SRST))
+) %>%
+  kable(digits = 3) %>% kable_styling()
+```
+
+### Figure showing sex ratios
+```{r}
+SR_figure <- gather(preds_all_isolines) %>%
+  ggplot(aes(key, value, fill = key)) + 
+  geom_eye() + 
+  geom_hline(yintercept = 50, linetype = 2) + 
+  coord_cartesian(ylim = c(49, 65)) + 
+  theme_bw() +
+  theme(legend.position = "none") + 
+  ylab("% daughters among adult offspring\n(posterior estimate)") + 
+  xlab("Maternal genotype") 
+
+SR_figure
+```
+
+```{r echo=FALSE}
+(SR_figure + theme(text = element_text(family = "Lato", size = 12))) %>%
+  ggsave(filename = "figures/SR_figure.pdf", height = 4.7, width = 5)
+```
+
+
+
+### Figure showing sex ratios - split by isoline
+```{r}
+SR_figure2 <- gather(preds_by_isoline) %>%
+  mutate(split = strsplit(key, split = "_"),
+         Genotype = map_chr(split, ~.x[1]),
+         isoline = paste(map_chr(split, ~.x[2]), "isoline")) %>%
+  select(value, Genotype, isoline) %>%
+  ggplot(aes(Genotype, value, fill = Genotype)) + 
+  geom_eye() + 
+  geom_hline(yintercept = 50, linetype = 2) + 
+  facet_wrap(~isoline) + 
+  coord_cartesian(ylim = c(48, 71.3)) + 
+  theme_bw() +
+  theme(legend.position = "none") + 
+  ylab("% daughters among adult offspring\n(posterior estimate)") + 
+  xlab("Maternal genotype")
+
+SR_figure2
+```
+
+```{r echo=FALSE}
+(SR_figure2 + theme(text = element_text(family = "Lato", size = 12))) %>%
+  ggsave(filename = "figures/SR_figure_by_isoline.pdf", height = 7.8, width = 8)
+
+```
 
