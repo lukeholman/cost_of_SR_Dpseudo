@@ -1,12 +1,12 @@
 ---
-title: "High cost of meiotic driving X chromosomes in female flies"
+title: "An X-linked meiotic drive allele has strong, recessive fitness costs in female Drosophila pseudoobscura"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
 ---
 
-This website presents all the code used for the forthcoming paper "High cost of meiotic driving X chromosomes in female flies" by William Larner, Tom Price, Luke Holman, and Nina Wedell.
+This website presents all the code used in "An X-linked meiotic drive allele has strong, recessive fitness costs in female Drosophila pseudoobscura" by William Larner, Tom Price, Luke Holman, and Nina Wedell (_Proceedings of the Royal Society B_, http://dx.doi.org/10.1098/rspb.2019.2038).
 
 
 
