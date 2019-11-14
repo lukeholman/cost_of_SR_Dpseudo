@@ -29,15 +29,14 @@ R2_genotype <- readRDS("../output/R2_of_genotype_only_model.rds")
 \begin{center}
 \huge{\textbf{Online Supplementary Material}}
 \end{center}
-
-\begin{center}
-\textbf{An X-linked meiotic drive allele has strong, recessive fitness costs in female \textit{Drosophila pseudoobscura}}
-\end{center}
-
-\vspace{1.4cm}
+\vspace{0.5cm}
+\textbf{An X-linked meiotic drive allele has strong, recessive fitness costs in female \textit{Drosophila pseudoobscura}}, by
+Larner et al. \textit{Proceedings of the Royal Society B}
+\vspace{0.5cm}
 
 
-The figures and tables in this document, along with the with the R code used to generate them, can also be viewed online: \newline \textbf{REMOVED FOR BLINDED REVIEW}.
+
+The figures and tables in this document, along with the with the R code used to generate them, can also be viewed online at https://lukeholman.github.io/cost_of_SR_Dpseudo/
 
 
 \newpage
@@ -49,6 +48,16 @@ The figures and tables in this document, along with the with the R code used to 
 **Figure S1**: The same information as in Figure 1, except split by isoline. See Table S1 for sample sizes. 
 
 \newpage
+
+\begin{figure}[h]
+\includegraphics[width=1\textwidth]{../figures/SR_figure_by_isoline.pdf}
+\end{figure}
+
+**Figure S2**: The same information as in Figure 3, except split by isoline. 
+
+\newpage
+
+
 **Table S1**: Sample sizes and summary statistics for the experiment. For each genotype and isoline combination (or across all the isolines), we give the sample size (i.e. number of females measured), their mean productivity (including the unproductive females), the associated standard error, the number of productive females (i.e. those who produced one or more offspring), and the % females that were productive. 
 
 ```{r, results='asis'}
@@ -56,13 +65,13 @@ make_table("../output/sample_size_table.rds", digits = 2)
 ```
 
 \newpage
-**Table S2**: Parameter estimates from the Bayesian model plotted in Figure 1, showing the fixed effect estimates of genotype and female age, for both components of the hurdle model (n = 440 females). The Eff.Sample and Rhat columns indicate that the posterior was well-sampled and that the model has converged, respectively. The p column has the same interpretation as in Table 1. The final two rows show the standard deviation of the random intercepts associated with experimental block.
+**Table S2**: Parameter estimates from the Bayesian model plotted in Figure 1, showing the fixed effect estimates of genotype and female age, for both components of the hurdle model (n = 440 females). The Rhat and ESS (effective sample size) columns indicate that the model has converged and the posterior was well-sampled, respectively. The p column has the same interpretation as in Table 1. The final two rows show the standard deviation of the random intercepts associated with experimental block.
 
 ```{r, results='asis'}
 make_table("../output/no_isoline_model_table.rds", digits = 2)
 ```
 \newpage
-**Table S3**: Parameter estimates from the Bayesian model plotted in Figure S1, showing the fixed effect estimates of genotype, isoline, the genotype-by-isoline interaction, and female age, for both components of the hurdle model (n = 440 females). The Eff.Sample and Rhat columns indicate that the posterior was well-sampled and that the model has converged, respectively. The $p$ column has the same interpretation as in Table 1. The final two rows show the standard deviation of the random intercepts associated with experimental block.
+**Table S3**: Parameter estimates from the Bayesian model plotted in Figure S1, showing the fixed effect estimates of genotype, isoline, the genotype-by-isoline interaction, and female age, for both components of the hurdle model (n = 440 females). The Rhat and ESS (effective sample size) columns indicate that the model has converged and the posterior was well-sampled, respectively. The $p$ column has the same interpretation as in Table 1. The final two rows show the standard deviation of the random intercepts associated with experimental block.
 
 ```{r, results='asis'}
 make_table("../output/full_model_table.rds", digits = 2)

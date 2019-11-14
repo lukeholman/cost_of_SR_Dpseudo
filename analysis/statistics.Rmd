@@ -237,7 +237,7 @@ This model contains the fixed factor genotype, the fixed factor isoline, and the
 The response variable (number of progeny) was treated as a hurdle process, i.e. the model estimates the parameters for the probability of producing at least some progeny (the 'Hurdle' parameters), and the number of progeny produced assuming that at least some are (other parameters).
 
 ```{r}
-full_model_table <- make_model_table(genotype_only_model)
+full_model_table <- make_model_table(full_model)
 saveRDS(full_model_table, "output/full_model_table.rds")
 full_model_table %>% 
   kable() %>% kable_styling()
