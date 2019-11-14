@@ -11,7 +11,7 @@
 
 
 
-<title>High cost of meiotic driving X chromosomes in female flies</title>
+<title>An X-linked meiotic drive allele has strong, recessive fitness costs in female Drosophila pseudoobscura</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,9 +69,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -96,6 +94,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -110,7 +111,6 @@ body {
   padding-top: 56px;
   margin-top: -56px;
 }
-
 .section h2 {
   padding-top: 56px;
   margin-top: -56px;
@@ -130,6 +130,43 @@ body {
 .section h6 {
   padding-top: 56px;
   margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -151,19 +188,85 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -208,7 +311,7 @@ div.section {
 
 
 
-<h1 class="title toc-ignore">High cost of meiotic driving X chromosomes in female flies</h1>
+<h1 class="title toc-ignore">An X-linked meiotic drive allele has strong, recessive fitness costs in female Drosophila pseudoobscura</h1>
 
 </div>
 
@@ -233,7 +336,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-06-28
+<strong>Last updated:</strong> 2019-11-14
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -243,7 +346,7 @@ div.section {
 </p>
 <p>
 This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.3.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -264,10 +367,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstronga790625"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> a790625 </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreec1e1e492efe03eab6add1d4206eaa607e39e1681targetblankc1e1e49a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/tree/c1e1e492efe03eab6add1d4206eaa607e39e1681" target="_blank">c1e1e49</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstronga790625" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlukeholmancostofSRDpseudotreec1e1e492efe03eab6add1d4206eaa607e39e1681targetblankc1e1e49a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -320,16 +423,16 @@ Message
 Rmd
 </td>
 <td>
-a790625
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/c1e1e492efe03eab6add1d4206eaa607e39e1681/analysis/index.Rmd" target="_blank">c1e1e49</a>
 </td>
 <td>
 lukeholman
 </td>
 <td>
-2019-06-28
+2019-11-14
 </td>
 <td>
-First complete commit
+accepted version
 </td>
 </tr>
 <tr>
@@ -337,7 +440,7 @@ First complete commit
 html
 </td>
 <td>
-93aec6e
+<a href="https://rawcdn.githack.com/lukeholman/cost_of_SR_Dpseudo/89ec5c1f5332b93ce373ec825a80dc8f7e0c622d/docs/index.html" target="_blank">89ec5c1</a>
 </td>
 <td>
 lukeholman
@@ -354,7 +457,7 @@ Build site.
 Rmd
 </td>
 <td>
-01d7dbb
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/a790625d6c5ed6f0ad8b6eb06f6f0fc6cd6d68ee/analysis/index.Rmd" target="_blank">a790625</a>
 </td>
 <td>
 lukeholman
@@ -371,7 +474,41 @@ First complete commit
 html
 </td>
 <td>
-ffdc5d4
+<a href="https://rawcdn.githack.com/lukeholman/cost_of_SR_Dpseudo/93aec6e1d8dad8307c93f829030a82f004c39245/docs/index.html" target="_blank">93aec6e</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/01d7dbbcb24a7b6a4c779d3af9f5cd17545b4ad2/analysis/index.Rmd" target="_blank">01d7dbb</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2019-06-28
+</td>
+<td>
+First complete commit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lukeholman/cost_of_SR_Dpseudo/ffdc5d44370af9cba1f49ab7045fd537d8a2191c/docs/index.html" target="_blank">ffdc5d4</a>
 </td>
 <td>
 lukeholman
@@ -388,7 +525,7 @@ First complete commit
 Rmd
 </td>
 <td>
-e56965b
+<a href="https://github.com/lukeholman/cost_of_SR_Dpseudo/blob/e56965b0b55681e261b43082d4755239ec7fb41a/analysis/index.Rmd" target="_blank">e56965b</a>
 </td>
 <td>
 lukeholman
@@ -407,7 +544,7 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>This website presents all the code used for the forthcoming paper “High cost of meiotic driving X chromosomes in female flies” by William Larner, Tom Price, Luke Holman, and Nina Wedell.</p>
+<p>This website presents all the code used in “An X-linked meiotic drive allele has strong, recessive fitness costs in female Drosophila pseudoobscura” by William Larner, Tom Price, Luke Holman, and Nina Wedell (<em>Proceedings of the Royal Society B</em>, <a href="http://dx.doi.org/10.1098/rspb.2019.2038" class="uri">http://dx.doi.org/10.1098/rspb.2019.2038</a>).</p>
 <div id="statistical-analysis" class="section level1">
 <h1>Statistical analysis</h1>
 <p>Click <a href="statistics.html">here</a> to see the code used to analyse and plot the female fecundity data.</p>
